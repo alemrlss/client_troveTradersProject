@@ -1,11 +1,14 @@
+import { login } from "./services/Auth";
+
 function App() {
+
+ login('a@g.com','1234')
 
   return (
     <>
-      <h3 className='text-3xl bg-blue-800'>teddffdsst</h3>
-       
+      <h1>test</h1>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
