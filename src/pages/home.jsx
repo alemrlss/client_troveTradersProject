@@ -1,7 +1,7 @@
 function Home() {
   return (
     <div>
-        <h2>HAS ENTRADO A LA APP.</h2>
+        <h1 className="text-center text-6xl pt-10">HAS ENTRADO A LA APP.</h1>
     </div>
   )
 }

@@ -1,12 +1,18 @@
-import axios from "axios";
+import { Navigate } from "react-router-dom";
 import { useState } from "react";
+import {  login } from "../../services/Auth";
 
-function LoginComponent() {
+
+// eslint-disable-next-line react/prop-types
+function LoginComponent({handleLogin}) {
+
   const [formData, setformData] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+ 
 
   const handleInputChange = (e) => {
     setError("");
@@ -30,43 +36,32 @@ function LoginComponent() {
       return;
     }
 
-    axios
-      .post("http://localhost:3001/auth/login", {
-        email: formData.email,
-        password: formData.password,
-      })
-      .then((response) => {
-        //RESPUESTA CORRECTA
-        console.log(response);
-      })
-      .catch((err) => {
-        const status = err.response.data.statusCode;
-        // MANEJAR AQUI EL ERROR DE USUARIO NO ENCONTRADO Y CLAVE INCORRECTA
-        if (err.response) {
-          if (status === 404) {
-            setError("User Not Found");
-          } else if (status === 403) {
-            setError("Password Incorrect");
-          } else {
-            setError("Error during login");
-          }
-        } else {
-          setError("Connection error");
-        }
-      });
+    login(formData.email, formData.password).then((res) => {
+      if (res.status === 200 || res.status === 201) {
+        handleLogin()
+        setLoggedIn(true);
+      } else {
+        setError(res.message);
+      }
+    });
+  };
 
-    };
-    const validateEmail = (email) => {
-      // Validación de correo electrónico utilizando una expresión regular
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
+  if (loggedIn) {
+    return <Navigate to="/home" replace />;
+    
+  }
 
-    const validatePassword = (password) => {
-      // Validación de contraseña utilizando una expresión regular
-      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-      return passwordRegex.test(password);
-    };
+  const validateEmail = (email) => {
+    // Validación de correo electrónico utilizando una expresión regular
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    // Validación de contraseña utilizando una expresión regular
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return passwordRegex.test(password);
+  };
 
   return (
     <div>

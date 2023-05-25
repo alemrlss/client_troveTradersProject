@@ -2,27 +2,53 @@
 /* eslint-disable react/prop-types */
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/login";
-import { useState } from "react";
-import ProtectedRoute from './routes/ProtectedRoute'
-import Home from './pages/home'
+import { useEffect, useState } from "react";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import Home from "./pages/home";
+import {isAuthenticated} from './services/Auth'
+
 
 
 function App() {
+  const [isAuth, setIsAuth] = useState(undefined);
 
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  useEffect(() => {
+    // Verifica la autenticación al cargar la aplicación
+    const token = isAuthenticated()
+    if(token) { 
+      setIsAuth(true)
+    } else { 
+      setIsAuth(false)
+    }
+  }, []);
+//ESTA PENDIENTE POR ANEXAR LA VALIDEZ DEL TOKEN!!!. 
+
+
+  const handleLogin = () => {
+    // Maneja el evento de inicio de sesión exitoso y actualiza el estado de autenticación
+    setIsAuth(true);
+    localStorage.setItem('isAuthenticated', 'true');
+  };
 
   return (
     <div className="app">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />}></Route>
-          
-          <Route element={<ProtectedRoute isAuthorized={isAuthorized} redirectTo="/login"/>}>
-              <Route path="/home" element={<Home/>}/>
-          </Route>
 
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+
+            <Route
+              element={
+                <ProtectedRoute
+                  isAuthorized={isAuth || localStorage.getItem('isAuthenticated')}
+                  redirectTo="/login"
+                />
+              }
+            >
+              <Route path="/home" element={<Home />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
     </div>
   );
 }
