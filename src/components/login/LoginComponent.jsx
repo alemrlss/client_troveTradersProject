@@ -1,18 +1,15 @@
-import { Navigate } from "react-router-dom";
 import { useState } from "react";
-import {  login } from "../../services/Auth";
-
+import { loginBackend } from "../../services/Auth";
+import { useAuthContext } from "../../contexts/authContext";
 
 // eslint-disable-next-line react/prop-types
-function LoginComponent({handleLogin}) {
-
+function LoginComponent() {
+  const { login } = useAuthContext();
   const [formData, setformData] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
- 
 
   const handleInputChange = (e) => {
     setError("");
@@ -36,20 +33,14 @@ function LoginComponent({handleLogin}) {
       return;
     }
 
-    login(formData.email, formData.password).then((res) => {
+    loginBackend(formData.email, formData.password).then((res) => {
       if (res.status === 200 || res.status === 201) {
-        handleLogin()
-        setLoggedIn(true);
+        login()
       } else {
         setError(res.message);
       }
     });
   };
-
-  if (loggedIn) {
-    return <Navigate to="/home" replace />;
-    
-  }
 
   const validateEmail = (email) => {
     // Validación de correo electrónico utilizando una expresión regular

@@ -5,7 +5,7 @@ import axios from "axios";
 
 
 
-export const login = async (email, password) => {
+export const loginBackend = async (email, password) => {
   try {
     const response = await axios.post("http://localhost:3001/auth/login", {
       email,
@@ -36,14 +36,8 @@ export const login = async (email, password) => {
   }
 };
 
-// Función para cerrar sesión
-export const logout = () => {
-  localStorage.removeItem("accessToken");
-};
-
 // Función para verificar el estado de autenticación(True=Autorizado. False=NoAutorizado.)
-export const isAuthenticated = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  console.log(!!accessToken)
+export const isAuthenticated =  () => {
+  const accessToken =  localStorage.getItem("accessToken");
   return !!accessToken;
 };
