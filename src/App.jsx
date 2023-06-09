@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Home from "./pages/home";
 import {isAuthenticated} from './services/Auth'
+import Signup from "./pages/signup";
 
 
 
@@ -35,6 +36,7 @@ function App() {
 
         <BrowserRouter>
           <Routes>
+          <Route path="/signup" element={<Signup/>}/>
             <Route path="/login" element={<Login handleLogin={handleLogin} />} />
 
             <Route

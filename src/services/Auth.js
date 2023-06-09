@@ -3,8 +3,6 @@ import axios from "axios";
 
 // Función para iniciar sesión
 
-
-
 export const login = async (email, password) => {
   try {
     const response = await axios.post("http://localhost:3001/auth/login", {
