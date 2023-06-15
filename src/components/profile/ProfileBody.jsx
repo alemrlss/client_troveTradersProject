@@ -2,6 +2,7 @@
 import { useState } from "react";
 import About from "./About";
 import Trades from "./Trades";
+import { FiStar } from "react-icons/fi";
 function ProfileBody({ data }) {
   const profileOptions = {
     about: "about",
@@ -19,12 +20,12 @@ function ProfileBody({ data }) {
     setisClicked(e.target.textContent.toLowerCase());
 
     if (e.target.textContent.toLowerCase() === profileOptions.about) {
-      setClassButtonTrades('')
-      setClassButtonAbout(decorationButton)
+      setClassButtonTrades("");
+      setClassButtonAbout(decorationButton);
     }
     if (e.target.textContent.toLowerCase() === profileOptions.trades) {
-      setClassButtonAbout('')
-      setClassButtonTrades(decorationButton)
+      setClassButtonAbout("");
+      setClassButtonTrades(decorationButton);
     }
   };
 
@@ -38,7 +39,9 @@ function ProfileBody({ data }) {
           <button className="bg-orange-300 mr-5 pr-2 pl-2">Edit Profile</button>
         </div>
         <p className="pl-4 text-xl text-gray-600">@{data.username}</p>
-        <p className="pl-4 m-6 text-xl">RANKING: 0/5</p>
+        <div className="mt-12 pb-1 flex items-center justify-center text-3xl">
+          <p className="text-gray-600 font-semibold">Ranking:</p><p className="font-bold">0/5</p> <FiStar />
+        </div>
       </div>
       <div className="flex flex-col h-full">
         <div className="flex pl-2">
@@ -57,7 +60,7 @@ function ProfileBody({ data }) {
         </div>
 
         <div className="h-full">
-          {isClicked === profileOptions.about && <About />}
+          {isClicked === profileOptions.about && <About data={data} />}
           {isClicked === profileOptions.trades && <Trades />}
         </div>
       </div>

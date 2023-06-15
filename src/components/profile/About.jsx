@@ -1,6 +1,11 @@
 import { useState } from "react";
+import General from "./About/General";
+import Warnings from "./About/Warnings";
+import LastsPosts from "./About/LastsPosts";
+import Ratings from "./About/Ratings";
 
-function About() {
+// eslint-disable-next-line react/prop-types
+function About({data}) {
   const optionsAbout = {
     general: "general information",
     warnings: "warnings",
@@ -50,38 +55,38 @@ function About() {
 
   return (
     <div className="m-2 h-full flex bg-orange-200">
-      <div className=" w-1/4 h-full flex flex-col p-4 border-r-2 border-gray-400 ">
-        <p className="text-3xl pb-2 text-center">Information</p>
+      <div className=" w-1/4 h-full flex flex-col p-4 border-r-2 border-gray-400 text-gray-600 ">
+        <p className="text-3xl pb-2 text-center text-black">Information</p>
         <button
           onClick={handleButtons}
-          className={`m-1 text-xl text-gray-600 font-bold ${btnGeneralClass}`}
+          className={`m-1 text-xl font-bold  ${btnGeneralClass}`}
         >
           General information
         </button>
         <button
           onClick={handleButtons}
-          className={`m-1 text-xl text-gray-600 font-bold ${btnWarningClass}`}
+          className={`m-1 text-xl font-bold ${btnWarningClass}`}
         >
           Warnings
         </button>
         <button
           onClick={handleButtons}
-          className={`m-1 text-xl text-gray-600 font-bold ${btnLastsPostsClass}`}
+          className={`m-1 text-xl font-bold ${btnLastsPostsClass}`}
         >
           Lasts Posts
         </button>
         <button
           onClick={handleButtons}
-          className={`m-1 text-xl text-gray-600 font-bold ${btnRatingsClass}`}
+          className={`m-1 text-xl  font-bold ${btnRatingsClass}`}
         >
           Ratings
         </button>
       </div>
       <div className="w-3/4">
-        {isClicked === optionsAbout.general && <div> General info</div>}
-        {isClicked === optionsAbout.warnings && <div> Warnings info</div>}
-        {isClicked === optionsAbout.lastsPosts && <div> LastsPosts info</div>}
-        {isClicked === optionsAbout.ratings && <div> Ratings info</div>}
+        {isClicked === optionsAbout.general && <General data={data} />}
+        {isClicked === optionsAbout.warnings && <Warnings />}
+        {isClicked === optionsAbout.lastsPosts && <LastsPosts />}
+        {isClicked === optionsAbout.ratings && <Ratings />}
       </div>
     </div>
   );
