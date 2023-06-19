@@ -1,5 +1,5 @@
 const mongoose=require("mongoose")
-mongoose.connect("mongodb://0.0.0.0:27017/no")
+mongoose.connect("mongodb://localhost:27017/troveTradersUsersDb")
 .then(()=>{
     console.log("Base de Datos conectada(usuarios)");
 })

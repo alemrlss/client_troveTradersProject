@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import SingupComponent from '../components/signup/SingupComponent'
+import SignupComponent from '../components/signup/SignupComponent'
 function Signup() {
   return (
-    <SingupComponent/>
+    <SignupComponent/>
   )
 }
 
