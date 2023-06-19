@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import LoginComponent from '../components/login/LoginComponent'
-function Login({handleLogin}) {
+function Login() {
   return (
-    <LoginComponent handleLogin={handleLogin}/>
+    <LoginComponent/>
   )
 }
 

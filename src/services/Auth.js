@@ -1,9 +1,10 @@
 // auth.js
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 // Función para iniciar sesión
 
-export const login = async (email, password) => {
+export const loginBackend = async (email, password) => {
   try {
     const response = await axios.post("http://localhost:3001/auth/login", {
       email,
@@ -34,14 +35,45 @@ export const login = async (email, password) => {
   }
 };
 
-// Función para cerrar sesión
-export const logout = () => {
-  localStorage.removeItem("accessToken");
-};
-
 // Función para verificar el estado de autenticación(True=Autorizado. False=NoAutorizado.)
 export const isAuthenticated = () => {
   const accessToken = localStorage.getItem("accessToken");
-  console.log(!!accessToken)
   return !!accessToken;
+};
+
+//GET TOKEN LOCALSTORAGE
+export const getToken = () => {
+  const token = localStorage.getItem("accessToken");
+  return token;
+};
+
+//GET ID USER BY LOCALSTORAGE
+export const getIdUser = () => {
+  const token = getToken();
+  if (token) {
+    try {
+      const decodedToken = jwt_decode(token);
+      console.log(decodedToken);
+      const userId = decodedToken.id;
+      return userId;
+    } catch (error) {
+      console.error("Error decoding JWT:", error);
+    }
+  } else {
+    console.log("TOKEN NO VALID");
+  }
+};
+
+export const getDataUser = () => {
+  const token = getToken();
+  if (token) {
+    try {
+      const decodedToken = jwt_decode(token);
+      return decodedToken;
+    } catch (error) {
+      console.error("Error decoding JWT:", error);
+    }
+  } else {
+    console.log("TOKEN NO VALID");
+  }
 };
