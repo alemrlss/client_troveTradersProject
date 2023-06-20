@@ -24,10 +24,8 @@ function profile() {
           `http://localhost:3001/users/${id}`,
           config
         );
-        setTimeout(() => {
-          setLoading(false);
-          setData(response.data);
-        }, 3000);
+        setLoading(false);
+        setData(response.data);
       } catch (error) {
         console.log(error); //PROGRAMAR ERROR.
       }

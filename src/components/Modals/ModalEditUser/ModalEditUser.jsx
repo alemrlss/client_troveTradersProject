@@ -5,7 +5,7 @@ import { useState } from "react";
 import ModalInfoGeneral from "./ModalInfoGeneral";
 import ModalProfileImage from "./ModalProfileImage";
 
-function ModalEditUser({ isOpen, closeModal, data }) {
+function ModalEditUser({ isOpen, closeModal, data, handleSaveChanges }) {
   const handleCloseModal = () => {
     //IMPLEMENTAR LOGICA PARA HACER OTRO MODAL DICIENDO QUE SI ESTA SEGURO DE SALIR MODAL
     closeModal();
@@ -55,7 +55,11 @@ function ModalEditUser({ isOpen, closeModal, data }) {
         </div>
         <div>
           {isClicked === editOptions.infoGeneral && (
-            <ModalInfoGeneral data={data} />
+            <ModalInfoGeneral
+              data={data}
+              closeModal={closeModal}
+              handleSaveChanges={handleSaveChanges}
+            />
           )}
           {isClicked === editOptions.profileImage && (
             <ModalProfileImage data={data} />

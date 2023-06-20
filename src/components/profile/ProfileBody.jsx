@@ -12,6 +12,12 @@ function ProfileBody({ data }) {
     trades: "trades",
   };
 
+  const [userData, setUserData] = useState(data); //data del usuario.
+
+  const handleSaveChanges = (updatedData) => {
+    setUserData(updatedData);
+  };
+
   const decorationButton = " border-b-4 border-green-800";
   const [isClicked, setisClicked] = useState(profileOptions.about);
   const [classButtonAbout, setClassButtonAbout] = useState(decorationButton);
@@ -33,18 +39,23 @@ function ProfileBody({ data }) {
   };
 
   useEffect(() => {
-    if (data._id === getDataUser().id) {
+    if (userData._id === getDataUser().id) {
       setCanEdit(true);
     }
-  }, [data._id]);
+  }, [userData._id]);
 
   return (
     <div className="w-3/4 rounded-r-md flex flex-col p-10">
-      <ModalEditUser isOpen={isOpenModalEdit} closeModal={closeModalEdit} data={data} />{" "}
+      <ModalEditUser
+        isOpen={isOpenModalEdit}
+        closeModal={closeModalEdit}
+        data={userData}
+        handleSaveChanges={handleSaveChanges}
+      />{" "}
       <div className="bg-green-100 p-2">
         <div className="flex flex-row">
           <h2 className="text-3xl flex-grow">
-            {data.name} {data.lastName}
+            {userData.name} {userData.lastName}
           </h2>
           {canEdit && (
             <button
@@ -55,7 +66,7 @@ function ProfileBody({ data }) {
             </button>
           )}
         </div>
-        <p className="pl-4 text-xl text-gray-600">@{data.username}</p>
+        <p className="pl-4 text-xl text-gray-600">@{userData.username}</p>
         <div className="mt-12 pb-1 flex items-center justify-center text-3xl">
           <p className="text-gray-600 font-semibold">Ranking:</p>
           <p className="font-bold">0/5</p> <FiStar />
@@ -78,7 +89,7 @@ function ProfileBody({ data }) {
         </div>
 
         <div className="h-full">
-          {isClicked === profileOptions.about && <About data={data} />}
+          {isClicked === profileOptions.about && <About data={userData} />}
           {isClicked === profileOptions.trades && <Trades />}
         </div>
       </div>

@@ -3,15 +3,17 @@ import { GiPadlock } from "react-icons/gi";
 import { HiUser } from "react-icons/hi";
 import { useState } from "react";
 import Select from "react-select";
-function ModalInfoGeneral({ data }) {
+import axios from "axios";
+import { getIdUser } from "../../../services/Auth";
+
+function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
   const [formData, setFormData] = useState({
     name: data.name,
     lastName: data.lastName,
     username: data.username,
     gender: data.gender,
+    role: "user",
   });
-
-  console.log(formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,8 +25,18 @@ function ModalInfoGeneral({ data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("enviando...");
-    console.log(formData);
+    console.log(formData); //formData que se envia a la peticion!
+
+    axios
+      .put(`http://localhost:3001/users/${getIdUser()}`, formData)
+      .then((response) => {
+        console.log(response.data);
+        handleSaveChanges(formData);
+      })
+      .catch((error) => {
+        console.log(error.data);
+      });
+    closeModal();
   };
   const options = [
     { value: "unknown", label: "Unknown" },
