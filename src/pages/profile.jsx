@@ -24,10 +24,12 @@ function profile() {
           `http://localhost:3001/users/${id}`,
           config
         );
-        setLoading(false);
-        setData(response.data);
+        setTimeout(() => {
+          setLoading(false);
+          setData(response.data);
+        }, 3000);
       } catch (error) {
-        console.log(error);
+        console.log(error); //PROGRAMAR ERROR.
       }
     };
 
@@ -35,9 +37,14 @@ function profile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  const options = {
+    width: 100,
+    height: 100,
+  };
+
   return (
     <div>
-      {loading && <Loader />}
+      {loading && <Loader options={options} />}
       {data && <ProfileMain data={data} />}
     </div>
   );

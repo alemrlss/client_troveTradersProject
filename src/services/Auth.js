@@ -3,7 +3,6 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 // Función para iniciar sesión
-
 export const loginBackend = async (email, password) => {
   try {
     const response = await axios.post("http://localhost:3001/auth/login", {
@@ -53,7 +52,7 @@ export const getIdUser = () => {
   if (token) {
     try {
       const decodedToken = jwt_decode(token);
-      console.log(decodedToken);
+
       const userId = decodedToken.id;
       return userId;
     } catch (error) {

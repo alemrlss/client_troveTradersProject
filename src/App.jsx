@@ -16,20 +16,20 @@ function App() {
   return (
     <div className="app">
       <AuthContextProvider>
+
         <BrowserRouter>
           <Routes>
+
             <Route path="/" element={<PublicRoute />}>
               <Route path={LOGIN} element={<Login />} />
               <Route path={REGISTER} element={<Register />} />
             </Route>
-
 
             <Route path="/" element={<PrivateRoute />}>
               <Route path={HOME} element={<Home />} />
               <Route path={`${PROFILE}/:id`} element={<Profile/>}/>
             </Route>
 
-   
           </Routes>
         </BrowserRouter>
       </AuthContextProvider>
