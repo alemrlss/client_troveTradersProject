@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import "./loaderStyle.css";
-import NavBar from "../NavBar/NavBar";
 
 function Loader({ options }) {
   const optionsLoadingId = {
@@ -15,7 +14,6 @@ function Loader({ options }) {
 
   return (
     <div>
-      <NavBar />
       <div style={optionsLoading} className="loading">
         <div className="loading-id text-center">
           <div style={optionsLoadingId}></div>

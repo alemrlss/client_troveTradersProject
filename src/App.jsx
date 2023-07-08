@@ -9,6 +9,7 @@ import { AuthContextProvider } from "./contexts/authContext";
 import PublicRoute from "./components/router/PublicRoute";
 import PrivateRoute from "./components/router/PrivateRoute";
 import Register from "./pages/register";
+import { SocketProvider } from "./contexts/socketContext";
 
 function App() {
   //ESTA PENDIENTE POR ANEXAR LA VALIDEZ DEL TOKEN!!!.
@@ -16,10 +17,8 @@ function App() {
   return (
     <div className="app">
       <AuthContextProvider>
-
         <BrowserRouter>
           <Routes>
-
             <Route path="/" element={<PublicRoute />}>
               <Route path={LOGIN} element={<Login />} />
               <Route path={REGISTER} element={<Register />} />
@@ -27,9 +26,8 @@ function App() {
 
             <Route path="/" element={<PrivateRoute />}>
               <Route path={HOME} element={<Home />} />
-              <Route path={`${PROFILE}/:id`} element={<Profile/>}/>
+              <Route path={`${PROFILE}/:id`} element={<Profile />} />
             </Route>
-
           </Routes>
         </BrowserRouter>
       </AuthContextProvider>
