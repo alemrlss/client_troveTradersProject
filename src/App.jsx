@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HOME, LOGIN, PROFILE, REGISTER } from "./routes/paths";
+import { HOME, LOGIN, POST, PROFILE, REGISTER } from "./routes/paths";
 import Login from "./pages/login";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
+import Post from "./pages/post";
 import { AuthContextProvider } from "./contexts/authContext";
 import PublicRoute from "./components/router/PublicRoute";
 import PrivateRoute from "./components/router/PrivateRoute";
@@ -27,6 +28,7 @@ function App() {
             <Route path="/" element={<PrivateRoute />}>
               <Route path={HOME} element={<Home />} />
               <Route path={`${PROFILE}/:id`} element={<Profile />} />
+              <Route path={`${POST}/:id`} element={<Post />} />
             </Route>
           </Routes>
         </BrowserRouter>
