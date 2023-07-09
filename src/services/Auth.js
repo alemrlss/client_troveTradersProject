@@ -2,10 +2,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
-export const signupBackend = async (name,lastname, email, password) => {
-  
-}
-
 // Función para iniciar sesión
 export const loginBackend = async (email, password) => {
   try {
