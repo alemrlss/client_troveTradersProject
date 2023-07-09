@@ -55,39 +55,65 @@ function LoginComponent() {
   };
 
   return (
-    <section className="bg-secondary-100">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900">
-          <img className="w-20 h-20 mr-2" src="src\assets\img\logo-bg.png" alt="logo"/>
-            TroveTraders
-        </a>
-        <div className="w-full bg-primary-100 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0"> {/*Background*/}
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8"> {/*Panel principal*/}
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-                Acceder
+    <div>
+      <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
+        <div className="w-full p-6 m-auto bg-white rounded-md shadow-xl shadow-blue-400  ring-2 ring-gray-700 lg:max-w-xl">
+          <div className="flex flex-row items-center">
+            <h1 className="w-3/4 text-4xl font-bold text-center text-blue-500 underline uppercase decoration-slice">
+              Sign in
             </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}> {/*Email y Contraseña*/}
-              <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Tu Correo:</label>
-                <input name="email" onChange={handleInputChange} type="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Tu nombre"/>
-              </div>
-              <div>
-                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
-                <input name="password" onChange={handleInputChange} type="password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Tu Contraseena"/>
-              </div>
-          
-              <div className="space-y-4 md:space-y-6">
-                  <p className="text-red-600">{error}</p>
-                  <a href="#" className="text-sm font-light text-gray-500 text-primary-600 hover:underline">Has olvidado la contraseña?</a>
-                  <button className="w-full text-white bg-secondary-200 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Acceder</button>
-              </div>
-            </form>
-            <p className="text-sm font-light text-gray-500">{" "}No tienes cuenta?{" "}<a href="#" className="font-medium text-primary-600 hover:underline">Registrate</a>
-            </p>
           </div>
+
+          <form className="mt-6" onSubmit={handleSubmit}>
+            <div className="mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold text-gray-800"
+              >
+                Email
+              </label>
+              <input
+                name="email"
+                onChange={handleInputChange}
+                type="email"
+                className="block w-full px-4 py-2 mt-2 text-bacl bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              />
+            </div>
+            <div className="mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-gray-800"
+              >
+                Password
+              </label>
+              <input
+                name="password"
+                onChange={handleInputChange}
+                type="password"
+                className="block w-full px-4 py-2 mt-2 text-black bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              />
+              <p className="text-red-500">{error}</p>
+            </div>
+            <a href="#" className="text-xs text-blue-500 hover:underline">
+              Forget Password?
+            </a>
+            <div className="mt-6">
+              <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                Login
+              </button>
+            </div>
+          </form>
+
+          <p className="mt-8 text-xs font-light text-center text-gray-700">
+            {" "}
+            Dont have an account?{" "}
+            <a href="#" className="font-medium text-blue-500 hover:underline">
+              Sign up
+            </a>
+          </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
