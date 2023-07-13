@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import NavBar from "../components/NavBar/NavBar";
 import Loader from "../components/Loader/Loader";
 import PostComponent from "../components/Post/PostComponent";
 import axios from "axios";
@@ -9,10 +8,7 @@ import axios from "axios";
 function post() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { id } = useParams();
-
-
   const [loading, setLoading] = useState(false);
-
   const [post, setPost] = useState(null);
 
   useEffect(() => {
@@ -35,7 +31,6 @@ function post() {
     height: 100,
   };
   return <div>
-    <NavBar/>
     {loading && <Loader options={options}/>}
     {post && <PostComponent post={post}/>}
   </div>;

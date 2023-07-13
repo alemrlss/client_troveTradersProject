@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import "./Modal.css";
+import "../Modal.css";
 import { FiX } from "react-icons/fi";
 import { useState } from "react";
 import ModalInfoGeneral from "./ModalInfoGeneral";

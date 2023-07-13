@@ -2,44 +2,109 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getDataUser } from "../../services/Auth";
 import { useAuthContext } from "../../contexts/authContext";
+import NotificationsComponent from "./NotificationsComponent";
 import img from "../../assets/logo.png";
-import axios from "axios";
+import TradesComponent from "./TradesComponent";
+import RequestsComponent from "./RequestsComponent";
+import { useModal } from "../../hooks/useModal";
+import ModalRequests from "../Modals/ModalRequests/ModalRequests";
+import ModalTrades from "../Modals/ModalTrades.jsx/ModalTrades";
+import { useContext } from "react";
+import { SocketContext } from "../../contexts/socketContext";
 function NavBar() {
+  //^  Contexto.
+  const socket = useContext(SocketContext);
   const { logout } = useAuthContext();
+
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationsB, setNotificationsB] = useState([]);
+
+  //!UseEffect para la escucha de las notificaciones
+  useEffect(() => {
+    if (socket) {
+      socket.on("newNotification", (payload) => {
+        // Manejar la notificación recibida desde el servidor
+        console.log(payload);
+        const msgHTML = (
+          <p>
+            <b>{payload.msgNotification}</b>
+          </p>
+        );
+        console.log("Nueva notificación recibida:", payload.msgNotification);
+        showAndHideNotification(payload.msgNotification, msgHTML, payload.bgColor);
+
+        // Puedes realizar otras acciones con la notificación, como mostrarla en la interfaz de usuario
+      });
+    }
+    return () => {
+      if (socket) {
+        socket.off("newNotification");
+      }
+    };
+  }, []);
+
+  //!UseEffect para cuando una notificacion cambie se renderize
+  useEffect(() => {
+    // Timer para eliminar las notificaciones después de 2 segundos
+    let timer;
+
+    if (notificationsB.length > 0) {
+      timer = setTimeout(() => {
+        setNotifications([]);
+        setShowNotification(true);
+      }, 2500);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [notificationsB]);
+
+  //!Funcion para mostrar las Notificaciones
+  const showAndHideNotification = (msg, messageHTML, bgColor) => {
+    // ~Verificar si la notificación ya existe en el estado de notificaciones
+    const notificationExists = notificationsB.some(
+      (notification) => notification.msg === msg
+    );
+    if (!notificationExists) {
+      setShowNotification(true);
+      setNotificationsB((prevNotifications) => [
+        ...prevNotifications,
+        { msg, messageHTML, bgColor },
+      ]);
+    }
+  };
+  //? Funcion para enviar la notificacion al socket de socket.io
+  const sendNotification = (authorId, msgNotification, bgColor) => {
+    if (socket) {
+      socket.emit("notification", { authorId, msgNotification, bgColor });
+    }
+  };
+
+  //~MODALES DE REQUESTS Y TRADES
+  const [isOpenModalRequests, openModalRequests, closeModalRequests] =
+    useModal(false);
+  const [isOpenModalTrades, openModalTrades, closeModalTrades] =
+    useModal(false);
+
+  //!idUser de la session!
   const idUser = getDataUser().id;
 
+  //?Estados de las notificaciones
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const loadNotifications = () => {
-    // Realiza la solicitud al servidor para obtener las notificaciones
-    // Puedes usar axios o cualquier otra librería para hacer la solicitud HTTP
-    axios
-      .get(`http://localhost:3001/notifications/${idUser}`)
-      .then((response) => {
-        // Actualiza el estado con las notificaciones obtenidas del servidor
-        setNotifications(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        // Manejo de errores si la solicitud falla
-        console.log(error);
-      });
-  };
+  //?Estados de las requests
+  const [requests, setRequests] = useState([]);
 
-  const handleNotificationsClick = () => {
-    if (isOpen) {
-      setIsOpen(!isOpen);
-    } else {
-      setIsOpen(!isOpen);
-      loadNotifications();
-    }
-    console.log(isOpen);
-  };
+  //?Estado de los trades
+  const [trades, setTrades] = useState([]);
 
+  //!MANEJO DEL LOGOUT
   const handleLogout = () => {
     logout();
   };
+
+  //
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -74,14 +139,23 @@ function NavBar() {
         </button>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <li>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={handleNotificationsClick}
-              >
-                Notificaciones
-              </button>
-            </li>
+            <RequestsComponent
+              id={idUser}
+              openModal={openModalRequests}
+              setRequests={setRequests}
+            />
+            <TradesComponent
+              id={idUser}
+              openModal={openModalTrades}
+              setTrades={setTrades}
+            />
+            <NotificationsComponent
+              idUser={idUser}
+              setNotifications={setNotifications}
+              setIsOpen={setIsOpen}
+              isOpen={isOpen}
+            />
+
             <li>
               <Link
                 to={`/home`}
@@ -126,6 +200,33 @@ function NavBar() {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+      <ModalRequests
+        isOpen={isOpenModalRequests}
+        closeModal={closeModalRequests}
+        requests={requests}
+        setRequests={setRequests}
+        idUser={idUser}
+        showAndHideNotification={showAndHideNotification}
+        sendNotification={sendNotification}
+      />
+      <ModalTrades
+        isOpen={isOpenModalTrades}
+        closeModal={closeModalTrades}
+        trades={trades}
+      />
+      {showNotification && (
+        <div className="absolute top-4 right-5 space-y-4">
+          {notificationsB.map((notification, index) => (
+            <div
+              key={index}
+              className={`${notification.bgColor} text-gray-800 p-4 rounded-md shadow-md`}
+            >
+              {" "}
+              {notification.messageHTML}
+            </div>
+          ))}
         </div>
       )}
     </nav>

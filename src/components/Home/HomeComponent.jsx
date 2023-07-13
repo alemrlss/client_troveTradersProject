@@ -19,16 +19,12 @@ function HomeComponent({ posts }) {
     if (socket) {
       socket.on("newNotification", (msgNotification) => {
         // Manejar la notificación recibida desde el servidor
-
         const msgHTML = (
           <p>
             <b>{msgNotification}</b>
           </p>
         );
-        console.log("Nueva notificación recibida:", msgNotification);
         showAndHideNotification(msgNotification, msgHTML, "bg-orange-400");
-
-        // Puedes realizar otras acciones con la notificación, como mostrarla en la interfaz de usuario
       });
     }
     return () => {
@@ -40,16 +36,20 @@ function HomeComponent({ posts }) {
   //!UseEffect para cuando una notificacion cambie se renderize
   useEffect(() => {
     // Timer para eliminar las notificaciones después de 2 segundos
-    const timer = setTimeout(() => {
-      setShowNotification(false);
-      setNotifications([]);
-    }, 2500);
+    let timer;
 
+    if (notifications.length > 0) {
+      timer = setTimeout(() => {
+        setNotifications([]);
+        setShowNotification(true);
+      }, 2500);
+    }
     return () => {
       clearTimeout(timer);
     };
   }, [notifications]);
-  //!Funcion para mostrar las notificaciones
+
+    //!Funcion para mostrar las notificaciones
   const showAndHideNotification = (msg, messageHTML, bgColor) => {
     // ~Verificar si la notificación ya existe en el estado de notificaciones
     const notificationExists = notifications.some(
@@ -64,6 +64,7 @@ function HomeComponent({ posts }) {
     }
   };
 
+  
   return (
     <div>
       <div className="grid grid-cols-3 gap-4 bg-orange-300 p-4">

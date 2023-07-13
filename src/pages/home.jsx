@@ -3,7 +3,6 @@ import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import Loader from "../components/Loader/Loader";
 import { SocketContext } from "../contexts/socketContext";
-import NavBar from '../components/NavBar/NavBar'
 function Home() {
   const [posts, setPosts] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -29,7 +28,6 @@ function Home() {
   };
   return (
     <>
-      <NavBar />
       {loading && <Loader options={options} />}
       {posts && <HomeComponent posts={posts} />}
     </>
