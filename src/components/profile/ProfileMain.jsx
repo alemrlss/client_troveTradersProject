@@ -4,6 +4,7 @@ import ProfileBody from "./ProfileBody";
 import SidebarProfile from "./SidebarProfile";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/socketContext";
+import { Link } from "react-router-dom";
 function ProfileMain({ data }) {
   //^  Contexto.
   const socket = useContext(SocketContext);
@@ -19,9 +20,9 @@ function ProfileMain({ data }) {
         // Manejar la notificación recibida desde el servidor
 
         const msgHTML = (
-          <p>
+          <Link to={payload.target}>
             <b>{payload.msgNotification}</b>
-          </p>
+          </Link>
         );
         console.log("Nueva notificación recibida:", payload.msgNotification);
         showAndHideNotification(

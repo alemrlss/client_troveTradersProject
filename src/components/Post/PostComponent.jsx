@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { SocketContext } from "../../contexts/socketContext";
 import { getIdUser } from "../../services/Auth";
+import { Link } from "react-router-dom";
 
 function PostComponent({ post }) {
   //^  Contexto.
@@ -23,11 +24,11 @@ function PostComponent({ post }) {
     if (socket) {
       socket.on("newNotification", (payload) => {
         // Manejar la notificación recibida desde el servidor
-
+        console.log(payload.target);
         const msgHTML = (
-          <p>
+          <Link to={payload.target}>
             <b>{payload.msgNotification}</b>
-          </p>
+          </Link>
         );
 
         showAndHideNotification(
@@ -101,10 +102,15 @@ function PostComponent({ post }) {
   };
 
   //? Funcion para enviar la notificacion al socket de socket.io
-  const sendNotification = (authorId, msgNotification, bgColor) => {
+  const sendNotification = (authorId, msgNotification, bgColor, target) => {
     console.log(authorId, msgNotification, bgColor);
     if (socket) {
-      socket.emit("notification", { authorId, msgNotification, bgColor });
+      socket.emit("notification", {
+        authorId,
+        msgNotification,
+        bgColor,
+        target,
+      });
     }
   };
 
@@ -124,14 +130,16 @@ function PostComponent({ post }) {
 
     const buyer = await getBuyerInfo(getIdUser());
     const message = `${buyer.name} te ha solicitado comprar el producto:  "${post.title}"`;
+
     try {
       // Enviar notificación al vendedor
       await axios.post("http://localhost:3001/notifications", {
         sellerId: post.author_id,
         message,
+        target: `/pofile/${buyer._id}`
       });
 
-      sendNotification(post.author_id, message, `bg-orange-600`);
+      sendNotification(post.author_id, message, `bg-orange-600`, `/profile/${buyer._id}`);
 
       // Agregar la solicitud al array del vendedor
       await axios.post(
@@ -226,9 +234,12 @@ function PostComponent({ post }) {
             </span>
             <span>
               {seller ? (
-                <span className="text-gray-900 font-medium">
-                  {seller.name} {seller.lastName}
-                </span>
+                <Link to={`/profile/${seller._id}`}>
+                  {" "}
+                  <span className="text-gray-900 font-medium hover:text-blue-500">
+                    {seller.name} {seller.lastName}
+                  </span>
+                </Link>
               ) : (
                 <span className="text-gray-400">Vendedor no disponible</span>
               )}

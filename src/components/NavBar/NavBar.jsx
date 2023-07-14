@@ -74,9 +74,9 @@ function NavBar() {
     }
   };
   //? Funcion para enviar la notificacion al socket de socket.io
-  const sendNotification = (authorId, msgNotification, bgColor) => {
+  const sendNotification = (authorId, msgNotification, bgColor, target) => {
     if (socket) {
-      socket.emit("notification", { authorId, msgNotification, bgColor });
+      socket.emit("notification", { authorId, msgNotification, bgColor, target });
     }
   };
 

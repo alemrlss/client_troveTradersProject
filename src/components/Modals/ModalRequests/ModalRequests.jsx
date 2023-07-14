@@ -33,6 +33,7 @@ function ModalRequests({
       await axios.post("http://localhost:3001/notifications", {
         sellerId: request.buyerID,
         message: `El vendedor ${request.nameSeller} ha ACEPTADO tu solicitud por la compra del articulo: ${request.titlePost}. CLICK AQUI PARA IR A REVISAR`,
+        target: `/trade/${request._id}`
       });
 
       await axios.put(`http://localhost:3001/posts/${request.postID}`, { newState: 'acuerdo' });
@@ -40,7 +41,8 @@ function ModalRequests({
       sendNotification(
         request.buyerID,
         `El vendedor ${request.nameSeller} ha aceptado tu solicitud por la compra del articulo: ${request.titlePost} click aqui para ir a revisar`,
-        "bg-green-200"
+        "bg-green-200", 
+        `/trade/${request._id}`
       );
       closeModal();
     } catch (error) {
@@ -60,12 +62,14 @@ function ModalRequests({
 
       await axios.post("http://localhost:3001/notifications", {
         sellerId: request.buyerID,
-        message: `El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost}}}`,
+        message: `El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost}`,
+        target: `/home`
       });
       sendNotification(
         request.buyerID,
         `El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost}}`,
-        "bg-pink-400"
+        "bg-pink-400",
+        '/home'
       );
       closeModal();
     } catch (error) {

@@ -20,9 +20,9 @@ function HomeComponent({ posts }) {
       socket.on("newNotification", (payload) => {
         // Manejar la notificación recibida desde el servidor
         const msgHTML = (
-          <p>
+          <Link to={payload.target}>
             <b>{payload.msgNotification}</b>
-          </p>
+          </Link>
         );
         showAndHideNotification(payload.msgNotification, msgHTML, payload.bgColor);
       });
