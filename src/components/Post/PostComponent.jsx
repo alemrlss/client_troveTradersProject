@@ -14,9 +14,12 @@ function PostComponent({ post }) {
   const [seller, setSeller] = useState(null);
   const [isConfirming, setIsConfirming] = useState(false);
   const [hasRequested, setHasRequested] = useState(false);
+  const [isPostAvailable, setIsPostAvailable] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   //!UseEffect para la escucha de las notificaciones
   useEffect(() => {
+    setIsPostAvailable(post.currentState === "disponible");
     if (socket) {
       socket.on("newNotification", (payload) => {
         // Manejar la notificación recibida desde el servidor
@@ -99,6 +102,7 @@ function PostComponent({ post }) {
 
   //? Funcion para enviar la notificacion al socket de socket.io
   const sendNotification = (authorId, msgNotification, bgColor) => {
+    console.log(authorId, msgNotification, bgColor);
     if (socket) {
       socket.emit("notification", { authorId, msgNotification, bgColor });
     }
@@ -128,6 +132,7 @@ function PostComponent({ post }) {
       });
 
       sendNotification(post.author_id, message, `bg-orange-600`);
+
       // Agregar la solicitud al array del vendedor
       await axios.post(
         `http://localhost:3001/users/${post.author_id}/requests`,
@@ -156,6 +161,12 @@ function PostComponent({ post }) {
         "bg-green-400"
       );
       setIsConfirming(false);
+      setIsButtonDisabled(true);
+
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+        console.log("h");
+      }, 2000);
     } catch (error) {
       console.error("Error al confirmar la compra:", error);
     }
@@ -196,88 +207,109 @@ function PostComponent({ post }) {
 
   return (
     <div className="h-screen bg-gray-200 flex items-center justify-center">
-      <div className="max-w-3xl bg-white p-6 rounded shadow">
-        <p className="text-gray-400 text-sm mb-2">
-          Creado: {formatDate(post.createdAt)}
-        </p>
-        <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-        <p className="text-gray-500 mb-2 flex items-center">
-          <span className="mr-2">
-            {seller && (
-              <img
-                src={`http://localhost:3001/image/profile/${seller.imageProfile}`}
-                alt="Foto del vendedor"
-                className="w-8 h-8 rounded-full"
-              />
-            )}
-          </span>
-          <span>
-            {seller ? (
-              <span className="text-gray-900 font-medium">
-                {seller.name} {seller.lastName}
-              </span>
-            ) : (
-              <span className="text-gray-400">Vendedor no disponible</span>
-            )}
-          </span>
-        </p>
-        <p className="text-gray-600 mb-4">{post.description}</p>
-        <p className="text-gray-800 text-lg font-bold mb-4">
-          Precio: {post.price}
-        </p>
+      {isPostAvailable ? (
+        // Contenido del post si el estado es 'disponible'
+        <div className="max-w-3xl bg-white p-6 rounded shadow">
+          <p className="text-gray-400 text-sm mb-2">
+            Creado: {formatDate(post.createdAt)}
+          </p>
+          <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
+          <p className="text-gray-500 mb-2 flex items-center">
+            <span className="mr-2">
+              {seller && (
+                <img
+                  src={`http://localhost:3001/image/profile/${seller.imageProfile}`}
+                  alt="Foto del vendedor"
+                  className="w-8 h-8 rounded-full"
+                />
+              )}
+            </span>
+            <span>
+              {seller ? (
+                <span className="text-gray-900 font-medium">
+                  {seller.name} {seller.lastName}
+                </span>
+              ) : (
+                <span className="text-gray-400">Vendedor no disponible</span>
+              )}
+            </span>
+          </p>
+          <p className="text-gray-600 mb-4">{post.description}</p>
+          <p className="text-gray-800 text-lg font-bold mb-4">
+            Precio: {post.price}
+          </p>
 
-        <div className="grid grid-cols-2 gap-4">
-          {post.photos.map((photo, index) => (
-            <img
-              key={index}
-              src={`http://localhost:3001/images/posts/${photo}`}
-              alt={`Photo ${index}`}
-              className="rounded shadow w-full h-72 object-cover"
-            />
-          ))}
-        </div>
-        <div className="flex justify-center mt-8">
-          {!isConfirming ? (
-            <button
-              onClick={() => {
-                hasRequestedFunction(post.author_id);
-                if (post.author_id === getIdUser()) {
-                  // El usuario está intentando comprar su propio post
-                  const msgError = "No puedes comprar tu propio producto.";
-                  const msgErrorHTML = (
-                    <p className="text-xl">
-                      <b>{msgError}</b>
-                    </p>
-                  );
-                  showAndHideNotification(msgError, msgErrorHTML, "bg-red-300");
-                  return;
-                }
-                setIsConfirming(true);
-              }}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 text-2xl rounded"
-            >
-              Comprar
-            </button>
-          ) : (
-            <div>
-              <button
-                onClick={handleConfirmClick}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 mr-2"
-              >
-                Confirmar compra
-              </button>
+          <div className="grid grid-cols-2 gap-4">
+            {post.photos.map((photo, index) => (
+              <img
+                key={index}
+                src={`http://localhost:3001/images/posts/${photo}`}
+                alt={`Photo ${index}`}
+                className="rounded shadow w-full h-72 object-cover"
+              />
+            ))}
+          </div>
+          <div className="flex justify-center mt-8">
+            {!isConfirming ? (
               <button
                 onClick={() => {
-                  setIsConfirming(false);
+                  hasRequestedFunction(post.author_id);
+
+                  if (post.author_id === getIdUser()) {
+                    // El usuario está intentando comprar su propio post
+                    const msgError = "No puedes comprar tu propio producto.";
+                    const msgErrorHTML = (
+                      <p className="text-xl">
+                        <b>{msgError}</b>
+                      </p>
+                    );
+                    showAndHideNotification(
+                      msgError,
+                      msgErrorHTML,
+                      "bg-red-300"
+                    );
+                    return;
+                  }
+
+                  setIsConfirming(true);
                 }}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 text-2xl rounded"
+                disabled={isButtonDisabled}
               >
-                Cancelar
+                Comprar
               </button>
-            </div>
-          )}
+            ) : (
+              <div>
+                <button
+                  onClick={() => {
+                    handleConfirmClick();
+                    setIsConfirming(false);
+                  }}
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 mr-2"
+                  disabled={isButtonDisabled}
+                >
+                  Confirmar compra
+                </button>
+                <button
+                  onClick={() => {
+                    setIsConfirming(false);
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
+                >
+                  Cancelar
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        // Mensaje de post no disponible si el estado no es 'disponible'
+        <div className="max-w-3xl bg-white p-6 rounded shadow">
+          <h1 className="text-2xl text-red-500 font-bold">
+            Este post no está disponible actualmente.
+          </h1>
+        </div>
+      )}
 
       {showNotification && (
         <div className="absolute top-4 right-5 space-y-4">

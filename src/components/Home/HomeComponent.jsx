@@ -17,14 +17,14 @@ function HomeComponent({ posts }) {
   //!UseEffect para la escucha de las notificaciones
   useEffect(() => {
     if (socket) {
-      socket.on("newNotification", (msgNotification) => {
+      socket.on("newNotification", (payload) => {
         // Manejar la notificación recibida desde el servidor
         const msgHTML = (
           <p>
-            <b>{msgNotification}</b>
+            <b>{payload.msgNotification}</b>
           </p>
         );
-        showAndHideNotification(msgNotification, msgHTML, "bg-orange-400");
+        showAndHideNotification(payload.msgNotification, msgHTML, payload.bgColor);
       });
     }
     return () => {
@@ -74,7 +74,6 @@ function HomeComponent({ posts }) {
             <p className="text-gray-600">{post.description}</p>
             <Link to={`/post/${post._id}`}>
               <button
-                onClick={() => {}}
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
               >
                 Comprar#2

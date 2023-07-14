@@ -24,8 +24,29 @@ function ModalRequests({
     return formattedDate;
   }
 
-  const handleAccept = () => {
-    console.log("Has aceptado");
+  const handleAccept = async (request) => {
+   
+    try {
+      await axios.post(
+        `http://localhost:3001/users/${idUser}/requests/${request._id}/accept`
+      );
+      await axios.post("http://localhost:3001/notifications", {
+        sellerId: request.buyerID,
+        message: `El vendedor ${request.nameSeller} ha ACEPTADO tu solicitud por la compra del articulo: ${request.titlePost}. CLICK AQUI PARA IR A REVISAR`,
+      });
+
+      await axios.put(`http://localhost:3001/posts/${request.postID}`, { newState: 'acuerdo' });
+
+      sendNotification(
+        request.buyerID,
+        `El vendedor ${request.nameSeller} ha aceptado tu solicitud por la compra del articulo: ${request.titlePost} click aqui para ir a revisar`,
+        "bg-green-200"
+      );
+      closeModal();
+    } catch (error) {
+      // Manejo de errores si la solicitud falla
+      console.error("Error al aceptar la solicitud:", error);
+    }
   };
 
   const handleReject = async (request) => {
@@ -38,8 +59,8 @@ function ModalRequests({
       setRequests(updatedRequests);
 
       await axios.post("http://localhost:3001/notifications", {
-        sellerId: request.buyerID, 
-        message:`El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost}}}`,
+        sellerId: request.buyerID,
+        message: `El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost}}}`,
       });
       sendNotification(
         request.buyerID,
@@ -57,7 +78,7 @@ function ModalRequests({
       <div className="modal-container">
         <h2 className="text-4xl  mb-4">Solicitudes</h2>
         <h2>
-          {requests.length === 0 ? (
+        {requests.length === 0 ? (
             <div className="p-4 mb-4 border rounded bg-gray-100">
               <p className="text-gray-500">No hay solicitudes disponibles.</p>
             </div>
@@ -74,9 +95,12 @@ function ModalRequests({
                   </p>
                 </div>
                 <div>
+                  { console.log(request)}
                   <button
                     className="px-4 py-2 mr-2 text-sm text-white bg-green-500 rounded hover:bg-green-600"
-                    onClick={handleAccept}
+                    onClick={() => {
+                      handleAccept(request);
+                    }}
                   >
                     Aceptar
                   </button>

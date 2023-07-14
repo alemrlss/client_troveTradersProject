@@ -215,6 +215,7 @@ function NavBar() {
         isOpen={isOpenModalTrades}
         closeModal={closeModalTrades}
         trades={trades}
+        idUser={idUser}
       />
       {showNotification && (
         <div className="absolute top-4 right-5 space-y-4">
