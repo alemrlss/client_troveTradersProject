@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// eslint-disable-next-line react-hooks/exhaustive-deps
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -8,25 +10,38 @@ import { getDataUser } from "../services/Auth";
 function trade() {
   const { id } = useParams();
   const [tradeInfo, setTradeInfo] = useState(null);
+  const [postInfo, setPostInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [test, setTest] = useState(null)
 
   //!idUser de la session!
   const idUser = getDataUser().id;
 
   useEffect(() => {
-    console.log("ha");
-    axios
-      .get(`http://localhost:3001/users/${idUser}/trades/${id}`)
-      .then((response) => {
-        // !La respuesta de la solicitud GET se encuentra en la variable "response"
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/users/${idUser}/trades/${id}`
+        );
+        const responsePost = await axios.get(
+          `http://localhost:3001/posts/${response.data.postID}`
+        );
+
+        const r = await axios.get(
+          `http://localhost:3001/users/${idUser}`
+        );
+        setTest(r.data)
         setLoading(false);
+        setPostInfo(responsePost.data);
         setTradeInfo(response.data);
-      })
-      .catch((error) => {
+      } catch (error) {
         setError(error.response?.data?.message || "Error: Trade not found");
         setLoading(false);
-      });
+      }
+    };
+    fetchData();
 
     setLoading(true);
   }, []);
@@ -39,8 +54,14 @@ function trade() {
   return (
     <>
       {loading && <Loader options={options} />}
-      {error && <h1>{error} PROGRAMAR ESTA PARTE QUE ES CUANDO EL TRADE NO SE ENCUENTRA</h1>}
-      {tradeInfo && <TradeComponent trade={tradeInfo} idUser={idUser} />}
+      {error && (
+        <h1>
+          {error} PROGRAMAR ESTA PARTE QUE ES CUANDO EL TRADE NO SE ENCUENTRA
+        </h1>
+      )}
+      {tradeInfo && (
+        <TradeComponent trade={tradeInfo} post={postInfo} idUser={idUser} userData={test} />
+      )}
     </>
   );
 }

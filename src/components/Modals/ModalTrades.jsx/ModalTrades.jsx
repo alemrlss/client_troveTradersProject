@@ -7,7 +7,6 @@ function ModalTrades({ isOpen, closeModal, trades }) {
     closeModal();
   };
 
-  console.log(trades)
 
   return (
     <article className={`modal ${isOpen && "is-open"}`}>

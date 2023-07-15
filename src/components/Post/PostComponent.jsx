@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
@@ -129,14 +130,14 @@ function PostComponent({ post }) {
     }
 
     const buyer = await getBuyerInfo(getIdUser());
-    const message = `${buyer.name} te ha solicitado comprar el producto:  "${post.title}"`;
+    const message = `😾 ${buyer.name} te ha solicitado comprar tu producto: "${post.title}". Click aqui para ir al Perfil del vendedor`;
 
     try {
       // Enviar notificación al vendedor
       await axios.post("http://localhost:3001/notifications", {
         sellerId: post.author_id,
         message,
-        target: `/pofile/${buyer._id}`
+        target: `/profile/${buyer._id}`
       });
 
       sendNotification(post.author_id, message, `bg-orange-600`, `/profile/${buyer._id}`);
@@ -157,7 +158,7 @@ function PostComponent({ post }) {
 
       // Mostrar notificación de compra confirmada
       const msgConfirmation =
-        "¡Le has enviado la solicitud de compra al vendedor, esperad que responda!";
+        "✅ La solicitud de compra ha sido enviada con exito";
       const msgConfirmationHTML = (
         <p>
           <b>{msgConfirmation}</b>

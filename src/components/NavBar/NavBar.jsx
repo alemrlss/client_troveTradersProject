@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getDataUser } from "../../services/Auth";
@@ -11,6 +12,7 @@ import ModalRequests from "../Modals/ModalRequests/ModalRequests";
 import ModalTrades from "../Modals/ModalTrades.jsx/ModalTrades";
 import { useContext } from "react";
 import { SocketContext } from "../../contexts/socketContext";
+import axios from "axios";
 function NavBar() {
   //^  Contexto.
   const socket = useContext(SocketContext);
@@ -31,7 +33,11 @@ function NavBar() {
           </p>
         );
         console.log("Nueva notificación recibida:", payload.msgNotification);
-        showAndHideNotification(payload.msgNotification, msgHTML, payload.bgColor);
+        showAndHideNotification(
+          payload.msgNotification,
+          msgHTML,
+          payload.bgColor
+        );
 
         // Puedes realizar otras acciones con la notificación, como mostrarla en la interfaz de usuario
       });
@@ -76,7 +82,12 @@ function NavBar() {
   //? Funcion para enviar la notificacion al socket de socket.io
   const sendNotification = (authorId, msgNotification, bgColor, target) => {
     if (socket) {
-      socket.emit("notification", { authorId, msgNotification, bgColor, target });
+      socket.emit("notification", {
+        authorId,
+        msgNotification,
+        bgColor,
+        target,
+      });
     }
   };
 
@@ -102,6 +113,21 @@ function NavBar() {
   //!MANEJO DEL LOGOUT
   const handleLogout = () => {
     logout();
+  };
+
+  const readNotification = (idNotification, idUser) => {
+    console.log("h");
+    axios
+      .put(
+        `http://localhost:3001/notifications/${idUser}/read/${idNotification}`
+      )
+      .then((response) => {
+        console.log("Notificación marcada como leída:", response.data);
+        // Realiza alguna acción adicional si es necesario
+      })
+      .catch((error) => {
+        console.error("Error al marcar la notificación como leída:", error);
+      });
   };
 
   //
@@ -191,12 +217,18 @@ function NavBar() {
           <ul className="divide-y divide-gray-300 ">
             {notifications.map((notification) => (
               <li
-                className={`bg-gray-300 p-4 m-1  ${
-                  notification.read === "true" ? "text-gray-500" : "text-black"
-                }`}
+              //~Aqui se puede poner un ternario para cambiar el color de la notificacion(la condicion es si esta leida o no)
+                className={` p-4 m-1  ${notification.read ? "bg-gray-200 text-gray-700" : "bg-orange-200 text-orange-700"}`}
                 key={notification._id}
+                onClick={() => {
+                  readNotification(notification._id, idUser);
+                  setIsOpen(false);
+                }}
               >
-                {notification.message}
+                <Link to={notification.target}>
+                  {notification.message}
+                 {console.log(notification)}
+                </Link>
               </li>
             ))}
           </ul>

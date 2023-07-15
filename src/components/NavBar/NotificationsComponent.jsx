@@ -20,7 +20,7 @@ function NotificationsComponent({
         //Reversed: para que las notificaciones más recientes aparezcan primero
         const reversed = response.data.reverse();
         setNotifications(reversed);
-        console.log(response.data);
+   
       })
       .catch((error) => {
         // Manejo de errores si la solicitud falla
@@ -34,7 +34,6 @@ function NotificationsComponent({
       setIsOpen(!isOpen);
       loadNotifications();
     }
-    console.log(isOpen);
   };
 
   return (

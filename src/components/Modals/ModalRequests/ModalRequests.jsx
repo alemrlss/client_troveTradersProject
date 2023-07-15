@@ -25,23 +25,24 @@ function ModalRequests({
   }
 
   const handleAccept = async (request) => {
-   
     try {
       await axios.post(
         `http://localhost:3001/users/${idUser}/requests/${request._id}/accept`
       );
       await axios.post("http://localhost:3001/notifications", {
         sellerId: request.buyerID,
-        message: `El vendedor ${request.nameSeller} ha ACEPTADO tu solicitud por la compra del articulo: ${request.titlePost}. CLICK AQUI PARA IR A REVISAR`,
-        target: `/trade/${request._id}`
+        message: `🤩 El vendedor ${request.nameSeller} ha aceptado tu solicitud de compra por el articulo: ${request.titlePost}. Click para ir al trade`,
+        target: `/trade/${request._id}`,
       });
 
-      await axios.put(`http://localhost:3001/posts/${request.postID}`, { newState: 'acuerdo' });
+      await axios.put(`http://localhost:3001/posts/${request.postID}`, {
+        newState: "acuerdo",
+      });
 
       sendNotification(
         request.buyerID,
-        `El vendedor ${request.nameSeller} ha aceptado tu solicitud por la compra del articulo: ${request.titlePost} click aqui para ir a revisar`,
-        "bg-green-200", 
+        `🤩 El vendedor ${request.nameSeller} ha aceptado tu solicitud de compra por el articulo: ${request.titlePost}. Click para ir al trade`,
+        "bg-green-200",
         `/trade/${request._id}`
       );
       closeModal();
@@ -62,14 +63,14 @@ function ModalRequests({
 
       await axios.post("http://localhost:3001/notifications", {
         sellerId: request.buyerID,
-        message: `El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost}`,
-        target: `/home`
+        message: `😭 El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost} 😭`,
+        target: `/home`,
       });
       sendNotification(
         request.buyerID,
-        `El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost}}`,
+        `😭 El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost} 😭`,
         "bg-pink-400",
-        '/home'
+        "/home"
       );
       closeModal();
     } catch (error) {
@@ -82,7 +83,7 @@ function ModalRequests({
       <div className="modal-container">
         <h2 className="text-4xl  mb-4">Solicitudes</h2>
         <h2>
-        {requests.length === 0 ? (
+          {requests.length === 0 ? (
             <div className="p-4 mb-4 border rounded bg-gray-100">
               <p className="text-gray-500">No hay solicitudes disponibles.</p>
             </div>
@@ -99,7 +100,7 @@ function ModalRequests({
                   </p>
                 </div>
                 <div>
-                  { console.log(request)}
+                  {console.log(request)}
                   <button
                     className="px-4 py-2 mr-2 text-sm text-white bg-green-500 rounded hover:bg-green-600"
                     onClick={() => {
