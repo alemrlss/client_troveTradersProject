@@ -25,7 +25,6 @@ function ProfileMain({ data }) {
             <b>{payload.msgNotification}</b>
           </Link>
         );
-        console.log("Nueva notificación recibida:", payload.msgNotification);
         showAndHideNotification(
           payload.msgNotification,
           msgHTML,

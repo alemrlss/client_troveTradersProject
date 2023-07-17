@@ -14,7 +14,10 @@ function trade() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [test, setTest] = useState(null)
+  const [userData, setUserData] = useState(null);
+
+  const [sellerData, setSellerData] = useState(null);
+  const [buyerData, setBuyerData] = useState(null);
 
   //!idUser de la session!
   const idUser = getDataUser().id;
@@ -29,13 +32,23 @@ function trade() {
           `http://localhost:3001/posts/${response.data.postID}`
         );
 
-        const r = await axios.get(
+        const responseUserData = await axios.get(
           `http://localhost:3001/users/${idUser}`
         );
-        setTest(r.data)
-        setLoading(false);
+
+        const responseSellerData = await axios.get(
+          `http://localhost:3001/users/${response.data.sellerID}`
+        );
+        const responseBuyerData = await axios.get(
+          `http://localhost:3001/users/${response.data.buyerID}`
+        );
+
+        setBuyerData(responseBuyerData.data);
+        setSellerData(responseSellerData.data);
+        setUserData(responseUserData.data);
         setPostInfo(responsePost.data);
         setTradeInfo(response.data);
+        setLoading(false);
       } catch (error) {
         setError(error.response?.data?.message || "Error: Trade not found");
         setLoading(false);
@@ -60,7 +73,14 @@ function trade() {
         </h1>
       )}
       {tradeInfo && (
-        <TradeComponent trade={tradeInfo} post={postInfo} idUser={idUser} userData={test} />
+        <TradeComponent
+          trade={tradeInfo}
+          post={postInfo}
+          idUser={idUser}
+          userData={userData}
+          sellerData={sellerData}
+          buyerData={buyerData}
+        />
       )}
     </>
   );

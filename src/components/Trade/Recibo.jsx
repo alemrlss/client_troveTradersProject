@@ -2,7 +2,8 @@
 import { useContext, useState, useEffect } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import axios from "axios";
-function Pago({
+
+function Recibo({
   post,
   messages,
   newMessage,
@@ -21,60 +22,59 @@ function Pago({
   const [buyerConfirmed, setBuyerConfirmed] = useState(false);
   const [sellerConfirmed, setSellerConfirmed] = useState(false);
 
-  const [payConfirmedBuyer, setPayConfirmedBuyer] = useState(false);
-  const [payConfirmedSeller, setPayConfirmedSeller] = useState(false);
+  const [receivedConfirmedBuyer, setReceivedConfirmedBuyer] = useState(false);
+  const [receivedConfirmedSeller, setReceivedConfirmedSeller] = useState(false);
 
   useEffect(() => {
     // Escuchar evento de confirmación del comprador
-    socket.on("buyerConfirmationPay", () => {
+    socket.on("buyerConfirmationReceived", () => {
       setBuyerConfirmed(true);
-      setPayConfirmedBuyer(true);
+      setReceivedConfirmedBuyer(true);
     });
 
     // Escuchar evento de confirmación del vendedor
-    socket.on("sellerConfirmationPay", () => {
+    socket.on("sellerConfirmationReceived", () => {
       setSellerConfirmed(true);
-      setPayConfirmedSeller(true);
+      setReceivedConfirmedSeller(true);
     });
 
     return () => {
       // Desuscribirse de los eventos al desmontar el componente
-      socket.off("buyerConfirmationPay");
-      socket.off("sellerConfirmationPay");
+      socket.off("buyerConfirmationReceived");
+      socket.off("sellerConfirmationReceived");
     };
   }, [socket]);
 
   useEffect(() => {
     // Verificar si ambos usuarios han confirmado el acuerdo
     if (sellerConfirmed && buyerConfirmed) {
-      /*  axios
+      axios
         .put(`http://localhost:3001/posts/${post._id}`, {
-          newState: "recibo", // Cambiar al estado "recibo"
+          newState: "finalizado", // Cambiar al estado "finalizado"
         })
         .then((response) => {
           console.log(response.data);
-          setCurrentState("recibo");
+          setCurrentState("finalizado");
           // Manejar la respuesta de la petición si es necesario
         })
         .catch((error) => {
           console.error("Error al actualizar el estado del post:", error);
-        });*/
+        });
       setTimeout(() => {
-        setCurrentState("recibo");
+        setCurrentState("finalizado");
       }, 4000);
     }
   }, [sellerConfirmed, buyerConfirmed, setCurrentState]);
 
-  //evento que hara el comprador
   const handleBuyerConfirmed = () => {
-    socket.emit("buyerConfirmationPay");
+    socket.emit("buyerConfirmationReceived");
+    console.log("lol");
   };
 
   //evento que hara el vendedor
   const handleSellerConfirmed = () => {
-    socket.emit("sellerConfirmationPay");
+    socket.emit("sellerConfirmationReceived");
   };
-
   return (
     <div className="flex flex-col h-screen">
       <div className="flex justify-center mb-6">
@@ -85,73 +85,68 @@ function Pago({
           </h2>
           <hr className="" />
           <h2 className="text-3xl font-bold mb-4 pt-2 text-center mt-4">
-            Precio: {post.price}
+            Aqui tiene que ir informacion acerca del recibo del producto(no
+            funcional)
           </h2>
-
+          -
           <h2 className="text-2xl mb-4 text-center">
             {buyer
-              ? `Realizale el Pago al Vendedor: ${sellerData.name} y luego confirma en el Boton de Abajo`
-              : "Esperando que el Comprador confirme que ha realizado el pago... Puedes enviarle un mensaje en el chat para recordarle que confirme. Luego que confirme se te activara el boton para que tu confirmes que lo has recibido..."}
+              ? `Esperando que el Vendedor confirme que te ha enviado / entregado el Producto: ${post.title}`
+              : "Confirmale al Comprador que le has enviado / entregado el Producto"}
           </h2>
-
-          {payConfirmedBuyer && (
+          {receivedConfirmedSeller && (
             <p className="bg-blue-300 text-gray-900 font-bold px-4 py-2 rounded">
-              ¡El Comprador <b>{trade.nameBuyer}</b> ha realizado el Pago!
+              ¡El vendedor <b>{trade.nameSeller}</b> ha realizado marcado el
+              producto como Entregado!
             </p>
           )}
-
-          {seller && payConfirmedBuyer && (
-            <p className=" text-gray-900 font-bold px-4 py-2 rounded text-xl">
-              Revisa que has recibido el pago, y confirma el Pago como Recibido!
+          {seller && sellerConfirmed && (
+            <h2 className="text-xl font-bold mt-4">
+              Le has confirmado al Comprador que le has entregado el Producto..
+              Esperando respuesta de {trade.nameSeller}
+            </h2>
+          )}
+          {buyer && sellerConfirmed && (
+            <h2 className="text-xl font-bold mt-4">
+              El comprador ha marcado el producto como entregado. Por favor
+              verifica si el producto fue entregado y de ser asi marca el
+              Producto como recibido!
+            </h2>
+          )}
+          {receivedConfirmedBuyer && (
+            <p className="bg-orange-300 text-gray-900 font-bold px-4 py-2 rounded mt-4">
+              ¡El comprador ha recibido el Producto!!!
             </p>
+          )}
+          {buyerConfirmed && sellerConfirmed && (
+            <h2 className="text-xl font-bold mt-4 text-white">
+              La entrega del producto ha sido exitosa... Redireccionando al
+              estado: Finalizado
+            </h2>
           )}
           <div className="flex justify-center mt-4">
-            {seller && buyerConfirmed && !sellerConfirmed && (
+            {seller && !receivedConfirmedSeller && (
               <button
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-6 rounded mr-2 font-bold"
                 onClick={() => {
                   handleSellerConfirmed();
                 }}
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-6 rounded mr-2 font-bold"
               >
-                He recibido el Pago
+                Le he entregado el Producto al Comprador
               </button>
             )}
 
-            {buyer && !buyerConfirmed && (
+            {buyer && receivedConfirmedSeller && (
               <button
                 onClick={() => {
                   handleBuyerConfirmed();
                 }}
                 className="bg-green-500 hover:bg-green-600 text-white px-4 py-6 rounded mr-2 font-bold"
               >
-                He realizado el Pago
+                He recibido el Producto
               </button>
             )}
-
-            {buyer && buyerConfirmed && (
-              <h2 className="text-xl font-bold">
-                Le has confirmado al vendedor que has realizado el Pago.
-                Esperando su confirmacion de Recibo...
-              </h2>
-            )}
           </div>
-          {payConfirmedSeller && (
-            <p className="bg-orange-500 text-gray-900 font-bold px-4 py-2 rounded mt-4 mb-2">
-              ¡El Vendedor <b>{trade.nameSeller}</b> ha recibido el Pago
-              Realizado!
-            </p>
-          )}
-          {seller && sellerConfirmed && (
-            <h2 className="text-2xl">
-              Le has confirmado al comprador que has recibido el Pago.
-            </h2>
-          )}
-          {payConfirmedSeller && payConfirmedBuyer && (
-            <p className=" text-white font-bold px-4 py-2 mt-8">
-              Se ha confirmado el Pago de el Trade con exito.. Pasando a la
-              siguiente seccion: Recibo
-            </p>
-          )}
         </div>
 
         {/* Columna del chat */}
@@ -160,7 +155,7 @@ function Pago({
             Trade Chat
           </h1>
           <p className="text-center font-bold text-gray-400 text-xs pb-1">
-            Ponte de acuerdo con la otra parte para realizar el pago....
+            Ponte de acuerdo con la otra parte para la entrega del objeto...
           </p>
           <div className="border border-gray-800 p-4 mb-4 max-w-md h-full overflow-y-auto center bg-slate-400 w-2/3 rounded-md mx-auto">
             {messages.map((message, index) => (
@@ -193,4 +188,4 @@ function Pago({
   );
 }
 
-export default Pago;
+export default Recibo;

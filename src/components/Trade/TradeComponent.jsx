@@ -1,12 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useContext } from "react";
-import Acuerdo from "./Acuerdo";
 import { SocketContext } from "../../contexts/socketContext";
 import axios from "axios";
-import { getDataUser } from "../../services/Auth";
+import Acuerdo from "./Acuerdo";
+import Pago from "./Pago";
+import Recibo from "./Recibo";
+import Finalizado from "./Finalizado";
 
-function TradeComponent({ trade, idUser, post, userData }) {
-  console.log(getDataUser());
+function TradeComponent({
+  trade,
+  idUser,
+  post,
+  userData,
+  sellerData,
+  buyerData,
+}) {
   const socket = useContext(SocketContext);
 
   const [username] = useState(userData.username);
@@ -16,12 +24,13 @@ function TradeComponent({ trade, idUser, post, userData }) {
   const [seller, setSeller] = useState(false);
   const [buyer, setBuyer] = useState(false);
 
+  const [role, setRole] = useState();
+
   const [currentState, setCurrentState] = useState(post.currentState);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        console.log(trade._id);
         const response = await axios.get(
           "http://localhost:3001/messages/" + trade._id
         );
@@ -38,20 +47,20 @@ function TradeComponent({ trade, idUser, post, userData }) {
   useEffect(() => {
     if (idUser === trade.sellerID) {
       setSeller(true);
+      setRole("vendedor");
     } else if (idUser === trade.buyerID) {
       setBuyer(true);
+      setRole("comprador");
     }
-
     socket.emit("joinTradeRoom", trade._id);
 
     // Manejar evento de recepción de mensajes
     socket.on("message", handleMessageReceived);
-
     return () => {
       // Desuscribirse del evento al desmontar el componente
       socket.off("message", handleMessageReceived);
     };
-  }, [idUser, trade]);
+  }, [idUser, socket, trade]);
 
   const handleMessageReceived = (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -69,67 +78,70 @@ function TradeComponent({ trade, idUser, post, userData }) {
     setNewMessage("");
   };
 
+  const stateComponents = {
+    acuerdo: (
+      <Acuerdo
+        post={post}
+        messages={messages}
+        newMessage={newMessage}
+        setNewMessage={setNewMessage}
+        handleSendMessage={handleSendMessage}
+        currentState={currentState}
+        role={role}
+        setCurrentState={setCurrentState}
+        trade={trade}
+        sellerData={sellerData}
+        buyerData={buyerData}
+      />
+    ),
+    pago: (
+      <Pago
+        post={post}
+        messages={messages}
+        newMessage={newMessage}
+        setNewMessage={setNewMessage}
+        handleSendMessage={handleSendMessage}
+        currentState={currentState}
+        role={role}
+        setCurrentState={setCurrentState}
+        trade={trade}
+        seller={seller}
+        buyer={buyer}
+        sellerData={sellerData}
+        buyerData={buyerData}
+      />
+    ),
+    recibo: (
+      <Recibo
+        post={post}
+        messages={messages}
+        newMessage={newMessage}
+        setNewMessage={setNewMessage}
+        handleSendMessage={handleSendMessage}
+        currentState={currentState}
+        role={role}
+        setCurrentState={setCurrentState}
+        trade={trade}
+        seller={seller}
+        buyer={buyer}
+        sellerData={sellerData}
+        buyerData={buyerData}
+      />
+    ),
+    finalizado: <Finalizado />,
+  };
+
+  const component = stateComponents[currentState];
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div>
-        <h1 className="text-2xl font-bold mb-4">Trade Chat</h1>
-
-        <div className="border border-gray-300 p-4 mb-4 max-w-md">
-          {messages.map((message, index) => (
-            <div key={index} className="mb-2">
-              <strong>{message.username}: </strong>
-              {message.message}
-            </div>
-          ))}
-        </div>
-
-        <div className="flex">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
-          <button
-            onClick={handleSendMessage}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 rounded-r"
-          >
-            Send
-          </button>
-        </div>
-      </div>
-      <h1 className="text-2xl font-bold mb-4">Detalles del Trade</h1>
-      {seller && (
-        <div className="bg-orange-200 rounded-lg shadow-md p-4 mb-4">
-          <h2 className="text-xl mb-2">Esta es la ventana del vendedor</h2>
-          <p>
-            Aquí tendrás acceso a todas las funcionalidades relacionadas con el
-            trade como la negociación, el pago y el envío.
-          </p>
-        </div>
-      )}
-      {buyer && (
-        <div className="bg-gray-600 rounded-lg shadow-md p-4 mb-4">
-          <h2 className="text-xl mb-2">Esta es la ventana del comprador</h2>
-          <p>
-            Aquí podrás realizar la compra del artículo y coordinar los detalles
-            con el vendedor.
-          </p>
-        </div>
-      )}
+    <div className="container mx-auto px-4 py-8 bg-slate-500 rounded-md">
+      {seller && component}
+      {buyer && component}
       {!seller && !buyer && (
-        <div className="bg-red-100 rounded-lg shadow-md p-4">
+        <div className="bg-red-300 rounded-lg shadow-md p-4">
           <h2 className="text-xl mb-2">No tienes roles para este Trade</h2>
           <p>No tienes los permisos necesarios para acceder a esta página.</p>
         </div>
-      )}
-      {(seller || buyer) && currentState === "acuerdo" && (
-        <Acuerdo
-          trade={trade}
-          post={post}
-          seller={seller}
-          buyer={buyer}
-          setCurrentState={setCurrentState}
-        />
       )}
     </div>
   );
