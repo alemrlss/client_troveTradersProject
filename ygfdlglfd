@@ -1,0 +1,32 @@
+[33m3324697[m[33m ([m[1;36mHEAD -> [m[1;32mbranch-alejandro[m[33m, [m[1;31morigin/branch-alejandro[m[33m)[m merged changes
+[33mfb51e23[m[33m ([m[1;31morigin/branch-kevin[m[33m, [m[1;32mmaster[m[33m)[m borre signupBackend
+[33me5c9dd7[m tailwind, fotos, signup
+[33mb7cd1c9[m notifications funcionally in Profile and Home! and create a post route& component postComponent
+[33mf02eee4[m component home beta... Logic notifications error and notifications sends..
+[33m4f5d7eb[m changes
+[33mb41cb49[m Modal edit component info general working... with http put(only name, lastname, username and gender)
+[33m3e0722e[m Adding changes in Profile component... and first changes in edit modal(using custom hooks) and react-select
+[33mb174ca5[m Merge branch 'branch-alejandro' into branch-kevin
+[33m60a0fe9[m commit
+[33me934d48[m adding about in the about component
+[33m5844bf2[m changes to the profile component(no finish)
+[33m4c60eef[m signup, mongodb
+[33m59be832[m adding AuthContext in the application
+[33m56af6af[m[33m ([m[1;32mbranch-kevin[m[33m)[m Merge branch 'branch-alejandro' into branch-kevin
+[33mf88db38[m adding auth login and protected routes
+[33m184c3c0[m Login component and validations front-backend... and ProtectedRoutes in app.jsx
+[33m27d6ffb[m adding functions: login, logout and isauthorized in a folder Auth
+[33m767fdc9[m Create a branch-alejandro
+[33m9f2e339[m Update index.html
+[33m71aa4be[m[33m ([m[1;31morigin/master[m[33m)[m add dependencys and folder structure
+[33mfbf4b68[m test
+[33m5514424[m Merge pull request #3 from alemrlss/branch-kevin
+[33m487a901[m adding dependencys and folder structure
+[33mf73ea85[m Update index.html
+[33m3dadca4[m Merge pull request #2 from alemrlss/branch-kevin
+[33m082df63[m tailwind
+[33m260fa08[m Merge pull request #1 from alemrlss/branch-kevin
+[33m75eb9b0[m Update index.html
+[33m01bc789[m Update README.md
+[33mcaa8c9d[m TrovelTraders
+[33m8ae0425[m my first commit
