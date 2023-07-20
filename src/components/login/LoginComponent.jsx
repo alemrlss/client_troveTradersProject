@@ -127,7 +127,7 @@ function LoginComponent() {
               {" "}
               No tienes cuenta?{" "}
               <a
-                href="#"
+                href="/register"
                 className="font-medium text-primary-600 hover:underline"
               >
                 Registrate
