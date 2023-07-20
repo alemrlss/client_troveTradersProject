@@ -13,29 +13,27 @@ function Recibo({
   role,
   setCurrentState,
   trade,
-  sellerData,
   seller,
   buyer,
 }) {
   const socket = useContext(SocketContext);
 
-  const [buyerConfirmed, setBuyerConfirmed] = useState(false);
-  const [sellerConfirmed, setSellerConfirmed] = useState(false);
-
-  const [receivedConfirmedBuyer, setReceivedConfirmedBuyer] = useState(false);
-  const [receivedConfirmedSeller, setReceivedConfirmedSeller] = useState(false);
+  const [buyerConfirmed, setBuyerConfirmed] = useState(
+    trade.receivedConfirmationBuyer ? true : false
+  );
+  const [sellerConfirmed, setSellerConfirmed] = useState(
+    trade.receivedConfirmationSeller ? true : false
+  );
 
   useEffect(() => {
     // Escuchar evento de confirmación del comprador
     socket.on("buyerConfirmationReceived", () => {
       setBuyerConfirmed(true);
-      setReceivedConfirmedBuyer(true);
     });
 
     // Escuchar evento de confirmación del vendedor
     socket.on("sellerConfirmationReceived", () => {
       setSellerConfirmed(true);
-      setReceivedConfirmedSeller(true);
     });
 
     return () => {
@@ -60,20 +58,46 @@ function Recibo({
         .catch((error) => {
           console.error("Error al actualizar el estado del post:", error);
         });
-      setTimeout(() => {
-        setCurrentState("finalizado");
-      }, 4000);
     }
-  }, [sellerConfirmed, buyerConfirmed, setCurrentState]);
+  }, [sellerConfirmed, buyerConfirmed, setCurrentState, post._id]);
 
   const handleBuyerConfirmed = () => {
-    socket.emit("buyerConfirmationReceived");
-    console.log("lol");
+    axios
+      .post(
+        `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/confirmationReceivedBuyer`
+      )
+      .then((response) => {
+        console.log(response.data);
+        const message = "El Comprador ha recibido el Producto";
+        // Emitir evento de confirmación del vendedor
+        socket.emit("buyerConfirmationReceived", {
+          tradeId: trade._id,
+          message,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   //evento que hara el vendedor
   const handleSellerConfirmed = () => {
-    socket.emit("sellerConfirmationReceived");
+    axios
+      .post(
+        `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/confirmationReceivedSeller`
+      )
+      .then((response) => {
+        console.log(response.data);
+        const message = "El Vendedor ha enviado el Producto";
+        // Emitir evento de confirmación del vendedor
+        socket.emit("sellerConfirmationReceived", {
+          tradeId: trade._id,
+          message,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div className="flex flex-col h-screen">
@@ -94,7 +118,7 @@ function Recibo({
               ? `Esperando que el Vendedor confirme que te ha enviado / entregado el Producto: ${post.title}`
               : "Confirmale al Comprador que le has enviado / entregado el Producto"}
           </h2>
-          {receivedConfirmedSeller && (
+          {sellerConfirmed && (
             <p className="bg-blue-300 text-gray-900 font-bold px-4 py-2 rounded">
               ¡El vendedor <b>{trade.nameSeller}</b> ha realizado marcado el
               producto como Entregado!
@@ -113,7 +137,7 @@ function Recibo({
               Producto como recibido!
             </h2>
           )}
-          {receivedConfirmedBuyer && (
+          {buyerConfirmed && (
             <p className="bg-orange-300 text-gray-900 font-bold px-4 py-2 rounded mt-4">
               ¡El comprador ha recibido el Producto!!!
             </p>
@@ -125,7 +149,7 @@ function Recibo({
             </h2>
           )}
           <div className="flex justify-center mt-4">
-            {seller && !receivedConfirmedSeller && (
+            {seller && !sellerConfirmed && (
               <button
                 className="bg-green-500 hover:bg-green-600 text-white px-4 py-6 rounded mr-2 font-bold"
                 onClick={() => {
@@ -136,7 +160,7 @@ function Recibo({
               </button>
             )}
 
-            {buyer && receivedConfirmedSeller && (
+            {buyer && sellerConfirmed && (
               <button
                 onClick={() => {
                   handleBuyerConfirmed();

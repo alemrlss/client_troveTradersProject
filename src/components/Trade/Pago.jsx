@@ -18,23 +18,22 @@ function Pago({
 }) {
   const socket = useContext(SocketContext);
 
-  const [buyerConfirmed, setBuyerConfirmed] = useState(false);
-  const [sellerConfirmed, setSellerConfirmed] = useState(false);
-
-  const [payConfirmedBuyer, setPayConfirmedBuyer] = useState(false);
-  const [payConfirmedSeller, setPayConfirmedSeller] = useState(false);
+  const [buyerConfirmed, setBuyerConfirmed] = useState(
+    trade.payConfirmationBuyer ? true : false
+  );
+  const [sellerConfirmed, setSellerConfirmed] = useState(
+    trade.payConfirmationSeller ? true : false
+  );
 
   useEffect(() => {
     // Escuchar evento de confirmación del comprador
     socket.on("buyerConfirmationPay", () => {
       setBuyerConfirmed(true);
-      setPayConfirmedBuyer(true);
     });
 
     // Escuchar evento de confirmación del vendedor
     socket.on("sellerConfirmationPay", () => {
       setSellerConfirmed(true);
-      setPayConfirmedSeller(true);
     });
 
     return () => {
@@ -47,7 +46,7 @@ function Pago({
   useEffect(() => {
     // Verificar si ambos usuarios han confirmado el acuerdo
     if (sellerConfirmed && buyerConfirmed) {
-      /*  axios
+      axios
         .put(`http://localhost:3001/posts/${post._id}`, {
           newState: "recibo", // Cambiar al estado "recibo"
         })
@@ -58,21 +57,52 @@ function Pago({
         })
         .catch((error) => {
           console.error("Error al actualizar el estado del post:", error);
-        });*/
-      setTimeout(() => {
-        setCurrentState("recibo");
-      }, 4000);
+        });
     }
-  }, [sellerConfirmed, buyerConfirmed, setCurrentState]);
+  }, [sellerConfirmed, buyerConfirmed, setCurrentState, post._id]);
 
   //evento que hara el comprador
   const handleBuyerConfirmed = () => {
-    socket.emit("buyerConfirmationPay");
+    axios
+      .post(
+        `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/confirmationPayBuyer`
+      )
+      .then((response) => {
+        console.log(response.data);
+        const message = "El Comprador ha realizado el Pago";
+        // Emitir evento de confirmación del vendedor
+        socket.emit("buyerConfirmationPay", {
+          tradeId: trade._id,
+          message,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   //evento que hara el vendedor
   const handleSellerConfirmed = () => {
-    socket.emit("sellerConfirmationPay");
+    if (!trade.payConfirmationBuyer) {
+      return alert("El comprador no ha confirmado que ha realizado el pago");
+    }
+
+    axios
+      .post(
+        `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/confirmationPaySeller`
+      )
+      .then((response) => {
+        console.log(response.data);
+        const message = "El vendedor ha confirmado el Pago";
+        // Emitir evento de confirmación del vendedor
+        socket.emit("sellerConfirmationPay", {
+          tradeId: trade._id,
+          message,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -94,17 +124,6 @@ function Pago({
               : "Esperando que el Comprador confirme que ha realizado el pago... Puedes enviarle un mensaje en el chat para recordarle que confirme. Luego que confirme se te activara el boton para que tu confirmes que lo has recibido..."}
           </h2>
 
-          {payConfirmedBuyer && (
-            <p className="bg-blue-300 text-gray-900 font-bold px-4 py-2 rounded">
-              ¡El Comprador <b>{trade.nameBuyer}</b> ha realizado el Pago!
-            </p>
-          )}
-
-          {seller && payConfirmedBuyer && (
-            <p className=" text-gray-900 font-bold px-4 py-2 rounded text-xl">
-              Revisa que has recibido el pago, y confirma el Pago como Recibido!
-            </p>
-          )}
           <div className="flex justify-center mt-4">
             {seller && buyerConfirmed && !sellerConfirmed && (
               <button
@@ -135,21 +154,21 @@ function Pago({
               </h2>
             )}
           </div>
-          {payConfirmedSeller && (
-            <p className="bg-orange-500 text-gray-900 font-bold px-4 py-2 rounded mt-4 mb-2">
-              ¡El Vendedor <b>{trade.nameSeller}</b> ha recibido el Pago
+          {/*//Mensajes que se mostraran cuando el buyer y seller confirmen*/}
+          {/*// Tambien se pueden hacer mensajes personalizados para cada usuario por ejemplo: 
+            {buyer && buyerConfirmed && ((codigo) asi le mostrariamos solo al buyer..
+          */}
+          {buyerConfirmed && (
+            <p className="bg-blue-500 text-gray-900 font-bold px-4 py-2 rounded mt-4 mb-2">
+              ¡El Comprador <b>{trade.nameSeller}</b> ha maracado el Pago
               Realizado!
             </p>
           )}
-          {seller && sellerConfirmed && (
-            <h2 className="text-2xl">
-              Le has confirmado al comprador que has recibido el Pago.
-            </h2>
-          )}
-          {payConfirmedSeller && payConfirmedBuyer && (
-            <p className=" text-white font-bold px-4 py-2 mt-8">
-              Se ha confirmado el Pago de el Trade con exito.. Pasando a la
-              siguiente seccion: Recibo
+
+          {sellerConfirmed && (
+            <p className="bg-orange-500 text-gray-900 font-bold px-4 py-2 rounded mt-4 mb-2">
+              ¡El Vendedor <b>{trade.nameSeller}</b> ha recibido el Pago
+              Realizado!
             </p>
           )}
         </div>

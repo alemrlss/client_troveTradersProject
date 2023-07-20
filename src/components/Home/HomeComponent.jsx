@@ -5,6 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import { getIdUser } from "../../services/Auth";
 import { Link } from "react-router-dom";
+import CreatePost from "./CreatePost";
 function HomeComponent({ posts }) {
   //^  Contexto.
   const socket = useContext(SocketContext);
@@ -103,6 +104,9 @@ function HomeComponent({ posts }) {
           ))}
         </div>
       )}
+
+
+<CreatePost/>
     </div>
   );
 }

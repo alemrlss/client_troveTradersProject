@@ -7,7 +7,6 @@ function ModalTrades({ isOpen, closeModal, trades }) {
     closeModal();
   };
 
-
   return (
     <article className={`modal ${isOpen && "is-open"}`}>
       <div className="modal-container">

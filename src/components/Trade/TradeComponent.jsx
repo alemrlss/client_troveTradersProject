@@ -27,7 +27,7 @@ function TradeComponent({
   const [role, setRole] = useState();
 
   const [currentState, setCurrentState] = useState(post.currentState);
-
+  console.log(currentState);
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -128,7 +128,15 @@ function TradeComponent({
         buyerData={buyerData}
       />
     ),
-    finalizado: <Finalizado />,
+    finalizado: (
+      <Finalizado
+        seller={seller}
+        buyer={buyer}
+        post={post}
+        setCurrentState={setCurrentState}
+        trade={trade}
+      />
+    ),
   };
 
   const component = stateComponents[currentState];

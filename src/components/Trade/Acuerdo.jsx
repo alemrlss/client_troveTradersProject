@@ -18,18 +18,11 @@ function Acuerdo({
 }) {
   const socket = useContext(SocketContext);
 
-  const [agreementConfirmedSeller, setAgreementConfirmedSeller] = useState(
-    localStorage.getItem(`sellerConfirmed:${trade._id}`) === "true"
-  );
-  const [agreementConfirmedBuyer, setAgreementConfirmedBuyer] = useState(
-    localStorage.getItem(`buyerConfirmed:${trade._id}`) === "true"
-  );
-
   const [sellerConfirmed, setSellerConfirmed] = useState(
-    localStorage.getItem(`sellerConfirmed:${trade._id}`) === "true"
+    trade.agreementConfirmationSeller ? true : false
   );
   const [buyerConfirmed, setBuyerConfirmed] = useState(
-    localStorage.getItem(`buyerConfirmed:${trade._id}`) === "true"
+    trade.agreementConfirmationBuyer ? true : false
   );
 
   useEffect(() => {
@@ -37,15 +30,11 @@ function Acuerdo({
     // Escuchar evento de confirmación del vendedor
     socket.on("sellerConfirmed", () => {
       setSellerConfirmed(true);
-      setAgreementConfirmedSeller(true);
-      localStorage.setItem(`sellerConfirmed:${trade._id}`, "true");
     });
 
     // Escuchar evento de confirmación del comprador
     socket.on("buyerConfirmed", () => {
       setBuyerConfirmed(true);
-      setAgreementConfirmedBuyer(true);
-      localStorage.setItem(`buyerConfirmed:${trade._id}`, "true");
     });
 
     return () => {
@@ -71,10 +60,45 @@ function Acuerdo({
         });
 
       setCurrentState("pago");
-      localStorage.removeItem(`sellerConfirmed:${trade._id}`);
-      localStorage.removeItem(`buyerConfirmed:${trade._id}`);
     }
-  }, [sellerConfirmed, buyerConfirmed]);
+  }, [sellerConfirmed, buyerConfirmed, trade._id, post._id, setCurrentState]);
+
+  const handleConfirmAgreementSeller = () => {
+    axios
+      .post(
+        `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/confirmationAgreementSeller`
+      )
+      .then((response) => {
+        console.log(response.data);
+        const message = "El vendedor está de acuerdo";
+        // Emitir evento de confirmación del vendedor
+        socket.emit("sellerConfirmed", {
+          tradeId: trade._id,
+          message,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const handleConfirmAgreementBuyer = () => {
+    axios
+      .post(
+        `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/confirmationAgreementBuyer`
+      )
+      .then((response) => {
+        console.log(response.data);
+        const message = "El comprador está de acuerdo";
+        // Emitir evento de confirmación del comprador
+        socket.emit("buyerConfirmed", {
+          tradeId: trade._id,
+          message,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -107,19 +131,9 @@ function Acuerdo({
             <button
               onClick={() => {
                 if (role === "vendedor") {
-                  const message = "El vendedor está de acuerdo";
-                  // Emitir evento de confirmación del vendedor
-                  socket.emit("sellerConfirmed", {
-                    tradeId: trade._id,
-                    message,
-                  });
+                  handleConfirmAgreementSeller();
                 } else if (role === "comprador") {
-                  const message = "El comprador está de acuerdo";
-                  // Emitir evento de confirmación del comprador
-                  socket.emit("buyerConfirmed", {
-                    tradeId: trade._id,
-                    message,
-                  });
+                  handleConfirmAgreementBuyer();
                 }
               }}
               className="bg-green-500 hover:bg-green-600 text-white px-4 py-6 rounded mr-2 font-bold"
@@ -165,13 +179,16 @@ function Acuerdo({
               Send
             </button>
           </div>
-          {agreementConfirmedSeller && (
+
+          {/* Mensajes de confirmación de acuerdo */}
+
+          {(trade.agreementConfirmationSeller || sellerConfirmed) && (
             <p className="bg-orange-500 text-white font-bold px-4 py-2 rounded">
               ¡El Vendedor<b> {trade.nameSeller}</b> esta de acuerdo para
-              iniciar el Trade!
+              iniciar el Trade! TEst test test
             </p>
           )}
-          {agreementConfirmedBuyer && (
+          {(trade.agreementConfirmationBuyer || buyerConfirmed) && (
             <p className="bg-green-500 text-gray-900 font-bold px-4 py-2 rounded">
               ¡El Comprador <b>{trade.nameBuyer}</b> esta de acuerdo para
               iniciar el Trade!
@@ -179,6 +196,8 @@ function Acuerdo({
           )}
         </div>
       </div>
+
+      {/* Columna de información del vendedor y comprador */}
       <div className="flex justify-center">
         <div className="flex w-1/2 flex-col items-center  shadow-md rounded-lg bg-pink-300 ml-6 mr-6 mt-4 p-12">
           <h2 className="text-2xl mb-5"> Vendedor</h2>
