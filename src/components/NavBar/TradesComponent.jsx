@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import axios from "axios";
+import { FaExchangeAlt } from "react-icons/fa";
 function TradesComponent({ openModal, setTrades, id }) {
   const getRequestsUser = async () => {
     try {
@@ -17,14 +18,12 @@ function TradesComponent({ openModal, setTrades, id }) {
   };
 
   return (
-    <li>
-      <button
-        onClick={getRequestsUser}
-        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4"
-      >
-        Trades
-      </button>
-    </li>
+    <button
+      onClick={getRequestsUser}
+      className="text-white p-3 hover:text-gray-300"
+    >
+      <FaExchangeAlt className="h-6 w-6" />
+    </button>
   );
 }
 

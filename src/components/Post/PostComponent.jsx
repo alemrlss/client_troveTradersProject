@@ -130,7 +130,7 @@ function PostComponent({ post }) {
     }
 
     const buyer = await getBuyerInfo(getIdUser());
-    const message = `😾 ${buyer.name} te ha solicitado comprar tu producto: "${post.title}". Click aqui para ir al Perfil del vendedor`;
+    const message = `😾 ${buyer.name} te ha solicitado comprar tu producto: "${post.title}".`;
 
     try {
       // Enviar notificación al vendedor

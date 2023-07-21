@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
+import { FaEnvelope } from "react-icons/fa";
 function RequestsComponent({ openModal, setRequests, id }) {
 
  
@@ -19,15 +20,14 @@ function RequestsComponent({ openModal, setRequests, id }) {
 
 
   return (
-    <li>
+
       <button
         onClick={getRequestsUser}
-        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
+        className="text-white p-3 hover:text-gray-300"
       >
-        Solicitudes
+        <FaEnvelope className="h-6 w-6"/>
 
       </button>
-    </li>
   );
 }
 

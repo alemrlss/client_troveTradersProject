@@ -25,7 +25,11 @@ function HomeComponent({ posts }) {
             <b>{payload.msgNotification}</b>
           </Link>
         );
-        showAndHideNotification(payload.msgNotification, msgHTML, payload.bgColor);
+        showAndHideNotification(
+          payload.msgNotification,
+          msgHTML,
+          payload.bgColor
+        );
       });
     }
     return () => {
@@ -50,7 +54,7 @@ function HomeComponent({ posts }) {
     };
   }, [notifications]);
 
-    //!Funcion para mostrar las notificaciones
+  //!Funcion para mostrar las notificaciones
   const showAndHideNotification = (msg, messageHTML, bgColor) => {
     // ~Verificar si la notificación ya existe en el estado de notificaciones
     const notificationExists = notifications.some(
@@ -65,7 +69,6 @@ function HomeComponent({ posts }) {
     }
   };
 
-  
   return (
     <div>
       <div className="grid grid-cols-3 gap-4 bg-orange-300 p-4">
@@ -74,9 +77,7 @@ function HomeComponent({ posts }) {
             <h3 className="text-xl font-bold mb-2">{post.title}</h3>
             <p className="text-gray-600">{post.description}</p>
             <Link to={`/post/${post._id}`}>
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
-              >
+              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4">
                 Comprar#2
               </button>
             </Link>
@@ -105,8 +106,7 @@ function HomeComponent({ posts }) {
         </div>
       )}
 
-
-<CreatePost/>
+      <CreatePost />
     </div>
   );
 }
