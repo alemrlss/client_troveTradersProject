@@ -1,14 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useContext, useEffect } from "react";
-import {
-  FaEnvelope,
-  FaExchangeAlt,
-  FaBell,
-  FaHome,
-  FaUser,
-  FaSignOutAlt,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
+import { FaHome, FaUser, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
 import img from "../../assets/logo.png";
 import { SocketContext } from "../../contexts/socketContext";
 import { useAuthContext } from "../../contexts/authContext";
@@ -151,7 +143,7 @@ function NavBarr() {
   };
 
   return (
-    <nav className="bg-primary-200 p-4">
+    <nav className="bg-primary-200 p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logotipo */}
         <div className="text-white text-2xl font-bold flex items-center">
@@ -210,7 +202,7 @@ function NavBarr() {
           {/* Botón o icono de cerrar sesión */}
           <button
             onClick={handleLogout}
-            className="text-gray-700 p-3 hover:text-red-700 ml-8"
+            className="text-primary-300 rounded-md p-3 hover:text-red-700 ml-8"
           >
             <FaSignOutAlt className="w-8 h-8" />
           </button>
@@ -220,15 +212,23 @@ function NavBarr() {
         {isMenuOpen && (
           <div className="sm:hidden absolute top-0 right-0 bg-primary-300 p-4">
             <div className="flex flex-col items-center space-y-2">
-              <button className="text-white p-3" onClick={handleMenuItemClick}>
-                <FaEnvelope />
-              </button>
-              <button className="text-white p-3" onClick={handleMenuItemClick}>
-                <FaExchangeAlt />
-              </button>
-              <button className="text-white p-3" onClick={handleMenuItemClick}>
-                <FaBell />
-              </button>
+              <TradesComponent
+                id={idUser}
+                openModal={openModalTrades}
+                setTrades={setTrades}
+              />
+              <RequestsComponent
+                id={idUser}
+                openModal={openModalRequests}
+                setRequests={setRequests}
+              />
+
+              <NotificationsComponent
+                idUser={idUser}
+                setNotifications={setNotifications}
+                setIsOpen={setIsOpen}
+                isOpen={isOpen}
+              />
               <Link
                 className="text-white p-3 flex items-center "
                 onClick={handleMenuItemClick}

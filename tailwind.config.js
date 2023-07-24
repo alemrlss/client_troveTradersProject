@@ -16,6 +16,11 @@ export default {
           200: "#65A147",
         },
       },
+      transitionProperty: {
+        'height': 'height', // Ejemplo de transición de altura
+        'opacity': 'opacity', // Ejemplo de transición de opacidad
+        // Puedes agregar más transiciones aquí según tus necesidades.
+      }
     },
   },
   plugins: [],
