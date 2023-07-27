@@ -64,8 +64,6 @@ function ProfileBody({ data }) {
                     <img className="height: 200px margin: 0 border-solid rounded-full" src={data.imageProfile ? `http://localhost:3001/image/profile/${data.imageProfile}` : img} alt="Imagen de Perfil"/>
                     </div>
                     <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">{userData.username}</h1>
-                    <h3 className="text-gray-600 font-lg text-semibold leading-6">Usuario no verificado</h3>
-                    <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">Descripcion sobre verificar usuario, etc....</p>
                     <ul
                         className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                         <li className="flex items-center py-3">
