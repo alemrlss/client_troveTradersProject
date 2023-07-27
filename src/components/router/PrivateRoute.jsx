@@ -3,6 +3,7 @@ import { LOGIN } from "../../routes/paths";
 import { useAuthContext } from "../../contexts/authContext";
 import { SocketProvider } from "../../contexts/socketContext";
 import NavBar from "../NavBar/NavBar";
+import NavBarr from "../NavBar/NavBarr";
 
 export default function PrivateRoute() {
   const { isAuthenticated } = useAuthContext();
@@ -14,7 +15,7 @@ export default function PrivateRoute() {
     //! SE LE COLOCA EL PROVIDER DE CONEXTO DE SOCKETS(SERVIDOR) SOLO PARA LAS RUTAS PRIVADAS..
     <SocketProvider>
       <div>
-        <NavBar/>
+       <NavBarr/>
         <Outlet />
       </div>
     </SocketProvider>

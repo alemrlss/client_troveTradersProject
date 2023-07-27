@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #606f7b #edf2f7;
+  /* Más estilos aquí... */
+}
+/* Estilos personalizados para el scrollbar */
+/* Para navegadores webkit (Chrome y Safari) */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #000000;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #edf2f7;
+}
