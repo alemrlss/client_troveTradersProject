@@ -104,7 +104,7 @@ function HomeComponent({ posts, user }) {
     <body className="">
       {/* Mensaje de verificación de correo electrónico */}
       {!verificationEmailUser && (
-        <div className="text-lg mb-4 flex items-center m-2">
+        <div className="text-lg mb-4 flex items-center m-2 ">
           <p className="m-1 text-xl">
             Por favor, verifica tu correo electrónico para acceder a todas las
             funciones de la aplicación.

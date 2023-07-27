@@ -202,7 +202,7 @@ function NavBarr() {
           {/* Botón o icono de cerrar sesión */}
           <button
             onClick={handleLogout}
-            className="text-primary-300 rounded-md p-3 hover:text-red-700 ml-8"
+            className="text-primary-400 rounded-md p-3 hover:text-red-700 ml-8"
           >
             <FaSignOutAlt className="w-8 h-8" />
           </button>

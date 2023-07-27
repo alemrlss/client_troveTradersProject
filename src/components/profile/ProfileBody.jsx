@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { getDataUser } from "../../services/Auth";
@@ -44,7 +45,7 @@ function ProfileBody({ data }) {
   }, [userData._id]);
 
   return (
-    <div className="container mx-auto my-5 p-5">
+    <div className="container mx-auto my-5 p-5 animate-fade animate-once animate-duration-500 animate-delay-0 animate-ease-linear">
       <ModalEditUser
         isOpen={isOpenModalEdit}
         closeModal={closeModalEdit}
