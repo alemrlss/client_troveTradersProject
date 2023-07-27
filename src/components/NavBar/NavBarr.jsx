@@ -143,11 +143,11 @@ function NavBarr() {
   };
 
   return (
-    <nav className="bg-primary-200 p-4 shadow-lg">
+    <nav className="bg-jisselColor1-300 p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logotipo */}
         <div className="text-white text-2xl font-bold flex items-center">
-          <img src={img} className="h-14 mr-2" alt="TroveTraders Logo" />
+          <img src={img} className="h-12 mr-3" alt="TroveTraders Logo" />
           <p>TroveTraders</p>
         </div>
         <button
@@ -210,7 +210,7 @@ function NavBarr() {
 
         {/* Menú para dispositivos móviles */}
         {isMenuOpen && (
-          <div className="sm:hidden absolute top-0 right-0 bg-primary-300 p-4">
+          <div className="sm:hidden absolute top-20 bg-jisselColor1-300 right-0 p-4 z-50 animate-fade-down animate-once animate-duration-100 animate-delay-0 animate-ease-linear">
             <div className="flex flex-col items-center space-y-2">
               <TradesComponent
                 id={idUser}
@@ -250,7 +250,7 @@ function NavBarr() {
                 onClick={handleMenuToggle}
               >
                 <FaSignOutAlt />
-                <span onClick={handleLogout} className="ml-2">
+                <span onClick={handleLogout} className="ml-2 font-bold text-xl">
                   Cerrar sesion
                 </span>
               </button>

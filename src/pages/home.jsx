@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader/Loader";
 import { getIdUser } from "../services/Auth";
+import Footer from "../components/Footer/Footer";
 function Home() {
   const [posts, setPosts] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -34,9 +35,10 @@ function Home() {
     height: 100,
   };
   return (
-    <div className=" min-h-screen">
+    <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <HomeComponent posts={posts} user={user} />}
+      <Footer />
     </div>
   );
 }

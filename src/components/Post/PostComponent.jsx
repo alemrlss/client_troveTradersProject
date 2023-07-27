@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
@@ -7,10 +6,7 @@ import { getIdUser } from "../../services/Auth";
 import { Link } from "react-router-dom";
 
 function PostComponent({ post }) {
-  //^  Contexto.
   const socket = useContext(SocketContext);
-
-  //~ Estados (showNotification y notifications) es para las notificaciones..
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [seller, setSeller] = useState(null);
@@ -19,13 +15,10 @@ function PostComponent({ post }) {
   const [isPostAvailable, setIsPostAvailable] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  //!UseEffect para la escucha de las notificaciones
   useEffect(() => {
     setIsPostAvailable(post.currentState === "disponible");
     if (socket) {
       socket.on("newNotification", (payload) => {
-        // Manejar la notificación recibida desde el servidor
-        console.log(payload.target);
         const msgHTML = (
           <Link to={payload.target}>
             <b>{payload.msgNotification}</b>
@@ -37,7 +30,6 @@ function PostComponent({ post }) {
           msgHTML,
           payload.bgColor
         );
-        // Puedes realizar otras acciones con la notificación, como mostrarla en la interfaz de usuario
       });
     }
 
@@ -61,9 +53,7 @@ function PostComponent({ post }) {
     };
   }, [post.author_id]);
 
-  //!UseEffect para cuando una notificacion cambie se renderize
   useEffect(() => {
-    // Timer para eliminar las notificaciones después de 2 segundos
     let timer;
 
     if (notifications.length > 0) {
@@ -77,9 +67,7 @@ function PostComponent({ post }) {
     };
   }, [notifications]);
 
-  //!Funcion para mostrar las notificaciones
   const showAndHideNotification = (msg, messageHTML, bgColor) => {
-    // ~Verificar si la notificación ya existe en el estado de notificaciones
     const notificationExists = notifications.some(
       (notification) => notification.msg === msg
     );
@@ -92,7 +80,6 @@ function PostComponent({ post }) {
     }
   };
 
-  //? Funcion para obtener el nombre del vendedor(Promise)
   const getBuyerInfo = async (id) => {
     try {
       const response = await axios.get(`http://localhost:3001/users/${id}`);
@@ -102,9 +89,7 @@ function PostComponent({ post }) {
     }
   };
 
-  //? Funcion para enviar la notificacion al socket de socket.io
   const sendNotification = (authorId, msgNotification, bgColor, target) => {
-    console.log(authorId, msgNotification, bgColor);
     if (socket) {
       socket.emit("notification", {
         authorId,
@@ -115,7 +100,6 @@ function PostComponent({ post }) {
     }
   };
 
-  // ?Función manejadora del ev ento de confirmación de compra
   const handleConfirmClick = async () => {
     if (hasRequested) {
       const msgError =
@@ -133,7 +117,6 @@ function PostComponent({ post }) {
     const message = `😾 ${buyer.name} te ha solicitado comprar tu producto: "${post.title}".`;
 
     try {
-      // Enviar notificación al vendedor
       await axios.post("http://localhost:3001/notifications", {
         sellerId: post.author_id,
         message,
@@ -142,7 +125,6 @@ function PostComponent({ post }) {
 
       sendNotification(post.author_id, message, `bg-orange-600`, `/profile/${buyer._id}`);
 
-      // Agregar la solicitud al array del vendedor
       await axios.post(
         `http://localhost:3001/users/${post.author_id}/requests`,
         {
@@ -156,7 +138,6 @@ function PostComponent({ post }) {
         }
       );
 
-      // Mostrar notificación de compra confirmada
       const msgConfirmation =
         "✅ La solicitud de compra ha sido enviada con exito";
       const msgConfirmationHTML = (
@@ -174,22 +155,17 @@ function PostComponent({ post }) {
 
       setTimeout(() => {
         setIsButtonDisabled(false);
-        console.log("h");
       }, 2000);
     } catch (error) {
       console.error("Error al confirmar la compra:", error);
     }
   };
 
-  //?hasRequestedFunction
   const hasRequestedFunction = (sellerID) => {
     axios
       .get(`http://localhost:3001/users/${sellerID}/requests`)
       .then((response) => {
-        // Verifica si alguna de las solicitudes coincide con el ID del post y el ID del vendedor
         const requests = response.data.requests;
-
-        //Verifica si no hay requests y no retorna nada.
         if (requests.length === 0) return;
 
         const hasRequested = requests.some(
@@ -197,28 +173,23 @@ function PostComponent({ post }) {
             request.postID === post._id && request.sellerID === post.author_id
         );
         setHasRequested(hasRequested);
-        console.log(hasRequested);
       })
       .catch((error) => {
         console.error("Error al obtener las solicitudes del comprador:", error);
       });
   };
 
-  //~ Funcion para dar formato a la fecha
   function formatDate(dateString) {
     const date = new Date(dateString);
-
     const options = { year: "numeric", month: "long", day: "numeric" };
     const formattedDate = date.toLocaleDateString(undefined, options);
-
     return formattedDate;
   }
 
   return (
-    <div className="h-screen bg-gray-200 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-200 p-4">
       {isPostAvailable ? (
-        // Contenido del post si el estado es 'disponible'
-        <div className="max-w-3xl bg-white p-6 rounded shadow">
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
           <p className="text-gray-400 text-sm mb-2">
             Creado: {formatDate(post.createdAt)}
           </p>
@@ -268,7 +239,6 @@ function PostComponent({ post }) {
                   hasRequestedFunction(post.author_id);
 
                   if (post.author_id === getIdUser()) {
-                    // El usuario está intentando comprar su propio post
                     const msgError = "No puedes comprar tu propio producto.";
                     const msgErrorHTML = (
                       <p className="text-xl">
@@ -315,8 +285,7 @@ function PostComponent({ post }) {
           </div>
         </div>
       ) : (
-        // Mensaje de post no disponible si el estado no es 'disponible'
-        <div className="max-w-3xl bg-white p-6 rounded shadow">
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
           <h1 className="text-2xl text-red-500 font-bold">
             Este post no está disponible actualmente.
           </h1>
@@ -324,18 +293,18 @@ function PostComponent({ post }) {
       )}
 
       {showNotification && (
-        <div className="absolute top-4 right-5 space-y-4">
+        <div className="fixed top-4 right-4 space-y-4">
           {notifications.map((notification, index) => (
             <div
               key={index}
               className={`${notification.bgColor} text-gray-800 p-4 rounded-md shadow-md`}
             >
-              {" "}
               {notification.messageHTML}
             </div>
           ))}
         </div>
       )}
+  
     </div>
   );
 }
