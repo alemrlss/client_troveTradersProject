@@ -73,17 +73,17 @@ function ProfileMain({ data }) {
   };
   return (
     <div>
-      <div className="p-16 bg-green-300 h-screen">
-        <div className=" h-full shadow-2xl bg-white flex rounded-md">
+      <div>
+        <div>
           <SidebarProfile data={data} />
-          <ProfileBody data={data} />
+          <ProfileBody data={data}/>
         </div>
         {showNotification && (
           <div className="absolute top-4 right-5 space-y-4">
             {notifications.map((notification, index) => (
               <div
                 key={index}
-                className={`${notification.bgColor} text-gray-800 p-4 rounded-md shadow-md`}
+                className={`${notification.bgColor} text-gray-800 p-4 rounded-md shadow-md bg`}
               >
                 {" "}
                 {notification.messageHTML}
