@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { getDataUser } from "../../services/Auth";
 import { useAuthContext } from "../../contexts/authContext";
 import NotificationsComponent from "./NotificationsComponent";
-import img from "../../assets/logo.png";
+import img from "../../assets/img/logo.png";
 import TradesComponent from "./TradesComponent";
 import RequestsComponent from "./RequestsComponent";
 import { useModal } from "../../hooks/useModal";
@@ -133,7 +133,7 @@ function NavBar() {
   //
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
+    <nav className="bg-white border-gray-200 dark:bg-gray-300">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="#" className="flex items-center">
           <img src={img} className="h-16 mr-3" alt="TroveTraders Logo" />
