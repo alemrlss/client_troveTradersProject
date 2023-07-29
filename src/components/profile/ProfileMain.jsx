@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 
 import ProfileBody from "./ProfileBody";
-import SidebarProfile from "./SidebarProfile";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import { Link } from "react-router-dom";
@@ -75,8 +74,7 @@ function ProfileMain({ data }) {
     <div>
       <div>
         <div>
-          <SidebarProfile data={data} />
-          <ProfileBody data={data}/>
+        <ProfileBody data={data} />
         </div>
         {showNotification && (
           <div className="absolute top-4 right-5 space-y-4">

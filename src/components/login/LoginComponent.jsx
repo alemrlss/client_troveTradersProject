@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { loginBackend } from "../../services/Auth";
 import { useAuthContext } from "../../contexts/authContext";
-
 // eslint-disable-next-line react/prop-types
 function LoginComponent() {
   const { login } = useAuthContext();
@@ -53,6 +52,7 @@ function LoginComponent() {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordRegex.test(password);
   };
+
 
   return (
     <section className="bg-white ">
@@ -111,7 +111,7 @@ function LoginComponent() {
                 />
               </div>
               <div className="space-y-4 md:space-y-6">
-                <p className="text-red-600">{error}</p>
+              <p className="text-red-600">{error}</p>
                 <a
                   href="#"
                   className="text-sm font-light text-gray-500 text-primary-600 hover:underline"

@@ -2,33 +2,44 @@ import HomeComponent from "../components/Home/HomeComponent";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader/Loader";
+import { getIdUser } from "../services/Auth";
+import Footer from "../components/Footer/Footer";
 function Home() {
   const [posts, setPosts] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("http://localhost:3001/posts/availables")
-      .then((response) => {
-        // !La respuesta de la solicitud GET se encuentra en la variable "response"
+    const fetchData = async () => {
+      try {
+        const responsePosts = await axios.get(
+          `http://localhost:3001/posts/availables`
+        );
+        const responseUser = await axios.get(
+          `http://localhost:3001/users/${getIdUser()}`
+        );
+        setPosts(responsePosts.data);
+        setUser(responseUser.data);
         setLoading(false);
-        setPosts(response.data);
-      })
-      .catch((error) => {
-        // !Manejo de errores en caso de que ocurra un problema en la solicitud GET
-        console.error(error);
-      });
+      } catch (error) {
+        console.error("Error al obtener el post:", error);
+      }
+    };
+
+    fetchData();
   }, []);
+
   const options = {
     width: 100,
     height: 100,
   };
   return (
-    <>
+    <div className="min-h-screen">
       {loading && <Loader options={options} />}
-      {posts && <HomeComponent posts={posts} />}
-    </>
+      {posts && <HomeComponent posts={posts} user={user} />}
+      <Footer />
+    </div>
   );
 }
 
