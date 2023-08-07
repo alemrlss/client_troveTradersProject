@@ -2,7 +2,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import { LOGIN } from "../../routes/paths";
 import { useAuthContext } from "../../contexts/authContext";
 import { SocketProvider } from "../../contexts/socketContext";
-import NavBar from "../NavBar/NavBar";
 import NavBarr from "../NavBar/NavBarr";
 
 export default function PrivateRoute() {

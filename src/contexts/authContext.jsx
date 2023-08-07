@@ -12,7 +12,7 @@ export const AuthContext = createContext();
 
 export function AuthContextProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    window.localStorage.getItem("accessToken" ?? false)
+    window.localStorage.getItem("accessTokenAdmin" ?? false)
   );
 
   const login = useCallback(function () {
@@ -20,7 +20,7 @@ export function AuthContextProvider({ children }) {
   }, []);
   
   const logout = useCallback(function () {
-    window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem("accessTokenAdmin");
     setIsAuthenticated(false);
   }, []);
 
