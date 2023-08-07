@@ -143,7 +143,7 @@ function NavBarr() {
   };
 
   return (
-    <nav className="bg-jisselColor1-300 p-4 shadow-lg">
+    <nav className="bg-primary-200 p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logotipo */}
         <div className="text-white text-2xl font-bold flex items-center">
@@ -164,16 +164,16 @@ function NavBarr() {
           {/* Iconos para las solicitudes de compra, trades en ejecución, notificaciones */}
           <div className="flex items-center text-white">
             {/* Contenedor para alinear ícono con texto */}
-            <FaHome className="w-6 h-6 text-xl" />
-            <Link className="text-white p-2 hover:text-gray-300" to={`/home`}>
+            <FaHome className="w-6 h-6 text-xl text-black" />
+            <Link className="text-black p-2" to={`/home`}>
               <span>Inicio</span>
             </Link>
           </div>
           <div className="flex items-center text-white">
             {/* Contenedor para alinear ícono con texto */}
-            <FaUser className="w-6 h-6 text-xl" />
+            <FaUser className="w-6 h-6 text-xl text-black" />
             <Link
-              className="text-white p-2 hover:text-gray-300"
+              className="text-black p-2"
               to={`/profile/${idUser}`}
             >
               <span>Perfil</span>
@@ -210,27 +210,27 @@ function NavBarr() {
 
         {/* Menú para dispositivos móviles */}
         {isMenuOpen && (
-          <div className="sm:hidden absolute top-20 bg-jisselColor1-300 right-0 p-4 z-50 animate-fade-down animate-once animate-duration-100 animate-delay-0 animate-ease-linear">
+          <div className="sm:hidden absolute top-20 bg-primary-100 right-0 p-4 z-50 animate-fade-down animate-once animate-duration-100 animate-delay-0 animate-ease-linear">
             <div className="flex flex-col items-center space-y-2">
               <TradesComponent
                 id={idUser}
                 openModal={openModalTrades}
                 setTrades={setTrades}
               />
-              <RequestsComponent
+              <RequestsComponent className="text-black"
                 id={idUser}
                 openModal={openModalRequests}
                 setRequests={setRequests}
               />
 
-              <NotificationsComponent
+              <NotificationsComponent className="text-black"
                 idUser={idUser}
                 setNotifications={setNotifications}
                 setIsOpen={setIsOpen}
                 isOpen={isOpen}
               />
               <Link
-                className="text-white p-3 flex items-center "
+                className="text-black p-3 flex items-center "
                 onClick={handleMenuItemClick}
                 to={`/home`}
               >
@@ -240,7 +240,7 @@ function NavBarr() {
               <Link
                 onClick={handleMenuItemClick}
                 to={`/profile/${idUser}`}
-                className="text-white p-3 flex items-center"
+                className="text-black p-3 flex items-center"
               >
                 <FaUser />
                 <span className="ml-2">Perfil</span>
@@ -259,9 +259,9 @@ function NavBarr() {
         )}
       </div>
       {isOpen && (
-        <div className="notification-menu absolute top-20 right-0 bg-white border border-gray-300 rounded-lg shadow-md p-4 w-80 max-h-60 overflow-y-auto">
+        <div className="notification-menu absolute top-20 right-0 text-black bg-white border border-gray-300 rounded-lg shadow-md p-4 w-80 max-h-60 overflow-y-auto">
           <h2 className="text-xl font-semibold mb-4">Notificaciones</h2>
-          <ul className="divide-y divide-gray-300">
+          <ul className="divide-y divide-gray-300"> 
             {notifications.map((notification) => (
               <li
                 className={`p-4 m-1 ${
