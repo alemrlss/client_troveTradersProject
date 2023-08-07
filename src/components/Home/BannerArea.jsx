@@ -1,5 +1,5 @@
-import banner from "../../assets/img/213ab356-cdae-4299-9c4f-12728ea785fd.jpg";
-
+import banner from "../../assets/img/bannertest.jpg";
+{/* Borrar esto ahora que tenemos carousel*/}
 function BannerArea() {
   return (
     <section className="w-full animate-fade animate-once animate-duration-1000 animate-delay-0 animate-ease-in-out relative">
@@ -15,5 +15,4 @@ function BannerArea() {
     </section>
   );
 }
-
 export default BannerArea;

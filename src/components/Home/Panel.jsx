@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-import testImg from "../../assets/img/logo-bg.png";
+import testImg from "../../assets/img/logo.png";
 
 // Componente para mostrar la calificación en forma de estrellas
 function RatingStars({ rating }) {
@@ -35,7 +35,7 @@ function Panel() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 m-4 items-center animate-fade animate-once animate-duration-1000 animate-delay-0 animate-ease-in-out">
+    <div className="flex flex-col sm:flex-row gap-4 m-2 items-center animate-fade animate-once animate-duration-1000 animate-delay-0 animate-ease-in-out">
       {/* Información del usuario */}
       <div className="flex items-center gap-2 sm:w-1/6">
         <img
@@ -54,12 +54,12 @@ function Panel() {
       {/* Botón "Crear Publicación" y "Mis Publicaciones" */}
       <div className="flex-grow-0 w-full sm:w-2/6 flex justify-center sm:justify-start space-x-4">
         <Link to="/crear-publicacion">
-          <button className="text-white rounded-full bg-jisselColor1-400 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          <button className="text-white rounded-full bg-primary-400 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Crear Publicación
           </button>
         </Link>
         <Link to="/mis-publicaciones">
-          <button className="text-white rounded-full bg-jisselColor1-400 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          <button className="text-white rounded-full bg-primary-400 hover:opacity-80 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Mis Publicaciones
           </button>
         </Link>

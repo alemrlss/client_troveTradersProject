@@ -13,7 +13,7 @@ function ProfileBody({ data }) {
   };
 
   const [userData, setUserData] = useState(data); //data del usuario.
-  
+
   const handleSaveChanges = (updatedData) => {
     setUserData(updatedData);
   };
@@ -78,7 +78,6 @@ function ProfileBody({ data }) {
             </p>
             <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
               <li className="flex items-center py-3">
-                {/*PONER A FUNCIONAR ESTO O BORRARLO */}
                 <span>Estado</span>
                 <span className="ml-auto">
                   <span className="bg-red-500 py-1 px-2 rounded text-white text-sm">
@@ -87,17 +86,16 @@ function ProfileBody({ data }) {
                 </span>
               </li>
               <li className="flex items-center py-3">
-                {/*PONER A FUNCIONAR ESTO O BORRARLO */}
+                <span>Rating</span>
+                <span className="ml-auto">
+                  <span className="bg-yellow-500 py-1 px-2 rounded text-white text-sm">
+                    4/5
+                  </span>
+                </span>
+              </li>
+              <li className="flex items-center py-3">
                 <span>Miembro desde</span>
                 <span className="ml-auto">Julio 25, 2023</span>
-              </li>
-              <li className="flex items-center py-3">
-                <span>Test</span>
-                <span className="ml-auto">Info</span>
-              </li>
-              <li className="flex items-center py-3">
-                <span>Test</span>
-                <span className="ml-auto">Info</span>
               </li>
             </ul>
           </div>
@@ -109,7 +107,7 @@ function ProfileBody({ data }) {
           {/*INFORMACION USUARIO. */}
           <div className="bg-white p-3 shadow-sm rounded-sm">
             <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-              <span className="text-green-500">
+              <span className="text-primary-200">
                 <svg
                   className="h-5"
                   xmlns="http://www.w3.org/2000/svg"
@@ -177,7 +175,7 @@ function ProfileBody({ data }) {
             <div className="grid grid-cols-2">
               <div>
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
-                  <span className="text-green-500">
+                  <span className="text-primary-200">
                     <svg
                       className="h-5"
                       xmlns="http://www.w3.org/2000/svg"
@@ -197,26 +195,26 @@ function ProfileBody({ data }) {
                 </div>
                 <ul className="list-inside space-y-2">
                   <li>
-                    <div className="text-teal-600">Trade 1</div>
+                    <div>Trade 1</div>
                     <div className="text-gray-500 text-xs">Julio 2023</div>
                   </li>
                   <li>
-                    <div className="text-teal-600">Trade 2</div>
+                    <div>Trade 2</div>
                     <div className="text-gray-500 text-xs">Julio 2023</div>
                   </li>
                   <li>
-                    <div className="text-teal-600">Trade 3</div>
+                    <div>Trade 3</div>
                     <div className="text-gray-500 text-xs">Julio 2023</div>
                   </li>
                   <li>
-                    <div className="text-teal-600">Trade 4</div>
+                    <div>Trade 4</div>
                     <div className="text-gray-500 text-xs">Julio 2023</div>
                   </li>
                 </ul>
               </div>
               <div>
                 <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
-                  <span className="text-green-500">
+                  <span className="text-primary-200">
                     <svg
                       className="h-5"
                       xmlns="http://www.w3.org/2000/svg"
@@ -241,47 +239,11 @@ function ProfileBody({ data }) {
                 </div>
                 <ul className="list-inside space-y-2">
                   <li>
-                    <div className="text-teal-600">Ejemplo</div>
+                    <div>Ejemplo</div>
                     <div className="text-gray-500 text-xs">Marzo 2020 </div>
                   </li>
                   <li>
-                    <div className="text-teal-600">4/5</div>
-                    <div className="text-gray-500 text-xs">Marzo 2020 </div>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
-                  <span className="text-green-500">
-                    <svg
-                      className="h-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path fill="#fff" d="M12 14l9-5-9-5-9 5 9 5z" />
-                      <path
-                        fill="#fff"
-                        d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                      />
-                    </svg>
-                  </span>
-                  <span className="tracking-wide">Warnings</span>
-                </div>
-                <ul className="list-inside space-y-2">
-                  <li>
-                    <div className="text-teal-600">Ejemplo</div>
-                    <div className="text-gray-500 text-xs">Marzo 2020 </div>
-                  </li>
-                  <li>
-                    <div className="text-teal-600">4/5</div>
+                    <div>4/5</div>
                     <div className="text-gray-500 text-xs">Marzo 2020 </div>
                   </li>
                 </ul>
@@ -289,8 +251,8 @@ function ProfileBody({ data }) {
             </div>
           </div>
         </div>
+      </div>
     </div>
-
   );
 }
 
