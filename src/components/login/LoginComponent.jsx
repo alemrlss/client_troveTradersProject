@@ -55,7 +55,7 @@ function LoginComponent() {
 
 
   return (
-    <section className="bg-secondary-100 ">
+    <section className="bg-white ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 ">
         <a
           href="#"
@@ -63,12 +63,12 @@ function LoginComponent() {
         >
           <img
             className="w-20 h-20 mr-2"
-            src="src\assets\img\logo-bg.png"
+            src="src\assets\img\logo.png"
             alt="logo"
           />
           TroveTraders
         </a>
-        <div className="w-full bg-primary-100 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 ">
+        <div className="w-full bg-primary-200 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 ">
           {" "}
           {/*Background*/}
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -118,7 +118,7 @@ function LoginComponent() {
                 >
                   Has olvidado la contraseña?
                 </a>
-                <button className="w-full text-white bg-secondary-200 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                <button className="w-full text-white bg-primary-100 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                   Acceder
                 </button>
               </div>

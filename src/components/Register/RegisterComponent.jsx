@@ -80,23 +80,22 @@ function RegisterComponent() {
     return passwordRegex.test(password);
   };
   return (
-    <section className="bg-secondary-100">
+    <section className="bg-white">
       {" "}
-      {/*En StockX tanto el login como el signup estan en la misma pagina, se podria hacer igual*/}
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
         <a
           href="#"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900"
+          className="flex items-center mb-6 mt-6 text-2xl font-semibold text-gray-900"
         >
           <img
             className="w-20 h-20 mr-2"
-            src="src\assets\img\logo-bg.png"
+            src="src\assets\img\logo.png"
             alt="logo"
           />
           TroveTraders
         </a>{" "}
         {/*Panel principal*/}
-        <div className="w-full bg-primary-100 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0">
+        <div className="w-full bg-primary-200 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 mb-6">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
               {" "}
@@ -224,11 +223,11 @@ function RegisterComponent() {
                 </div>
               </div>{" "}
               {/*Boton*/}
-              <p className="text-red-600">{error}</p>
-              <p className="text-green-600">{sucess}</p>
+              <p className="text-red-500">{error}</p>
+              <p className="text-green-500">{sucess}</p>
               <button
                 type="submit"
-                className="w-full text-white bg-secondary-200 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="w-full text-white bg-primary-100 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Crear una cuenta
               </button>

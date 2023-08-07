@@ -38,6 +38,7 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
       });
     closeModal();
   };
+
   const options = [
     { value: "unknown", label: "Unknown" },
     { value: "male", label: "Male" },
@@ -60,37 +61,38 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
       gender: selectedOption.value,
     });
   };
+
   return (
     <div>
       <div className="flex flex-col">
         <h2 className="text-center text-2xl font-bold p-4">
-          General Information
+          Información General
         </h2>
         <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-          <div className="m-4 flex">
-            <div className="w-2/4 ">
+          <div className="m-4 flex flex-col md:flex-row">
+            <div className="w-full md:w-1/3">
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-                <p>Name:</p>
+                <p>Nombre:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-                <p>Last name:</p>
+                <p>Apellido:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-                <p>Username:</p>
+                <p>Nombre de usuario:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-                <p>Gender:</p>
+                <p>Género:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <GiPadlock className="m-1 mr-4 text-red-600" />
-                <p className="text-red-600">Role:</p>
+                <p className="text-red-600">Rol:</p>
               </div>
             </div>
-            <div className="w-2/4">
+            <div className="w-full md:w-2/3 mt-4 md:mt-0 md:ml-4">
               <input
                 type="text"
                 value={formData.name}
@@ -101,11 +103,10 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
               <input
                 type="text"
                 value={formData.lastName}
-                className="p-2 text-xl text-blue-700 font-semibold "
+                className="p-2 text-xl text-blue-700 font-semibold"
                 onChange={handleChange}
                 name="lastName"
               />
-
               <input
                 type="text"
                 value={formData.username}
@@ -124,11 +125,10 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
               </p>
             </div>
           </div>
-
           <input
             type="submit"
             className="bg-green-600 relative p-3 text-white font-bold m-1"
-            value="Save changes"
+            value="Guardar cambios"
           />
         </form>
       </div>

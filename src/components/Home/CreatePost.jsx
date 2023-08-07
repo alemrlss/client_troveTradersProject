@@ -62,7 +62,8 @@ function CreatePost() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto" id="modal">
         <h2 className="text-2xl text-center font-bold">Crea un POST</h2>
       <div className="mb-4">
         <label className="block font-medium mb-1">Título:</label>
@@ -107,6 +108,7 @@ function CreatePost() {
         Crear Post
       </button>
     </form>
+    
   );
 }
 
