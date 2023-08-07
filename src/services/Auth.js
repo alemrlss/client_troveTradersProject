@@ -5,13 +5,13 @@ import jwt_decode from "jwt-decode";
 // Función para iniciar sesión
 export const loginBackend = async (email, password) => {
   try {
-    const response = await axios.post("http://localhost:3001/auth/loginAdmin", {
+    const response = await axios.post("http://localhost:3001/auth/login", {
       email,
       password,
     });
     if (response.status === 200 || response.status === 201) {
       const { token } = response.data;
-      localStorage.setItem("accessTokenAdmin", token);
+      localStorage.setItem("accessToken", token);
       return {
         status: response.status,
         message: "LOGGUED!",
@@ -36,13 +36,13 @@ export const loginBackend = async (email, password) => {
 
 // Función para verificar el estado de autenticación(True=Autorizado. False=NoAutorizado.)
 export const isAuthenticated = () => {
-  const accessToken = localStorage.getItem("accessTokenAdmin");
+  const accessToken = localStorage.getItem("accessToken");
   return !!accessToken;
 };
 
 //GET TOKEN LOCALSTORAGE
 export const getToken = () => {
-  const token = localStorage.getItem("accessTokenAdmin");
+  const token = localStorage.getItem("accessToken");
   return token;
 };
 
