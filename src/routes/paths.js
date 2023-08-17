@@ -5,3 +5,4 @@ export const PROFILE = "/profile"
 export const POST = "/post"
 export const  TRADE = '/trade'
 export const  EMAILVERIFICATION = '/email-verification'
+export const VERIFYACCOUNT = '/verify-account'
