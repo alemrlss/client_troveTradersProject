@@ -5,6 +5,8 @@ import { getDataUser } from "../../services/Auth";
 import ModalEditUser from "../Modals/ModalEditUser/ModalEditUser";
 import { useModal } from "../../hooks/useModal";
 import img from "../../assets/defaultProfile.png";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 function ProfileBody({ data }) {
   const profileOptions = {
@@ -37,6 +39,19 @@ function ProfileBody({ data }) {
       setClassButtonTrades(decorationButton);
     }
   };
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }; 
+
+  console.log(userData.createdAt)
+  const formattedDate = format(new Date(userData.createdAt), "MMMM d, yyyy", {
+    locale: es,
+  });
+  const formattedMonth = capitalizeFirstLetter(formattedDate.split(" ")[0]);
+  const finalFormattedDate = `${formattedMonth} ${formattedDate
+    .split(" ")
+    .slice(1)
+    .join(" ")}`;
 
   useEffect(() => {
     if (userData._id === getDataUser().id) {
@@ -70,32 +85,43 @@ function ProfileBody({ data }) {
             <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">
               {userData.username}
             </h1>
-            <h3 className="text-gray-600 font-lg text-semibold leading-6">
-              Usuario no verificado
-            </h3>
-            <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">
-              Descripcion sobre verificar usuario, etc....
-            </p>
+            {userData.isVerify ? (
+              <h3 className="text-gray-600 font-lg text-semibold leading-6">
+                El usuario se encuentra verificado
+              </h3>
+            ) : (
+              <h3 className="text-gray-600 font-lg text-semibold leading-6">
+                USUARIO NO VERIFICADO MOSTRAR ALGO AQUI
+              </h3>
+            )}
             <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
               <li className="flex items-center py-3">
                 <span>Estado</span>
                 <span className="ml-auto">
-                  <span className="bg-red-500 py-1 px-2 rounded text-white text-sm">
-                    USUARIO NO VERIFICADO
-                  </span>
+                  {userData.isVerify ? (
+                    <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
+                      Verificado
+                    </span>
+                  ) : (
+                    <span className="bg-red-500 py-1 px-2 rounded text-white text-sm">
+                      No Verificado
+                    </span>
+                  )}
                 </span>
               </li>
               <li className="flex items-center py-3">
                 <span>Rating</span>
                 <span className="ml-auto">
                   <span className="bg-yellow-500 py-1 px-2 rounded text-white text-sm">
-                    4/5
+                    {Math.round(userData.rating)}/5
                   </span>
                 </span>
               </li>
               <li className="flex items-center py-3">
                 <span>Miembro desde</span>
-                <span className="ml-auto">Julio 25, 2023</span>
+                <span className="ml-auto text-gray-400">
+                  {finalFormattedDate}
+                </span>
               </li>
             </ul>
           </div>
@@ -143,7 +169,9 @@ function ProfileBody({ data }) {
                   <div className="px-4 py-2 font-semibold">
                     Numero Telefonico:
                   </div>
-                  <div className="px-4 py-2">0412-1696399</div>
+                  <div className="px-4 py-2">
+                    {userData.phone ? userData.phone : <p>No registrado</p>}
+                  </div>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="px-4 py-2 font-semibold">Direccion:</div>
@@ -152,9 +180,7 @@ function ProfileBody({ data }) {
                 <div className="grid grid-cols-2">
                   <div className="px-4 py-2 font-semibold">Email</div>
                   <div className="px-4 py-2">
-                    <a className="text-blue-800" href="mailto:jane@example.com">
-                      kevin@ejemplo.com
-                    </a>
+                    <p className="text-blue-800">{userData.email} </p>
                   </div>
                 </div>
               </div>
