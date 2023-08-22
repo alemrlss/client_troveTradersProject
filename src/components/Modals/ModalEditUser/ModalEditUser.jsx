@@ -38,7 +38,7 @@ function ModalEditUser({ isOpen, closeModal, data, handleSaveChanges }) {
     <article className={`modal ${isOpen && "is-open"}`}>
       <div className="modal-container">
         <FiX className="modal-close w-8 h-8" onClick={handleCloseModal} />
-        <h1 className="text-4xl  mb-4">Edit Profile</h1>
+        <h1 className="text-4xl  mb-4">Editar</h1>
         <div className="modal-navbar flex">
           <button
             onClick={handleButtons}

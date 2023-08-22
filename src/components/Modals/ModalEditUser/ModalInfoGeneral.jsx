@@ -39,9 +39,9 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
     closeModal();
   };
   const options = [
-    { value: "unknown", label: "Unknown" },
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
+    { value: "unknown", label: "Desconocido" },
+    { value: "male", label: "Hombre" },
+    { value: "female", label: "Mujer" },
   ];
 
   let optionSelected = options[0];
@@ -64,30 +64,30 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
     <div>
       <div className="flex flex-col">
         <h2 className="text-center text-2xl font-bold p-4">
-          General Information
+          Informacion General
         </h2>
         <form className="flex flex-col items-center" onSubmit={handleSubmit}>
           <div className="m-4 flex">
             <div className="w-2/4 ">
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-                <p>Name:</p>
+                <p>Nombre:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-                <p>Last name:</p>
+                <p>Apellido:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-                <p>Username:</p>
+                <p>Usuario:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-                <p>Gender:</p>
+                <p>Genero:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <GiPadlock className="m-1 mr-4 text-red-600" />
-                <p className="text-red-600">Role:</p>
+                <p className="text-red-600">Rol:</p>
               </div>
             </div>
             <div className="w-2/4">
@@ -128,7 +128,7 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
           <input
             type="submit"
             className="bg-green-600 relative p-3 text-white font-bold m-1"
-            value="Save changes"
+            value="Guardar Cambios"
           />
         </form>
       </div>

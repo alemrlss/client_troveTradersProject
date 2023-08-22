@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Loader from "../components/Loader/Loader";
 import PostComponent from "../components/Post/PostComponent";
 import axios from "axios";
+import Footer from "../components/Footer/Footer";
 
 function post() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -33,6 +34,7 @@ function post() {
   return <div>
     {loading && <Loader options={options}/>}
     {post && <PostComponent post={post}/>}
+    <Footer />
   </div>;
 }
 

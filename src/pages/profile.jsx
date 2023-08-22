@@ -5,8 +5,11 @@ import axios from "axios";
 import { getToken } from "../services/Auth";
 import Loader from "../components/Loader/Loader";
 import ProfileMain from "../components/profile/ProfileMain";
+import { getIdUser } from "../services/Auth";
+import Footer from "../components/Footer/Footer";
 
 function profile() {
+  const [user, setUser] = useState(null);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
@@ -24,6 +27,10 @@ function profile() {
           `http://localhost:3001/users/${id}`,
           config
         );
+        const responseUser = await axios.get(
+          `http://localhost:3001/users/${getIdUser()}`
+        );
+        setUser(responseUser.data);
         setLoading(false);
         setData(response.data);
       } catch (error) {
@@ -43,7 +50,8 @@ function profile() {
   return (
     <div>
       {loading && <Loader options={options} />}
-      {data && <ProfileMain data={data} />}
+      {data && <ProfileMain data={data} user={user} />}
+      <Footer />
     </div>
   );
 }
