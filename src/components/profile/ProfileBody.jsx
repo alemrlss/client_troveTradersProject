@@ -90,7 +90,7 @@ function ProfileBody({ data, user }) {
       <div>
         {/* Mensaje de verificación de correo electrónico */}
         {!verificationEmailUser && (
-          <div className="text-sm flex items-center">
+          <div className="ml-8 text-sm flex items-center">
             <p className="text-sm">
               Por favor, verifica tu correo electrónico para acceder a todas las
               funciones de la aplicación.
