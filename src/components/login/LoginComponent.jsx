@@ -114,7 +114,7 @@ function LoginComponent() {
               <p className="text-red-600">{error}</p>
                 <a
                   href="#"
-                  className="text-sm font-light text-gray-500 text-primary-600 hover:underline"
+                  className="text-sm font-light text-primary-600 hover:underline"
                 >
                   Has olvidado la contraseña?
                 </a>
