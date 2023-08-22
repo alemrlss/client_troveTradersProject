@@ -5,7 +5,7 @@ import ProfileBody from "./ProfileBody";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import { Link } from "react-router-dom";
-function ProfileMain({ data }) {
+function ProfileMain({ data, user }) {
   //^  Contexto.
   const socket = useContext(SocketContext);
 
@@ -74,7 +74,7 @@ function ProfileMain({ data }) {
     <div>
       <div>
         <div>
-        <ProfileBody data={data} />
+        <ProfileBody data={data} user={user} />
         </div>
         {showNotification && (
           <div className="absolute top-4 right-5 space-y-4">

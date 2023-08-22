@@ -187,104 +187,90 @@ function PostComponent({ post }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-200 p-4">
-      {isPostAvailable ? (
-        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-          <p className="text-gray-400 text-sm mb-2">
-            Creado: {formatDate(post.createdAt)}
-          </p>
-          <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-          <p className="text-gray-500 mb-2 flex items-center">
-            <span className="mr-2">
-              {seller && (
-                <img
-                  src={`http://localhost:3001/image/profile/${seller.imageProfile}`}
-                  alt="Foto del vendedor"
-                  className="w-8 h-8 rounded-full"
-                />
-              )}
-            </span>
-            <span>
-              {seller ? (
-                <Link to={`/profile/${seller._id}`}>
-                  {" "}
-                  <span className="text-gray-900 font-medium hover:text-blue-500">
-                    {seller.name} {seller.lastName}
-                  </span>
-                </Link>
-              ) : (
-                <span className="text-gray-400">Vendedor no disponible</span>
-              )}
-            </span>
-          </p>
-          <p className="text-gray-600 mb-4">{post.description}</p>
-          <p className="text-gray-800 text-lg font-bold mb-4">
-            Precio: {post.price}
-          </p>
+    <div className="bg-white">
+    {isPostAvailable ? (
+    <div className="pt-6">
+      <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+        {post.photos.map((photo, index) => (
+          <img
+            key={index}
+            src={`http://localhost:3001/images/posts/${photo}`}
+            alt={`Photo ${index}`}
+            className="rounded shadow w-full h-72 object-cover"
+          />
+        ))}
+      </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            {post.photos.map((photo, index) => (
-              <img
-                key={index}
-                src={`http://localhost:3001/images/posts/${photo}`}
-                alt={`Photo ${index}`}
-                className="rounded shadow w-full h-72 object-cover"
-              />
-            ))}
-          </div>
-          <div className="flex justify-center mt-8">
-            {!isConfirming ? (
+      <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+        <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Nombre del producto:</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{post.title}</h1>
+        </div>
+
+
+
+        <div className="mt-4 lg:row-span-3 lg:mt-0">
+          <h2 className="sr-only">Informacion del producto.</h2>
+          <p className="text-3xl tracking-tight text-green-600">${post.price}</p>
+          <p className="text-2xl tracking-tight text-gray-900">{formatDate(post.createdAt)}</p>
+          <p className="text-2xl tracking-tight text-gray-900">Categoria: {post.category}</p>
+          {!isConfirming ? (
+          <button onClick={() => {
+            hasRequestedFunction(post.author_id);
+
+            if (post.author_id === getIdUser()) {
+              const msgError = "No puedes comprar tu propio producto.";
+              const msgErrorHTML = (
+                <p className="text-xl">
+                  <b>{msgError}</b>
+                </p>
+              );
+              showAndHideNotification(
+                msgError,
+                msgErrorHTML,
+                "bg-red-300"
+              );
+              return;
+            }
+
+            setIsConfirming(true);
+          }}
+          type="submit" className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary-100 px-8 py-3 text-base font-medium text-white hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" disabled={isButtonDisabled}>Comprar</button>
+          ) : (
+            <div>
               <button
                 onClick={() => {
-                  hasRequestedFunction(post.author_id);
-
-                  if (post.author_id === getIdUser()) {
-                    const msgError = "No puedes comprar tu propio producto.";
-                    const msgErrorHTML = (
-                      <p className="text-xl">
-                        <b>{msgError}</b>
-                      </p>
-                    );
-                    showAndHideNotification(
-                      msgError,
-                      msgErrorHTML,
-                      "bg-red-300"
-                    );
-                    return;
-                  }
-
-                  setIsConfirming(true);
+                  handleConfirmClick();
+                  setIsConfirming(false);
                 }}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 text-2xl rounded"
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 mr-2"
                 disabled={isButtonDisabled}
               >
-                Comprar
+                Confirmar compra
               </button>
-            ) : (
-              <div>
-                <button
-                  onClick={() => {
-                    handleConfirmClick();
-                    setIsConfirming(false);
-                  }}
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 mr-2"
-                  disabled={isButtonDisabled}
-                >
-                  Confirmar compra
-                </button>
-                <button
-                  onClick={() => {
-                    setIsConfirming(false);
-                  }}
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
-                >
-                  Cancelar
-                </button>
-              </div>
-            )}
+              <button
+                onClick={() => {
+                  setIsConfirming(false);
+                }}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
+              >
+                Cancelar
+              </button>
+            </div>
+          )}
+        </div>
+        
+        <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
+          <div>
+            <h3 className="">Descripcion:</h3>
+            <div className="space-y-6">
+              <p className="text-base text-gray-900">{post.description}</p>
+            </div>
           </div>
         </div>
-      ) : (
+      </div>
+    </div>
+    ) : (
         <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
           <h1 className="text-2xl text-red-500 font-bold">
             Este post no está disponible actualmente.
@@ -304,9 +290,9 @@ function PostComponent({ post }) {
           ))}
         </div>
       )}
-  
-    </div>
+  </div>
   );
+
 }
 
 export default PostComponent;

@@ -104,7 +104,7 @@ function HomeComponent({ posts, user }) {
 
   return (
       <div className="">
-        {/* Mensaje de verificación de correo electrónico */}
+        {/* Mensaje de verificación de correo electrónico 
         {!verificationEmailUser && (
           <div className="text-sm flex items-center">
             <p className="text-sm">
@@ -126,7 +126,7 @@ function HomeComponent({ posts, user }) {
               </button>
             )}
           </div>
-        )}
+        )}*/}
         <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
         {/* Panel de la homePage */}
         <Panel />
@@ -188,7 +188,7 @@ function HomeComponent({ posts, user }) {
           </div>
         </div>
         <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
-        <CreatePost />
+        {/*<CreatePost />*/}
         {showNotification && (
           <div className="absolute top-4 right-5 space-y-4">
             {notifications.map((notification, index) => (
