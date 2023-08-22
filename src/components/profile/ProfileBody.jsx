@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import axios from "axios";
 
-function ProfileBody({ data, user}) {
+function ProfileBody({ data, user }) {
   const profileOptions = {
     about: "about",
     trades: "trades",
@@ -45,9 +45,9 @@ function ProfileBody({ data, user}) {
   };
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }; 
+  };
 
-  console.log(userData.createdAt)
+  console.log(userData.createdAt);
   const formattedDate = format(new Date(userData.createdAt), "MMMM d, yyyy", {
     locale: es,
   });
@@ -147,22 +147,28 @@ function ProfileBody({ data, user}) {
                 <li className="flex items-center py-3">
                   <span>Estado</span>
                   <span className="ml-auto">
-                    <span className="bg-red-500 py-1 px-2 rounded text-white text-sm">
-                      USUARIO NO VERIFICADO
-                    </span>
+                    {userData.isVerify ? (
+                      <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
+                        Verificado
+                      </span>
+                    ) : (
+                      <span className="bg-red-500 py-1 px-2 rounded text-white text-sm">
+                        No Verificado
+                      </span>
+                    )}
                   </span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Rating</span>
                   <span className="ml-auto">
                     <span className="bg-yellow-500 py-1 px-2 rounded text-white text-sm">
-                      4/5
+                      {userData.rating}/5
                     </span>
                   </span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Miembro desde</span>
-                  <span className="ml-auto">Julio 25, 2023</span>
+                  <span className="ml-auto">{finalFormattedDate}</span>
                 </li>
               </ul>
             </div>
@@ -219,9 +225,7 @@ function ProfileBody({ data, user}) {
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Email</div>
                     <div className="px-4 py-2">
-                      <a className="text-blue-800" href="mailto:jane@example.com">
-                        kevin@ejemplo.com
-                      </a>
+                      <p className="text-blue-800">{userData.email}</p>
                     </div>
                   </div>
                 </div>
@@ -320,7 +324,7 @@ function ProfileBody({ data, user}) {
           </div>
         </div>
       </div>
-    </div>            
+    </div>
   );
 }
 
