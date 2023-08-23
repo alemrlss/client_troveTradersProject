@@ -143,7 +143,7 @@ function NavBarr() {
   };
 
   return (
-    <nav className="bg-primary-200 p-4 shadow-lg">
+    <nav className="bg-primary-200 p-4 shadow-lg w-full overflow-x-hidden">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logotipo */}
         <div className="text-white text-2xl font-bold flex items-center">
@@ -172,10 +172,7 @@ function NavBarr() {
           <div className="flex items-center text-white">
             {/* Contenedor para alinear ícono con texto */}
             <FaUser className="w-6 h-6 text-xl text-black" />
-            <Link
-              className="text-black p-2"
-              to={`/profile/${idUser}`}
-            >
+            <Link className="text-black p-2" to={`/profile/${idUser}`}>
               <span>Perfil</span>
             </Link>
           </div>
@@ -217,13 +214,15 @@ function NavBarr() {
                 openModal={openModalTrades}
                 setTrades={setTrades}
               />
-              <RequestsComponent className="text-black"
+              <RequestsComponent
+                className="text-black"
                 id={idUser}
                 openModal={openModalRequests}
                 setRequests={setRequests}
               />
 
-              <NotificationsComponent className="text-black"
+              <NotificationsComponent
+                className="text-black"
                 idUser={idUser}
                 setNotifications={setNotifications}
                 setIsOpen={setIsOpen}
@@ -261,7 +260,7 @@ function NavBarr() {
       {isOpen && (
         <div className="notification-menu absolute top-20 right-0 text-black bg-white border border-gray-300 rounded-lg shadow-md p-4 w-80 max-h-60 overflow-y-auto">
           <h2 className="text-xl font-semibold mb-4">Notificaciones</h2>
-          <ul className="divide-y divide-gray-300"> 
+          <ul className="divide-y divide-gray-300">
             {notifications.map((notification) => (
               <li
                 className={`p-4 m-1 ${

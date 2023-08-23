@@ -66,11 +66,7 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
     <div>
       <div className="flex flex-col">
         <h2 className="text-center text-2xl font-bold p-4">
-<<<<<<< HEAD
-          Información General
-=======
           Informacion General
->>>>>>> origin/branch-kevin
         </h2>
         <form className="flex flex-col items-center" onSubmit={handleSubmit}>
           <div className="m-4 flex flex-col md:flex-row">
@@ -85,19 +81,11 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
               </div>
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
-<<<<<<< HEAD
-                <p>Nombre de usuario:</p>
-              </div>
-              <div className="p-2 text-xl flex">
-                <HiUser className="m-1 mr-4" />
-                <p>Género:</p>
-=======
                 <p>Usuario:</p>
               </div>
               <div className="p-2 text-xl flex">
                 <HiUser className="m-1 mr-4" />
                 <p>Genero:</p>
->>>>>>> origin/branch-kevin
               </div>
               <div className="p-2 text-xl flex">
                 <GiPadlock className="m-1 mr-4 text-red-600" />
@@ -140,11 +128,7 @@ function ModalInfoGeneral({ data, closeModal, handleSaveChanges }) {
           <input
             type="submit"
             className="bg-green-600 relative p-3 text-white font-bold m-1"
-<<<<<<< HEAD
-            value="Guardar cambios"
-=======
             value="Guardar Cambios"
->>>>>>> origin/branch-kevin
           />
         </form>
       </div>

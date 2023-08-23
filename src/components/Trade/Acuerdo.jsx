@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useState, useContext, useEffect } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import axios from "axios";
+import { FaStar } from "react-icons/fa";
 
-/* eslint-disable react/prop-types */
 function Acuerdo({
   post,
   messages,
@@ -25,44 +26,42 @@ function Acuerdo({
     trade.agreementConfirmationBuyer ? true : false
   );
 
+  //?Escuchar los eventos de confirmacion de ambas partes
   useEffect(() => {
-    // ...
-    // Escuchar evento de confirmación del vendedor
-    socket.on("sellerConfirmed", () => {
+    socket.on(`sellerConfirmed_${trade._id}`, () => {
       setSellerConfirmed(true);
+      console.log("aqui");
     });
 
-    // Escuchar evento de confirmación del comprador
-    socket.on("buyerConfirmed", () => {
+    socket.on(`buyerConfirmed_${trade._id}`, () => {
       setBuyerConfirmed(true);
+      console.log("aqui");
     });
 
     return () => {
-      // Desuscribirse de los eventos
-      socket.off("sellerConfirmed");
-      socket.off("buyerConfirmed");
+      socket.off(`sellerConfirmed_${trade._id}`);
+      socket.off(`buyerConfirmed_${trade._id}`);
     };
-  }, [socket, post]);
+  }, [socket, post, trade._id]);
+
+  //?Cambiar el estado del post a "pago" cuando ambas partes esten de acuerdo
   useEffect(() => {
-    // Verificar si ambos usuarios han confirmado el acuerdo
     if (sellerConfirmed && buyerConfirmed) {
       axios
         .put(`http://localhost:3001/posts/${post._id}`, {
-          newState: "pago", // Cambiar al estado "pago"
+          newState: "pago",
         })
         .then((response) => {
           console.log(response.data);
           setCurrentState("pago");
-          // Manejar la respuesta de la petición si es necesario
         })
         .catch((error) => {
-          console.error("Error al actualizar el estado del post:", error);
+          console.error("Error updating post state:", error);
         });
-
-      setCurrentState("pago");
     }
   }, [sellerConfirmed, buyerConfirmed, trade._id, post._id, setCurrentState]);
 
+  //?Confirmacion cuando el vendedor esta de acuerdo
   const handleConfirmAgreementSeller = () => {
     axios
       .post(
@@ -71,7 +70,6 @@ function Acuerdo({
       .then((response) => {
         console.log(response.data);
         const message = "El vendedor está de acuerdo";
-        // Emitir evento de confirmación del vendedor
         socket.emit("sellerConfirmed", {
           tradeId: trade._id,
           message,
@@ -81,6 +79,7 @@ function Acuerdo({
         console.log(error);
       });
   };
+  //?Confirmacion cuando el comprador esta de acuerdo
   const handleConfirmAgreementBuyer = () => {
     axios
       .post(
@@ -89,7 +88,6 @@ function Acuerdo({
       .then((response) => {
         console.log(response.data);
         const message = "El comprador está de acuerdo";
-        // Emitir evento de confirmación del comprador
         socket.emit("buyerConfirmed", {
           tradeId: trade._id,
           message,
@@ -101,164 +99,171 @@ function Acuerdo({
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex justify-center mb-6">
-        <div className="w-1/2 ml-4">
-          <h2 className="text-3xl text-gray-400">Eres el {role}</h2>
-          <h2 className="text-3xl mb-4 text-right font-bold">
-            Estado: {currentState}
-          </h2>
-          <hr className="" />
-          <h2 className="text-2xl font-bold mb-4 pt-2 text-center">
-            {post.title}
-          </h2>
-          <p className="text-lg mb-2 text-center">{post.description}</p>
-          <p className="text-xl">
-            <b>Precio:</b> {post.price}
-          </p>
-          {/* Agrega aquí la visualización de las fotos del producto */}
-          <div className="flex space-x-2 mt-2 text-">
-            {post.photos.map((photo, index) => (
-              <img
-                key={index}
-                src={`http://localhost:3001/images/posts/${photo}`}
-                alt={post.title}
-                className="w-40 h-auto mt-4 rounded-md m-4"
-              />
-            ))}
-          </div>
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={() => {
-                if (role === "vendedor") {
-                  handleConfirmAgreementSeller();
-                } else if (role === "comprador") {
-                  handleConfirmAgreementBuyer();
-                }
-              }}
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-6 rounded mr-2 font-bold"
-            >
-              Estoy de Acuerdo
-            </button>
-            <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-6 rounded">
-              Cancelar Trade
-            </button>
+    <div className="flex flex-col p-4 md:p-8 lg:p-12">
+      <div className="flex flex-col md:flex-row justify-center mb-6">
+        <div className="w-full md:w-3/4 px-4 mb-4 md:mb-0">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-gray-400 mb-2 text-lg">Eres el {role}</h2>
+
+            {(trade.agreementConfirmationSeller || sellerConfirmed) && (
+              <p className=" bg-teal-200 text-black font-semibold px-4 py-2 rounded mt-4 m-2 mx-auto animate-fade-right animate-duration-[500ms] animate-delay-0">
+                ¡El Vendedor <b>{trade.nameSeller}</b> está de acuerdo para
+                iniciar el Trade!
+              </p>
+            )}
+            {(trade.agreementConfirmationBuyer || buyerConfirmed) && (
+              <p className=" bg-green-300 text-gray-900 font-semibold px-4 py-2 rounded mt-4 m-2 mx-auto animate-fade-right animate-duration-[500ms] animate-delay-0">
+                ¡El Comprador <b>{trade.nameBuyer}</b> está de acuerdo para
+                iniciar el Trade!
+              </p>
+            )}
+
+            <h2 className="text-xl mb-4 text-right font-bold text-gray-600">
+              Estado del Trade: {currentState}
+            </h2>
+            <hr className="border-gray-300 mb-4" />
+            <h2 className="text-xl font-semibold mb-4">{post.title}</h2>
+            <p className="text-gray-600 text-sm mb-4">{post.description}</p>
+
+            <p className="text-xl mb-4">
+              <b>Precio:</b> {post.price}
+            </p>
+            <p className="text-gray-600 text-sm mb-4">
+              <b>Categoría:</b> Deportes
+            </p>
+            <div className="flex flex-wrap items-center justify-center md:justify-between mt-4">
+              {post.photos.map((photo, index) => (
+                <img
+                  key={index}
+                  src={`http://localhost:3001/images/posts/${photo}`}
+                  alt={post.title}
+                  className="w-1/4 h-60 rounded-md mb-2"
+                />
+              ))}
+            </div>
+
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={() => {
+                  if (role === "vendedor") {
+                    handleConfirmAgreementSeller();
+                  } else if (role === "comprador") {
+                    handleConfirmAgreementBuyer();
+                  }
+
+                  console.log("MANEJAR AQUI QUITAR LOS BOTONES Y PONER OTRA COSA.. MIENTRAS EL OTRO CONFIRMA..")
+                }}
+                className="bg-green-500 hover:bg-green-600 text-white px-2 md:px-4 py-1 md:py-2 rounded mr-2 font-semibold"
+              >
+                Estoy de Acuerdo
+              </button>
+              <button className="bg-red-500 hover:bg-red-600 text-white px-2 md:px-4 py-1 md:py-2 rounded font-semibold">
+                Cancelar Trade
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Columna del chat */}
-        <div className="flex-1 max-h-96 ml-6">
-          <h1 className="text-3xl font-bold mb-1 text-white text-center">
-            Trade Chat
-          </h1>
-          <p className="text-center font-bold text-gray-400 text-xs pb-1">
-            Ponte de acuerdo con la otra parte para seguir con el tradeo...
-          </p>
-          <div className="border border-gray-800 p-4 mb-4 max-w-md h-full overflow-y-auto center bg-slate-400 w-2/3 rounded-md mx-auto">
+        <div className="w-full md:w-1/4 px-4 relative">
+          <div className="bg-slate-100 rounded-lg p-4 mb-4">
+            <h1 className="text-3xl font-bold mb-1 text-gray-900 text-center">
+              Trade Chat
+            </h1>
+            <p className="text-center font-semibold text-gray-600 text-sm">
+              Ponte de acuerdo con la otra parte para seguir con el tradeo...
+            </p>
+          </div>
+
+          <div className="border border-gray-300 p-4 mb-4 max-w-md h-96 overflow-y-auto bg-white rounded-lg shadow-md mx-auto">
             {messages.map((message, index) => (
-              <div key={index} className="mb-2 text-black">
-                <strong>{message.username}: </strong>
+              <div
+                key={index}
+                className={`mb-2 ${
+                  message.username === role ? "text-right" : "text-left"
+                }`}
+              >
+                <strong className="text-gray-700">{message.username}:</strong>{" "}
                 {message.message}
               </div>
             ))}
           </div>
 
-          {/* Campo de entrada y botón de enviar mensaje */}
-          <div className="flex w-2/3 mx-auto">
+          <form
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+            className="flex w-full mx-auto"
+          >
             <input
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded"
+              className="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
               placeholder="Escribe un mensaje..."
             />
             <button
               onClick={handleSendMessage}
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
             >
-              Send
+              Enviar
             </button>
-          </div>
-
-          {/* Mensajes de confirmación de acuerdo */}
-
-          {(trade.agreementConfirmationSeller || sellerConfirmed) && (
-            <p className="bg-orange-500 text-white font-bold px-4 py-2 rounded">
-              ¡El Vendedor<b> {trade.nameSeller}</b> esta de acuerdo para
-              iniciar el Trade! TEst test test
-            </p>
-          )}
-          {(trade.agreementConfirmationBuyer || buyerConfirmed) && (
-            <p className="bg-green-500 text-gray-900 font-bold px-4 py-2 rounded">
-              ¡El Comprador <b>{trade.nameBuyer}</b> esta de acuerdo para
-              iniciar el Trade!
-            </p>
-          )}
+          </form>
         </div>
       </div>
 
-      {/* Columna de información del vendedor y comprador */}
-      <div className="flex justify-center">
-        <div className="flex w-1/2 flex-col items-center  shadow-md rounded-lg bg-pink-300 ml-6 mr-6 mt-4 p-12">
-          <h2 className="text-2xl mb-5"> Vendedor</h2>
-          <img
-            src={`http://localhost:3001/image/profile/${sellerData.imageProfile}`}
-            alt="Foto del vendedor"
-            className="w-20 h-20 rounded-full mb-4"
-          />
-          <h2 className="text-xl font-bold">
-            {sellerData.name} {sellerData.lastName}
-          </h2>
-          <div className="flex items-center mb-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8 text-yellow-500 mr-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18.56 7.81a1 1 0 0 1 .24 1.09l-1.5 4.61a1 1 0 0 1-.96.68H13v5.1a1 1 0 0 1-.67.94l-4.56 1.52a1 1 0 0 1-1.18-1.3L7 18.35V13H3.5a1 1 0 0 1-.96-.68l-1.5-4.61a1 1 0 0 1 .24-1.09l4.56-4.19a1 1 0 0 1 1.37.17L10 4.35l3.79-2.76a1 1 0 0 1 1.37-.17l4.56 4.19zm-2.76 2.3a1 1 0 0 1-.28.34L10 15.65l-5.52-3.2a1 1 0 0 1-.3-.33L5.29 5h5.42l2.53 5.1a1 1 0 0 1-.29.31zm-9.45 1.48l1.26 3.87 1.28-3.87h-2.54zM10 11a1 1 0 0 1 .68.28l2.52 2.31-1.26-3.87L10 11zm-7-7.5A1.5 1.5 0 0 1 4.5 3h11a1.5 1.5 0 0 1 1.5 1.5V5h-14V3.5zM3.5 7h13v6.69l-2.98-1.22a1 1 0 0 0-1.27.55L10 17l-1.25-3.98a1 1 0 0 0-1.27-.55L3.5 13.69V7z"
+      <div className="flex flex-col md:flex-row justify-center mb-6">
+        <div className="w-full md:w-1/2 px-4 mb-4 md:mb-0">
+          <div className="flex items-start bg-white rounded-lg shadow-lg p-6">
+            <div className="w-1/4">
+              <img
+                src={`http://localhost:3001/image/profile/${sellerData.imageProfile}`}
+                alt="Foto del vendedor"
+                className="w-20 h-20 rounded-full mb-4 border-4 border-white"
               />
-            </svg>
-            <span className="text-yellow-500 text-2xl">4.8</span>
+              <div className="flex items-center">
+                <FaStar className="h-6 w-6 text-yellow-500 mr-1" />
+                <span className="text-yellow-500 font-bold text-lg">
+                  {sellerData.rating}/5
+                </span>
+              </div>
+            </div>
+            <div className="w-3/4 pl-6">
+              <h2 className="text-2xl font-bold mb-2">
+                {sellerData.name} {sellerData.lastName}
+              </h2>
+              <p className="text-gray-600 text-sm mb-4">Vendedor</p>
+              <button className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold">
+                Ver perfil
+              </button>
+            </div>
           </div>
-          <p className="text-gray-600 text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            eget ligula non tellus laoreet pretium. Nulla aliquet justo nec
-            purus scelerisque, vitae fringilla ex congue.
-          </p>
-          {/* Otra información relevante del vendedor */}
         </div>
-        <div className="flex w-1/2 flex-col items-center  shadow-md rounded-lg bg-gray-300 ml-6 mr-6 mt-4 p-12">
-          <h2 className="text-2xl mb-5"> Comprador</h2>
-          <img
-            src={`http://localhost:3001/image/profile/${buyerData.imageProfile}`}
-            alt="Foto del vendedor"
-            className="w-20 h-20 rounded-full mb-4"
-          />
-          <h2 className="text-xl font-bold">
-            {buyerData.name} {buyerData.lastName}
-          </h2>
-          <div className="flex items-center mb-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-yellow-500 mr-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18.56 7.81a1 1 0 0 1 .24 1.09l-1.5 4.61a1 1 0 0 1-.96.68H13v5.1a1 1 0 0 1-.67.94l-4.56 1.52a1 1 0 0 1-1.18-1.3L7 18.35V13H3.5a1 1 0 0 1-.96-.68l-1.5-4.61a1 1 0 0 1 .24-1.09l4.56-4.19a1 1 0 0 1 1.37.17L10 4.35l3.79-2.76a1 1 0 0 1 1.37-.17l4.56 4.19zm-2.76 2.3a1 1 0 0 1-.28.34L10 15.65l-5.52-3.2a1 1 0 0 1-.3-.33L5.29 5h5.42l2.53 5.1a1 1 0 0 1-.29.31zm-9.45 1.48l1.26 3.87 1.28-3.87h-2.54zM10 11a1 1 0 0 1 .68.28l2.52 2.31-1.26-3.87L10 11zm-7-7.5A1.5 1.5 0 0 1 4.5 3h11a1.5 1.5 0 0 1 1.5 1.5V5h-14V3.5zM3.5 7h13v6.69l-2.98-1.22a1 1 0 0 0-1.27.55L10 17l-1.25-3.98a1 1 0 0 0-1.27-.55L3.5 13.69V7z"
+
+        <div className="w-full md:w-1/2 px-4 mb-4 md:mb-0">
+          <div className="flex items-start bg-white rounded-lg shadow-lg p-6">
+            <div className="w-1/4">
+              <img
+                src={`http://localhost:3001/image/profile/${buyerData.imageProfile}`}
+                alt="Foto del vendedor"
+                className="w-20 h-20 rounded-full mb-4 border-4 border-white"
               />
-            </svg>
-            <span className="text-yellow-500">2.3</span>
+              <div className="flex items-center">
+                <FaStar className="h-6 w-6 text-yellow-500 mr-1" />
+                <span className="text-yellow-500 font-bold text-lg">
+                  {buyerData.rating}/5
+                </span>
+              </div>
+            </div>
+            <div className="w-3/4 pl-6">
+              <h2 className="text-2xl font-bold mb-2">
+                {buyerData.name} {buyerData.lastName}
+              </h2>
+              <p className="text-gray-600 text-sm mb-4">Comprador</p>
+              <button className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold">
+                Ver perfil
+              </button>
+            </div>
           </div>
-          <p className="text-gray-600 text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            eget ligula non tellus laoreet pretium. Nulla aliquet justo nec
-            purus scelerisque, vitae fringilla ex congue.
-          </p>
         </div>
       </div>
     </div>

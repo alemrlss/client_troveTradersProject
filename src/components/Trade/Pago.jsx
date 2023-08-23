@@ -106,12 +106,12 @@ function Pago({
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen mt-4">
       <div className="flex justify-center mb-6">
         <div className="w-1/2 ml-4">
-          <h2 className="text-3xl text-gray-400">Eres el {role}</h2>
-          <h2 className="text-3xl mb-4 text-right font-bold">
-            Estado: {currentState}
+          <h2 className="text-gray-400 mb-2 text-lg">Eres el {role}</h2>
+          <h2 className="text-xl mb-4 text-right font-bold text-gray-600">
+            Estado del Trade: {currentState}
           </h2>
           <hr className="" />
           <h2 className="text-3xl font-bold mb-4 pt-2 text-center mt-4">
@@ -174,37 +174,46 @@ function Pago({
         </div>
 
         {/* Columna del chat */}
-        <div className="flex-1 max-h-96 ml-6">
-          <h1 className="text-3xl font-bold mb-1 text-white text-center">
-            Trade Chat
-          </h1>
-          <p className="text-center font-bold text-gray-400 text-xs pb-1">
-            Ponte de acuerdo con la otra parte para realizar el pago....
-          </p>
-          <div className="border border-gray-800 p-4 mb-4 max-w-md h-full overflow-y-auto center bg-slate-400 w-2/3 rounded-md mx-auto">
+        <div className="w-full md:w-1/4 px-4">
+          <div className="bg-slate-100 rounded-lg p-4 mb-4">
+            <h1 className="text-3xl font-bold mb-1 text-gray-900 text-center">
+              Trade Chat
+            </h1>
+            <p className="text-center font-semibold text-gray-600 text-sm">
+              Ponte de acuerdo con la otra parte para seguir con el tradeo...
+            </p>
+          </div>
+
+          <div className="border border-gray-300 p-4 mb-4 max-w-md h-96 overflow-y-auto bg-white rounded-lg shadow-md mx-auto ">
             {messages.map((message, index) => (
-              <div key={index} className="mb-2 text-black">
-                <strong>{message.username}: </strong>
+              <div key={index} className="mb-2">
+                <strong className="text-gray-700">{message.username}:</strong>{" "}
                 {message.message}
               </div>
             ))}
           </div>
 
-          {/* Campo de entrada y botón de enviar mensaje */}
-          <div className="flex w-2/3 mx-auto">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded"
-              placeholder="Escribe un mensaje..."
-            />
-            <button
-              onClick={handleSendMessage}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          <div className="flex w-full mx-auto">
+            <form
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              className="flex"
             >
-              Send
-            </button>
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                className="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                placeholder="Escribe un mensaje..."
+              />
+              <button
+                onClick={handleSendMessage}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                Enviar
+              </button>
+            </form>
           </div>
         </div>
       </div>

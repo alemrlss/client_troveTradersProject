@@ -142,7 +142,7 @@ function TradeComponent({
   const component = stateComponents[currentState];
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-slate-500 rounded-md">
+    <div className="">
       {seller && component}
       {buyer && component}
       {!seller && !buyer && (
