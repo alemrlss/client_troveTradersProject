@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { loginBackend } from "../../services/Auth";
 import { useAuthContext } from "../../contexts/authContext";
+import { Link } from "react-router-dom";
 // eslint-disable-next-line react/prop-types
 function LoginComponent() {
   const { login } = useAuthContext();
@@ -55,7 +56,7 @@ function LoginComponent() {
 
 
   return (
-    <section className="bg-white ">
+    <section className="bg-logo-100 ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 ">
         <a
           href="#"
@@ -63,12 +64,12 @@ function LoginComponent() {
         >
           <img
             className="w-20 h-20 mr-2"
-            src="src\assets\img\logo.png"
+            src="src\assets\img\logo2.jpg"
             alt="logo"
           />
           TroveTraders
         </a>
-        <div className="w-full bg-primary-200 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 ">
+        <div className="w-full bg-primary-100 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 ">
           {" "}
           {/*Background*/}
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -112,13 +113,8 @@ function LoginComponent() {
               </div>
               <div className="space-y-4 md:space-y-6">
               <p className="text-red-600">{error}</p>
-                <a
-                  href="#"
-                  className="text-sm font-light text-primary-600 hover:underline"
-                >
-                  Has olvidado la contraseña?
-                </a>
-                <button className="w-full text-white bg-primary-100 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                <Link to='/forgot-password' className="text-sm font-light text-secondary-200 hover:underline">Has olvidado la contraseña?</Link>
+                <button className="w-full text-white bg-secondary-100 hover:bg-secondary-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                   Acceder
                 </button>
               </div>
@@ -128,7 +124,7 @@ function LoginComponent() {
               No tienes cuenta?{" "}
               <a
                 href="/register"
-                className="font-medium text-primary-600 hover:underline"
+                className="font-medium text-secondary-200 hover:underline"
               >
                 Registrate
               </a>

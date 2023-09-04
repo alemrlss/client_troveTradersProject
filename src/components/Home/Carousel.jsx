@@ -40,7 +40,7 @@ const Carousel = () => {
     };
   
     return (
-      <div className="carousel-container bg-primary-200 p-12 max-w-screen-lg mx-auto">
+      <div className="carousel-container bg-primary-100 p-12 max-w-screen-2xl mx-auto">
         <Slider {...settings}>
           {slides.map((slide, index) => (
             <div

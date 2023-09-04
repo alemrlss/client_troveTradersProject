@@ -8,6 +8,8 @@ function CreatePost() {
   const [price, setPrice] = useState("");
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
+  const [envio, setEnvio] = useState(false);
+
 
   const handleFileChange = (event) => {
     const selectedFiles = event.target.files;
@@ -69,8 +71,9 @@ function CreatePost() {
         <h2 className="text-base font-semibold leading-7 text-gray-900">Vende tu producto.</h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">Toda esta informacion sera publica en el sitio, asegurate de compartir la informacion correcta.</p>
       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div className="sm:col-span-4">
-          <label className="block text-sm font-medium leading-6 text-gray-900">Título:</label>
+        
+        <div className="sm:col-span-6">
+          <label className="text-base font-semibold block leading-6 text-gray-900">Título:</label>
           <div className="mt-2">
             <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
               <input
@@ -83,29 +86,47 @@ function CreatePost() {
             <p className="mt-3 text-sm leading-6 text-gray-600">El titulo de tu producto debe de contener la informacion mas importante.</p>
           </div>
         </div>
-        <div className="sm:col-span-3">
-          <label htmlFor="category" className="block text-sm font-medium leading-6 text-gray-900">Categoria:</label>
+
+        <div className="sm:col-span-2">
+          <label className="text-base font-semibold block leading-6 text-gray-900">Ubicacion:</label>
           <div className="mt-2">
-            <select id="category" name="category" autoComplete="category-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+              <input
+                type="text"
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+                className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
+              />
+            </div>  
+            <p className="mt-3 text-sm leading-6 text-gray-600">La ubicacion en donde se encuentra el producto.</p>
+          </div>
+        </div>
+
+        <div className="sm:col-span-4">
+          <label htmlFor="category" className="block text-base font-semibold leading-6 text-gray-900">Categoria:</label>
+          <div className="mt-2">
+            <select id="category" name="category" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
               type="text"
               value={category}
               onChange={(event) => setCategory(event.target.value)}
               > 
               <option value="">Seleccione una categoría</option>
-              <option value="antiguedades" className="capitalize" >Antiguedades</option>
-              <option className="capitalize">musica</option>
-              <option className="capitalize">cartas</option>
-              <option className="capitalize">tecnologia</option>
-              <option className="capitalize">comics</option>
-              <option className="capitalize">juguetes</option>
-              <option className="capitalize">deporte</option>
-              <option className="capitalize">libros</option>
-              <option className="capitalize">otros</option>
+              <option value="antiguedades">Antiguedades</option>
+              <option value="musica">Musica</option>
+              <option value="cartas">Cartas</option>
+              <option value="tecnologia">Tecnologia</option>
+              <option value="comics">Comics</option>
+              <option value="juguetes">Juguetes</option>
+              <option value="deporte">Deporte</option>
+              <option value="libros">Libros</option>
+              <option value="otros">Otros</option>
             </select>
+            <p className="mt-3 text-sm leading-6 text-gray-600">Selecciona la categoria adecuada, la categoria correcta determinara que tan facil puede ser encontrado tu producto.</p>
           </div>
         </div>
-        <div className="sm:col-span-4">
-          <label className="block text-sm font-medium leading-6 text-gray-900">Descripción:</label>
+
+        <div className="sm:col-span-6">
+          <label className="block text-base font-semibold leading-6 text-gray-900">Descripción:</label>
           <div className="mt-2">
             <textarea
               value={description}
@@ -115,8 +136,9 @@ function CreatePost() {
           </div>
           <p className="mt-3 text-sm leading-6 text-gray-600">Introduce una descripcion apropiada del producto. Una descripcion concreta y detallada permitira que tu producto tenga mayor probabilidad de ser comprado.</p>
         </div>
-        <div className="sm:col-span-4">
-          <label className="block text-sm font-medium leading-6 text-gray-900">Precio:</label>
+
+        <div className="sm:col-span-2">
+          <label className="block text-base font-semibold leading-6 text-gray-900">Precio:</label>
           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
             <input
               type="number"
@@ -127,8 +149,13 @@ function CreatePost() {
           </div>
         </div>
 
+        <div className="flex items-center mb-4">
+            <input id="default-checkbox" type="checkbox" value={envio} onChange={(event) => setEnvio(event,target.value)} className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+            <label htmlFor="default-checkbox" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Envio incluido?</label>
+        </div>
+
         <div className="col-span-full">
-          <label className="block text-sm font-medium leading-6 text-gray-900">Archivos:</label>
+          <label className="block text-base font-semibold leading-6 text-gray-900">Imagenes:</label>
           <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
             <div className="text-center">
               <svg className="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -160,6 +187,7 @@ function CreatePost() {
         >
           Vender producto
         </button>
+
       </div>
     </form>
   </div>

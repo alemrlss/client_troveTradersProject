@@ -1,18 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useContext, useEffect } from "react";
 import { FaHome, FaUser, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
-import img from "../../assets/logo.png";
+import img from "../../assets/img/logo3.jpg";
 import { SocketContext } from "../../contexts/socketContext";
 import { useAuthContext } from "../../contexts/authContext";
 import { useModal } from "../../hooks/useModal";
 import axios from "axios";
 import { getDataUser } from "../../services/Auth";
-import { Link } from "react-router-dom";
 import ModalRequests from "../Modals/ModalRequests/ModalRequests";
 import ModalTrades from "../Modals/ModalTrades.jsx/ModalTrades";
 import NotificationsComponent from "./NotificationsComponent";
 import TradesComponent from "./TradesComponent";
 import RequestsComponent from "./RequestsComponent";
+import { Link, useNavigate } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 function NavBarr() {
   //^  Contexto.
@@ -24,6 +25,10 @@ function NavBarr() {
   const [notificationsB, setNotificationsB] = useState([]);
 
   const [isMenuOpen, setMenuOpen] = useState(false);
+
+  const [query, setQuery] = useState("")
+
+  const navigate = useNavigate();
 
   //!UseEffect para la escucha de las notificaciones
   useEffect(() => {
@@ -142,14 +147,17 @@ function NavBarr() {
     setMenuOpen(false); // Cerrar el menú móvil cuando se hace clic en un elemento
   };
 
+
   return (
-    <nav className="bg-primary-200 p-4 shadow-lg">
-      <div className="container mx-auto flex justify-between items-center">
+  <div>
+    <nav className="bg-primary-100 p-4 shadow-lg mx-auto">
+      <div className="sm:mx-auto	container flex justify-between items-center lg:text-sm">
         {/* Logotipo */}
-        <div className="text-white text-2xl font-bold flex items-center">
-          <img src={img} className="h-12 mr-3" alt="TroveTraders Logo" />
-          <p>TroveTraders</p>
-        </div>
+        <div className="text-white text-sm font-bold flex items-center">
+          <img src={img} className="h-24" alt="TroveTraders Logo" />
+          <p className="text-secondary-100 hidden xl:block">TroveTraders</p>
+        </div> 
+        {/* menu hamb */}
         <button
           className="text-white mr-4 sm:hidden"
           onClick={handleMenuToggle}
@@ -160,28 +168,69 @@ function NavBarr() {
             <FaBars className="w-6 h-6" /> // Icono de menú hamburguesa
           )}
         </button>
-        <div className="hidden sm:flex items-center space-x-3">
+        <div className="hidden sm:flex items-center">
           {/* Iconos para las solicitudes de compra, trades en ejecución, notificaciones */}
           <div className="flex items-center text-white">
             {/* Contenedor para alinear ícono con texto */}
-            <FaHome className="w-6 h-6 text-xl text-black" />
-            <Link className="text-black p-2" to={`/home`}>
-              <span>Inicio</span>
+            <Link className="text-white p-2" to={`/home`}>
+              <FaHome className="w-7 h-7 text-xl text-white m-2" />
             </Link>
           </div>
           <div className="flex items-center text-white">
             {/* Contenedor para alinear ícono con texto */}
-            <FaUser className="w-6 h-6 text-xl text-black" />
             <Link
-              className="text-black p-2"
+              className="text-white p-2"
               to={`/profile/${idUser}`}
             >
-              <span>Perfil</span>
+              <FaUser className="w-6 h-6 text-xl text-white m-2" />
             </Link>
           </div>
         </div>
 
-        <div className="hidden sm:flex items-center space-x-4">
+        {/*-------------------------------------------------------------- BUSQUEDA ------------------------------------------------------------------*/}
+        <form className="flex-grow w-full sm:w-2/6 sm:mr-4" onSubmit={(e) => {
+                e.preventDefault();
+                navigate(`/resultados?query=${query}`)
+              }}>
+          <label
+            htmlFor="default-search"
+            className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          >
+            Search
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg
+                className="w-5 h-5 text-gray-900 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  d="M9 17a7 7 0 100-14 7 7 0 000 14z"
+                />
+                <path stroke="currentColor" d="M20 20l-5.2-5.2" />
+              </svg>
+            </div>
+            <input
+              type="search"
+              id="default-search"
+              className="block w-full rounded-full p-4 pl-10 text-sm text-gray-900 border border-jisselColor1-300 bg-gray-150 focus:ring-jisselColor1-200 focus:border-jisselColor1-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder=""
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="text-gray-400 rounded-full absolute right-2.5 bottom-2.5 bg-jisselColor1-300 hover:opacity-90 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Buscar
+            </button>
+          </div>
+        </form>
+
+        <div className="hidden sm:flex items-center space-x-0">
           <TradesComponent
             id={idUser}
             openModal={openModalTrades}
@@ -202,7 +251,7 @@ function NavBarr() {
           {/* Botón o icono de cerrar sesión */}
           <button
             onClick={handleLogout}
-            className="text-primary-400 rounded-md p-3 hover:text-red-700 ml-8"
+            className="text-secondary-200 rounded-md p-3 hover:text-red-700 ml-8"
           >
             <FaSignOutAlt className="w-8 h-8" />
           </button>
@@ -230,7 +279,7 @@ function NavBarr() {
                 isOpen={isOpen}
               />
               <Link
-                className="text-black p-3 flex items-center "
+                className="text-white p-3 flex items-center "
                 onClick={handleMenuItemClick}
                 to={`/home`}
               >
@@ -240,7 +289,7 @@ function NavBarr() {
               <Link
                 onClick={handleMenuItemClick}
                 to={`/profile/${idUser}`}
-                className="text-black p-3 flex items-center"
+                className="text-white p-3 flex items-center"
               >
                 <FaUser />
                 <span className="ml-2">Perfil</span>
@@ -310,7 +359,42 @@ function NavBarr() {
         </div>
       )}
     </nav>
+    <nav className="bg-secondary-200 dark:bg-gray-700">
+        <div className="px-4 py-3">
+            <div className="flex items-center">
+                <ul className="mx-auto flex flex-row font-medium mt-0 space-x-8 text-sm">
+                    <li>
+                        <Link to='/categoria/antiguedades' className="text-white  hover:underline" aria-current="page">Antiguedades</Link>
+                    </li>      
+                    <li>
+                        <Link to='/categoria/musica' className="text-white  hover:underline" aria-current="page">Musica</Link>
+                    </li>
+                    <li>
+                        <Link to='/categoria/cartas' className="text-white  hover:underline" aria-current="page">Cartas</Link>
+                    </li>
+                    <li>
+                        <Link to='/categoria/tecnologia' className="text-white  hover:underline" aria-current="page">Tecnologia</Link>
+                    </li>
+                    <li>
+                        <Link to='/categoria/comics' className="text-white  hover:underline" aria-current="page">Comics</Link>
+                    </li>
+                    <li>
+                        <Link to='/categoria/juguetes' className="text-white  hover:underline" aria-current="page">Juguetes</Link>
+                    </li>
+                    <li>
+                       <Link to='/categoria/deporte' className="text-white  hover:underline" aria-current="page">Deporte</Link>
+                    </li>
+                    <li>
+                        <Link to='/categoria/libros' className="text-white  hover:underline" aria-current="page">Libros</Link>
+                    </li>
+                    <li>
+                        <Link to='/categoria/otros' className="text-white  hover:underline" aria-current="page">Otros</Link>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
   );
 }
-
 export default NavBarr;

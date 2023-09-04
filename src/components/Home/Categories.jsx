@@ -13,56 +13,56 @@ const callouts = [
     description: 'Antiguedades',
     imageSrc: imgCategory,
     imageAlt: '',
-    href: 'antiguedades',
+    href: 'categoria/antiguedades',
   },
   {
     id: 2,
     description: 'Musica',
     imageSrc: imgCategory2,
-    imageAlt: 'eather key ring, and a houseplant.',
-    href: 'musica',
+    imageAlt: '',
+    href: 'categoria/musica',
   },
   {
     id: 3,
     description: 'Cartas',
     imageSrc: imgCategory3,
     imageAlt: '',
-    href: 'cartas',
+    href: 'categoria/cartas',
   },
   {
     id: 4,
     description: 'Tecnologia',
     imageSrc: imgCategory4,
     imageAlt: '',
-    href: 'tecnologia',
+    href: 'categoria/tecnologia',
   },
   {
     id: 5,
     description: 'Comics',
     imageSrc: imgCategory5,
     imageAlt: '',
-    href: 'comics',
+    href: 'categoria/comics',
   },
   {
     id: 6,
     description: 'Juguetes',
     imageSrc: imgCategory6,
     imageAlt: '',
-    href: 'juguetes',
+    href: 'categoria/juguetes',
   },
   {
     id: 7,
     description: 'Deporte',
     imageSrc: imgCategory7,
     imageAlt: '',
-    href: 'deporte',
+    href: 'categoria/deporte',
   },
   {
     id: 8,
     description:'Libros',
     imageSrc: imgCategory8,
     imageAlt: '',
-    href: 'libros',
+    href: 'categoria/libros',
   },
 ]
 
@@ -72,7 +72,7 @@ export default function Categories() {
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl py-4 sm:py-4 lg:max-w-none lg:py-4">
           <h2 className="text-2xl font-bold text-gray-900">Categorias</h2>
-
+          
           <div className="mt-6 space-y-12 lg:grid lg:grid-cols-8 lg:gap-x-6 lg:space-y-0">
             {callouts.map((callout) => (
               <div key={callout.id} className="group relative">

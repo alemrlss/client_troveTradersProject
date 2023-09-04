@@ -14,17 +14,15 @@ export default {
         current: "currentColor",
         primary: {
           /*Tonos marrones*/
-          100: "#bc8e6e",
-          200: "#e4c8a8",
-          300: "#3e301a ",
-          400: "#9c745c",
-          500: "#cbbca0",
+          100: "#d5c9ac"
         },
         secondary: {
-          /*Verdes*/
-          100: "#F4FFEE",
-          200: "#65A147",
+          100: "#8d3d3a",
+          200: "#a8814f"
         },
+        logo: {
+          100: "#EEF1EA"
+        }
       },
       transitionProperty: {
         height: "height", // Ejemplo de transición de altura
