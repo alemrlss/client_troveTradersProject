@@ -6,6 +6,7 @@ import Acuerdo from "./Acuerdo";
 import Pago from "./Pago";
 import Recibo from "./Recibo";
 import Finalizado from "./Finalizado";
+import uuid from "react-uuid";
 
 function TradeComponent({
   trade,
@@ -23,11 +24,12 @@ function TradeComponent({
 
   const [seller, setSeller] = useState(false);
   const [buyer, setBuyer] = useState(false);
-
   const [role, setRole] = useState();
 
+  const [alerts, setAlerts] = useState([]);
+  const [alertsReceived, setAlertsReceived] = useState([]);
+
   const [currentState, setCurrentState] = useState(post.currentState);
-  console.log(currentState);
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -42,6 +44,13 @@ function TradeComponent({
     };
 
     fetchMessages();
+
+    if (trade.alerts.length > 0) {
+      setAlerts(trade.alerts);
+    }
+    if (trade.alerts.length > 0) {
+      setAlertsReceived(trade.alerts);
+    }
   }, [trade]);
 
   useEffect(() => {
@@ -54,13 +63,37 @@ function TradeComponent({
     }
     socket.emit("joinTradeRoom", trade._id);
 
+    socket.on(`alert_${trade._id}`, handleAlert);
+    socket.on(`alertReceived_${trade._id}`, handleAlertReceived);
     // Manejar evento de recepción de mensajes
     socket.on("message", handleMessageReceived);
+
     return () => {
       // Desuscribirse del evento al desmontar el componente
       socket.off("message", handleMessageReceived);
+      socket.off(`alert_${trade._id}`, handleAlert);
+      socket.off(`alertReceived_${trade._id}`, handleAlertReceived);
     };
   }, [idUser, socket, trade]);
+
+  const handleAlert = (payload) => {
+    const newAlert = {
+      id: uuid(), // Genera un identificador único para la alerta
+      role: payload.role,
+      message: payload.message,
+    };
+
+    setAlerts((prevAlerts) => [...prevAlerts, newAlert]);
+  };
+  const handleAlertReceived = (payload) => {
+    const newAlert = {
+      id: uuid(), // Genera un identificador único para la alerta
+      role: payload.role,
+      message: payload.message,
+    };
+
+    setAlertsReceived((prevAlerts) => [...prevAlerts, newAlert]);
+  };
 
   const handleMessageReceived = (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -92,10 +125,14 @@ function TradeComponent({
         trade={trade}
         sellerData={sellerData}
         buyerData={buyerData}
+        seller={seller}
+        buyer={buyer}
       />
     ),
     pago: (
       <Pago
+        setAlerts={setAlerts}
+        alerts={alerts}
         post={post}
         messages={messages}
         newMessage={newMessage}
@@ -113,6 +150,8 @@ function TradeComponent({
     ),
     recibo: (
       <Recibo
+        setAlerts={setAlerts}
+        alertsReceived={alertsReceived}
         post={post}
         messages={messages}
         newMessage={newMessage}
@@ -135,6 +174,7 @@ function TradeComponent({
         post={post}
         setCurrentState={setCurrentState}
         trade={trade}
+        role={role}
       />
     ),
   };

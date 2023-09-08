@@ -53,7 +53,6 @@ function LoginComponent() {
     return passwordRegex.test(password);
   };
 
-
   return (
     <section className="bg-white ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 ">
@@ -111,7 +110,7 @@ function LoginComponent() {
                 />
               </div>
               <div className="space-y-4 md:space-y-6">
-              <p className="text-red-600">{error}</p>
+                <p className="text-red-600">{error}</p>
                 <a
                   href="#"
                   className="text-sm font-light text-primary-600 hover:underline"

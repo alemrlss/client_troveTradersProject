@@ -26,38 +26,41 @@ import PrivateRoute from "./components/router/PrivateRoute";
 import Register from "./pages/register";
 import VerifyAccount from "./pages/verifyAccount";
 import CrearProducto from "./pages/crearproducto";
+import { SocketProvider } from "./contexts/socketContext";
 
 function App() {
   //ESTA PENDIENTE POR ANEXAR LA VALIDEZ DEL TOKEN!!!.
 
   return (
     <div className="app">
-      <AuthContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<PublicRoute />}>
-              <Route path={LANDING} element={<Landing />} />
-              <Route path={LOGIN} element={<Login />} />
-              <Route path={REGISTER} element={<Register />} />
-            </Route>
+      <SocketProvider>
+        <AuthContextProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<PublicRoute />}>
+                <Route path={LANDING} element={<Landing />} />
+                <Route path={LOGIN} element={<Login />} />
+                <Route path={REGISTER} element={<Register />} />
+              </Route>
 
-            <Route path="/" element={<PrivateRoute />}>
-              <Route path={HOME} element={<Home />} />
-              <Route path={`${PROFILE}/:id`} element={<Profile />} />
-              <Route path={`${POST}/:id`} element={<Post />} />
-              <Route path={`${TRADE}/:id`} element={<Trade />} />
-              <Route
-                path={`${EMAILVERIFICATION}/:token/test`}
-                element={<EmailVerification />}
-              />
-              <Route path={VERIFYACCOUNT} element={<VerifyAccount />} />
+              <Route path="/" element={<PrivateRoute />}>
+                <Route path={HOME} element={<Home />} />
+                <Route path={`${PROFILE}/:id`} element={<Profile />} />
+                <Route path={`${POST}/:id`} element={<Post />} />
+                <Route path={`${TRADE}/:id`} element={<Trade />} />
+                <Route
+                  path={`${EMAILVERIFICATION}/:token/test`}
+                  element={<EmailVerification />}
+                />
+                <Route path={VERIFYACCOUNT} element={<VerifyAccount />} />
 
-              <Route path={CREARPRODUCTO} element={<CrearProducto />} />
-              <Route path="*" element={<h1>404</h1>} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </AuthContextProvider>
+                <Route path={CREARPRODUCTO} element={<CrearProducto />} />
+                <Route path="*" element={<h1>404</h1>} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </AuthContextProvider>
+      </SocketProvider>
     </div>
   );
 }

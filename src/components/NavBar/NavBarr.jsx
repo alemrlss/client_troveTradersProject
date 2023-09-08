@@ -143,7 +143,7 @@ function NavBarr() {
   };
 
   return (
-    <nav className="bg-primary-200 p-4 shadow-lg w-full overflow-x-hidden">
+    <nav className="bg-primary-200 p-4 md:p-2 shadow-lg w-full">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logotipo */}
         <div className="text-white text-2xl font-bold flex items-center">

@@ -1,8 +1,12 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 import { useState, useContext, useEffect } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import axios from "axios";
 import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { RiCheckLine, RiErrorWarningLine } from "react-icons/ri";
+import { FaCheckCircle } from "react-icons/fa";
 
 function Acuerdo({
   post,
@@ -16,7 +20,10 @@ function Acuerdo({
   trade,
   sellerData,
   buyerData,
+  seller,
+  buyer,
 }) {
+  const navigate = useNavigate();
   const socket = useContext(SocketContext);
 
   const [sellerConfirmed, setSellerConfirmed] = useState(
@@ -25,22 +32,40 @@ function Acuerdo({
   const [buyerConfirmed, setBuyerConfirmed] = useState(
     trade.agreementConfirmationBuyer ? true : false
   );
+  const [agreement, setAgreement] = useState(false);
+  const [cancelTrade, setCancelTrade] = useState(trade.isCancel ? true : false);
+
+  const [tradeCancelled, setTradeCancelled] = useState(
+    trade.isCancel ? true : false
+  );
+  const [buttonsDisabled, setButtonsDisabled] = useState(
+    trade.isCancel ? true : false
+  );
+  const [whoCancelled, setWhoCancelled] = useState(trade.whoCanceled);
 
   //?Escuchar los eventos de confirmacion de ambas partes
   useEffect(() => {
     socket.on(`sellerConfirmed_${trade._id}`, () => {
       setSellerConfirmed(true);
-      console.log("aqui");
     });
 
     socket.on(`buyerConfirmed_${trade._id}`, () => {
       setBuyerConfirmed(true);
-      console.log("aqui");
+    });
+
+    socket.on(`sellerCancel_${trade._id}`, () => {
+      cancelTradeRole("seller");
+    });
+
+    socket.on(`buyerCancel_${trade._id}`, () => {
+      cancelTradeRole("buyer");
     });
 
     return () => {
       socket.off(`sellerConfirmed_${trade._id}`);
       socket.off(`buyerConfirmed_${trade._id}`);
+      socket.off(`sellerCancel_${trade._id}`);
+      socket.off(`buyerCancel_${trade._id}`);
     };
   }, [socket, post, trade._id]);
 
@@ -59,17 +84,53 @@ function Acuerdo({
           console.error("Error updating post state:", error);
         });
     }
-  }, [sellerConfirmed, buyerConfirmed, trade._id, post._id, setCurrentState]);
+    //! Cuando el primero cancele el trade se activara el codigo dentro del if!
+    if (cancelTrade) {
+      axios
+        .post(
+          `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/cancel/${whoCancelled}`
+        )
+        .then(() => {
+          setTradeCancelled(true);
+          setButtonsDisabled(true);
+        })
+        .catch((error) => {
+          console.error("Error al cancelar el trade:", error);
 
+          // Aquí puedes manejar el error y mostrar un mensaje al usuario si es necesario
+        });
+    }
+  }, [
+    sellerConfirmed,
+    buyerConfirmed,
+    trade._id,
+    post._id,
+    setCurrentState,
+    cancelTrade,
+    trade.sellerID,
+    trade.buyerID,
+    whoCancelled,
+  ]);
+
+  const cancelTradeRole = (role) => {
+    if (role === "seller") {
+      setWhoCancelled("Vendedor");
+    }
+    if (role === "buyer") {
+      setWhoCancelled("Comprador");
+    }
+
+    setCancelTrade(true);
+  };
   //?Confirmacion cuando el vendedor esta de acuerdo
   const handleConfirmAgreementSeller = () => {
     axios
       .post(
         `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/confirmationAgreementSeller`
       )
-      .then((response) => {
-        console.log(response.data);
+      .then(() => {
         const message = "El vendedor está de acuerdo";
+        setAgreement(true);
         socket.emit("sellerConfirmed", {
           tradeId: trade._id,
           message,
@@ -86,6 +147,7 @@ function Acuerdo({
         `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/${trade.buyerID}/confirmationAgreementBuyer`
       )
       .then((response) => {
+        setAgreement(true);
         console.log(response.data);
         const message = "El comprador está de acuerdo";
         socket.emit("buyerConfirmed", {
@@ -98,8 +160,91 @@ function Acuerdo({
       });
   };
 
+  const handleCancelTradeBuyer = () => {
+    const message = "El comprador no esta de acuerdo para realizar el Trade";
+    socket.emit("buyerCancel", {
+      tradeId: trade._id,
+      message,
+    });
+  };
+  const handleCancelTradeSeller = () => {
+    const message = "El vendedor no esta de acuerdo para realizar el Trade";
+    socket.emit("sellerCancel", {
+      tradeId: trade._id,
+      message,
+    });
+  };
   return (
     <div className="flex flex-col p-4 md:p-8 lg:p-12">
+      {seller && tradeCancelled && (
+        <div className="bg-red-200  border-red-500 border-2 p-3 rounded shadow-md text-lg mb-4 animate-fade-down animate-duration-[800ms] animate-delay-0">
+          <p className="text-gray-900 font-semibold text-center md:text-left text-base">
+            El trade ha sido cancelado por el {whoCancelled}
+          </p>
+          <p className="text-gray-700 text-sm mb-0">
+            El trade ya no tiene validez alguna y no se seguirá comercializando.
+          </p>
+          <p className="text-gray-700 text-sm mb-1 mt-0 italic">
+            Debes volver a publicar el objeto nuevamente si quieres
+            comercializarlo.
+          </p>
+          <div className="flex justify-center md:justify-normal">
+            <button
+              onClick={async () => {
+                await axios.post(
+                  `http://localhost:3001/users/trades/${trade._id}/${trade.sellerID}/cancel`
+                );
+                await axios.delete(
+                  `http://localhost:3001/posts/delete/${post._id}`
+                );
+                navigate("/");
+              }}
+              className="bg-green-500 hover:bg-green-600 text-white text-sm px-2 md:px-4 py-1 md:py-2 rounded  flex "
+            >
+              Finalizar / Ir al Home
+            </button>
+          </div>
+          <p className="text-gray-600 text-xs mt-2 flex items-center">
+            <RiErrorWarningLine className="mr-1 h-5 w-5 text-red-500" />{" "}
+            Advertencia: Si no das clic en el botón, el trade no se finalizará
+            ni se eliminará de tus trades en ejecución.
+          </p>
+        </div>
+      )}
+      {buyer && tradeCancelled && (
+        <div className="mb-4 bg-red-200 p-3 border-red-500 border-2 rounded shadow-md z-10 text-lg animate-fade-down animate-duration-[800ms] animate-delay-0">
+          <p className="text-gray-900 font-semibold text-center md:text-left text-base">
+            El trade ha sido cancelado por el {whoCancelled}
+          </p>
+          <p className="text-gray-700 text-sm mb-0">
+            El trade ya no tiene validez alguna y no se seguirá comercializando.
+          </p>
+          <p className="text-gray-700 text-sm mb-1 mt-0 italic">
+            Puedes seguir buscando objetos dentro de nuestra plataforma
+          </p>
+          <div className="flex justify-center md:justify-normal">
+            <button
+              onClick={async () => {
+                await axios.post(
+                  `http://localhost:3001/users/trades/${trade._id}/${trade.buyerID}/cancel`
+                );
+                await axios.delete(
+                  `http://localhost:3001/posts/delete/${post._id}`
+                );
+                navigate("/");
+              }}
+              className="bg-green-500 hover:bg-green-600 text-white text-sm px-2 md:px-4 py-1 md:py-2 rounded  flex "
+            >
+              Finalizar / Ir al Home
+            </button>
+          </div>
+          <p className="text-gray-600 text-xs mt-2 flex items-center">
+            <RiErrorWarningLine className="mr-1 h-5 w-5 text-red-500" />{" "}
+            Advertencia: Si no das clic en el botón, el trade no se finalizará
+            ni se eliminará de tus trades en ejecución.
+          </p>
+        </div>
+      )}
       <div className="flex flex-col md:flex-row justify-center mb-6">
         <div className="w-full md:w-3/4 px-4 mb-4 md:mb-0">
           <div className="bg-white rounded-lg shadow-lg p-6">
@@ -143,23 +288,77 @@ function Acuerdo({
             </div>
 
             <div className="flex justify-center mt-6">
-              <button
-                onClick={() => {
-                  if (role === "vendedor") {
-                    handleConfirmAgreementSeller();
-                  } else if (role === "comprador") {
-                    handleConfirmAgreementBuyer();
-                  }
-
-                  console.log("MANEJAR AQUI QUITAR LOS BOTONES Y PONER OTRA COSA.. MIENTRAS EL OTRO CONFIRMA..")
-                }}
-                className="bg-green-500 hover:bg-green-600 text-white px-2 md:px-4 py-1 md:py-2 rounded mr-2 font-semibold"
-              >
-                Estoy de Acuerdo
-              </button>
-              <button className="bg-red-500 hover:bg-red-600 text-white px-2 md:px-4 py-1 md:py-2 rounded font-semibold">
-                Cancelar Trade
-              </button>
+              {buyer &&
+                (buyerConfirmed || agreement ? (
+                  <p className="flex items-center  font-sans  text-2xl animate-fade animate-duration-[500ms] animate-delay-0">
+                    <FaCheckCircle className="mr-2 h-10 w-10 text-green-500" />
+                    Estas de acuerdo con el Trade
+                  </p>
+                ) : (
+                  <div>
+                    {!trade.isDispute ? (
+                      <div className="flex">
+                        {" "}
+                        <button
+                          disabled={buttonsDisabled}
+                          onClick={() => {
+                            handleConfirmAgreementBuyer();
+                          }}
+                          className="bg-green-500 hover:bg-green-600 text-white px-2 md:px-4 py-1 md:py-2 rounded mr-2 font-semibold"
+                        >
+                          Estoy de Acuerdo
+                        </button>
+                        <button
+                          disabled={buttonsDisabled}
+                          onClick={handleCancelTradeBuyer}
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 md:px-4 py-1 md:py-2 rounded font-semibold"
+                        >
+                          Cancelar Trade
+                        </button>
+                      </div>
+                    ) : (
+                      <p className="flex items-center text-2xl  rounded-sm">
+                        <RiErrorWarningLine className="mr-1 h-10 w-10 text-red-500" />
+                        El trade ha sido cancelado!
+                      </p>
+                    )}
+                  </div>
+                ))}
+              {seller &&
+                (sellerConfirmed || agreement ? (
+                  <p className="flex items-center  font-sans  text-2xl animate-fade animate-duration-[500ms] animate-delay-0">
+                    <FaCheckCircle className="mr-2 h-10 w-10 text-green-500" />
+                    Estas de acuerdo con el Trade
+                  </p>
+                ) : (
+                  <div>
+                    {!cancelTrade ? (
+                      <div className="flex">
+                        <button
+                          disabled={buttonsDisabled}
+                          onClick={() => {
+                            handleConfirmAgreementSeller();
+                          }}
+                          className="bg-green-500 hover:bg-green-600 text-white px-2 md:px-4 py-1 md:py-2 rounded mr-2 font-semibold"
+                        >
+                          Estoy de Acuerdo
+                        </button>
+                        <button
+                          disabled={buttonsDisabled}
+                          onClick={handleCancelTradeSeller}
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 md:px-4 py-1 md:py-2 rounded font-semibold"
+                        >
+                          Cancelar Trade
+                        </button>
+                      </div>
+                    ) : (
+                      <p className="flex items-center text-2xl  rounded-sm">
+                        <RiErrorWarningLine className="mr-1 h-10 w-10 text-red-500" />
+                        El trade ha sido cancelado!
+                      </p>
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         </div>
