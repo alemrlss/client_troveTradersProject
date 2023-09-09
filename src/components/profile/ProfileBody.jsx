@@ -8,6 +8,7 @@ import img from "../../assets/defaultProfile.png";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function ProfileBody({ data, user }) {
   const profileOptions = {
@@ -216,17 +217,15 @@ function ProfileBody({ data, user }) {
                     <div className="px-4 py-2 font-semibold">
                       Numero Telefonico:
                     </div>
-                    <div className="px-4 py-2">0412-1696399</div>
+                    <div className="px-4 py-2">????????</div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Direccion:</div>
-                    <div className="px-4 py-2">Test</div>
+                    <div className="px-4 py-2">?????????</div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Email</div>
-                    <div className="px-4 py-2">
-                      <p className="text-blue-800">{userData.email}</p>
-                    </div>
+                    <div className="px-4 py-2">{userData.email}</div>
                   </div>
                 </div>
               </div>
@@ -235,9 +234,14 @@ function ProfileBody({ data, user }) {
                   className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4"
                   onClick={openModalEdit}
                 >
-                  Editar Perfil
+                  Editar Perfil.
                 </button>
               )}
+              <Link to={"/forgot-password"}>
+                <button className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
+                  Cambiar contraseña.
+                </button>
+              </Link>
             </div>
 
             <div className="my-4"></div>

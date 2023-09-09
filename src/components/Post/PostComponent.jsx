@@ -5,7 +5,7 @@ import { SocketContext } from "../../contexts/socketContext";
 import { getIdUser } from "../../services/Auth";
 import { Link } from "react-router-dom";
 
-function PostComponent({ post }) {
+function PostComponent({ post, user}) {
   const socket = useContext(SocketContext);
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -203,7 +203,7 @@ function PostComponent({ post }) {
 
       <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
         <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Nombre del producto:</h1>
+          <h1 className="">Nombre del producto:</h1>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{post.title}</h1>
         </div>
 
@@ -212,8 +212,13 @@ function PostComponent({ post }) {
         <div className="mt-4 lg:row-span-3 lg:mt-0">
           <h2 className="sr-only">Informacion del producto.</h2>
           <p className="text-3xl tracking-tight text-green-600">${post.price}</p>
-          <p className="text-2xl tracking-tight text-gray-900">{formatDate(post.createdAt)}</p>
-          <p className="text-2xl tracking-tight text-gray-900">Categoria: {post.category}</p>
+          <p className="text-2xl tracking-tight text-gray-900">Fecha de publicacion:</p>
+          <p>{formatDate(post.createdAt)}</p>
+          <p className="text-2xl tracking-tight text-gray-900 capitalize">Categoria:</p>
+          <p className="capitalize">{post.category}</p>
+          <p className="text-2xl tracking-tight text-gray-900">Nombre del Vendedor:</p>
+          <p className="capitalize">{user.name} {user.lastName}</p>
+          
           {!isConfirming ? (
           <button onClick={() => {
             hasRequestedFunction(post.author_id);
