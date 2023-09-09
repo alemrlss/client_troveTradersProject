@@ -74,7 +74,7 @@ function ProfileMain({ data, user }) {
     <div>
       <div>
         <div>
-        <ProfileBody data={data} user={user} />
+          <ProfileBody data={data} user={user} />
         </div>
         {showNotification && (
           <div className="absolute top-4 right-5 space-y-4">

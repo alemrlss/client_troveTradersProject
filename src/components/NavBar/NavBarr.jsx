@@ -266,13 +266,15 @@ function NavBarr() {
                 openModal={openModalTrades}
                 setTrades={setTrades}
               />
-              <RequestsComponent className="text-black"
+              <RequestsComponent
+                className="text-black"
                 id={idUser}
                 openModal={openModalRequests}
                 setRequests={setRequests}
               />
 
-              <NotificationsComponent className="text-black"
+              <NotificationsComponent
+                className="text-black"
                 idUser={idUser}
                 setNotifications={setNotifications}
                 setIsOpen={setIsOpen}
@@ -310,7 +312,7 @@ function NavBarr() {
       {isOpen && (
         <div className="notification-menu absolute top-20 right-0 text-black bg-white border border-gray-300 rounded-lg shadow-md p-4 w-80 max-h-60 overflow-y-auto">
           <h2 className="text-xl font-semibold mb-4">Notificaciones</h2>
-          <ul className="divide-y divide-gray-300"> 
+          <ul className="divide-y divide-gray-300">
             {notifications.map((notification) => (
               <li
                 className={`p-4 m-1 ${

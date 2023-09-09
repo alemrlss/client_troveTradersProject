@@ -100,7 +100,6 @@ function ModalRequests({
                   </p>
                 </div>
                 <div>
-                  {console.log(request)}
                   <button
                     className="px-4 py-2 mr-2 text-sm text-white bg-green-500 rounded hover:bg-green-600"
                     onClick={() => {

@@ -48,7 +48,7 @@ function ProfileBody({ data, user }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  console.log(userData.createdAt);
+
   const formattedDate = format(new Date(userData.createdAt), "MMMM d, yyyy", {
     locale: es,
   });

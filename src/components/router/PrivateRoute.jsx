@@ -13,10 +13,10 @@ export default function PrivateRoute() {
   return (
     //! SE LE COLOCA EL PROVIDER DE CONEXTO DE SOCKETS(SERVIDOR) SOLO PARA LAS RUTAS PRIVADAS..
     <SocketProvider>
-      <div>
-       <NavBarr/>
+      <>
+        <NavBarr />
         <Outlet />
-      </div>
+      </>
     </SocketProvider>
   );
 }

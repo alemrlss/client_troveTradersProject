@@ -103,7 +103,7 @@ function PostComponent({ post, user}) {
   const handleConfirmClick = async () => {
     if (hasRequested) {
       const msgError =
-        "Ya este producto se encuentra en las soliciudes del vendedor";
+        "Ya este producto se encuentra en las solicitudes del vendedor";
       const msgErrorHTML = (
         <p>
           <b>{msgError}</b>
@@ -120,10 +120,15 @@ function PostComponent({ post, user}) {
       await axios.post("http://localhost:3001/notifications", {
         sellerId: post.author_id,
         message,
-        target: `/profile/${buyer._id}`
+        target: `/profile/${buyer._id}`,
       });
 
-      sendNotification(post.author_id, message, `bg-orange-600`, `/profile/${buyer._id}`);
+      sendNotification(
+        post.author_id,
+        message,
+        `bg-orange-600`,
+        `/profile/${buyer._id}`
+      );
 
       await axios.post(
         `http://localhost:3001/users/${post.author_id}/requests`,
@@ -188,94 +193,103 @@ function PostComponent({ post, user}) {
 
   return (
     <div className="bg-white">
-    {isPostAvailable ? (
-    <div className="pt-6">
-      <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-        {post.photos.map((photo, index) => (
-          <img
-            key={index}
-            src={`http://localhost:3001/images/posts/${photo}`}
-            alt={`Photo ${index}`}
-            className="rounded shadow w-full h-72 object-cover"
-          />
-        ))}
-      </div>
+      {isPostAvailable ? (
+        <div className="pt-6">
+          <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+            {post.photos.map((photo, index) => (
+              <img
+                key={index}
+                src={`http://localhost:3001/images/posts/${photo}`}
+                alt={`Photo ${index}`}
+                className="rounded shadow w-full h-72 object-cover"
+              />
+            ))}
+          </div>
 
-      <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
-        <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-          <h1 className="">Nombre del producto:</h1>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{post.title}</h1>
-        </div>
-
-
-
-        <div className="mt-4 lg:row-span-3 lg:mt-0">
-          <h2 className="sr-only">Informacion del producto.</h2>
-          <p className="text-3xl tracking-tight text-green-600">${post.price}</p>
-          <p className="text-2xl tracking-tight text-gray-900">Fecha de publicacion:</p>
-          <p>{formatDate(post.createdAt)}</p>
-          <p className="text-2xl tracking-tight text-gray-900 capitalize">Categoria:</p>
-          <p className="capitalize">{post.category}</p>
-          <p className="text-2xl tracking-tight text-gray-900">Nombre del Vendedor:</p>
-          <p className="capitalize">{user.name} {user.lastName}</p>
-          
-          {!isConfirming ? (
-          <button onClick={() => {
-            hasRequestedFunction(post.author_id);
-
-            if (post.author_id === getIdUser()) {
-              const msgError = "No puedes comprar tu propio producto.";
-              const msgErrorHTML = (
-                <p className="text-xl">
-                  <b>{msgError}</b>
-                </p>
-              );
-              showAndHideNotification(
-                msgError,
-                msgErrorHTML,
-                "bg-red-300"
-              );
-              return;
-            }
-
-            setIsConfirming(true);
-          }}
-          type="submit" className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary-100 px-8 py-3 text-base font-medium text-white hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" disabled={isButtonDisabled}>Comprar</button>
-          ) : (
-            <div>
-              <button
-                onClick={() => {
-                  handleConfirmClick();
-                  setIsConfirming(false);
-                }}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 mr-2"
-                disabled={isButtonDisabled}
-              >
-                Confirmar compra
-              </button>
-              <button
-                onClick={() => {
-                  setIsConfirming(false);
-                }}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
-              >
-                Cancelar
-              </button>
+          <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+            <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+                Nombre del producto:
+              </h1>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+                {post.title}
+              </h1>
             </div>
-          )}
-        </div>
-        
-        <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
-          <div>
-            <h3 className="">Descripcion:</h3>
-            <div className="space-y-6">
-              <p className="text-base text-gray-900">{post.description}</p>
+
+            <div className="mt-4 lg:row-span-3 lg:mt-0">
+              <h2 className="sr-only">Informacion del producto.</h2>
+              <p className="text-3xl tracking-tight text-green-600">
+                ${post.price}
+              </p>
+              <p className="text-2xl tracking-tight text-gray-900">
+                {formatDate(post.createdAt)}
+              </p>
+              <p className="text-2xl tracking-tight text-gray-900">
+                Categoria: {post.category}
+              </p>
+              {!isConfirming ? (
+                <button
+                  onClick={() => {
+                    hasRequestedFunction(post.author_id);
+
+                    if (post.author_id === getIdUser()) {
+                      const msgError = "No puedes comprar tu propio producto.";
+                      const msgErrorHTML = (
+                        <p className="text-xl">
+                          <b>{msgError}</b>
+                        </p>
+                      );
+                      showAndHideNotification(
+                        msgError,
+                        msgErrorHTML,
+                        "bg-red-300"
+                      );
+                      return;
+                    }
+
+                    setIsConfirming(true);
+                  }}
+                  type="submit"
+                  className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary-100 px-8 py-3 text-base font-medium text-white hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  disabled={isButtonDisabled}
+                >
+                  Comprar
+                </button>
+              ) : (
+                <div>
+                  <button
+                    onClick={() => {
+                      handleConfirmClick();
+                      setIsConfirming(false);
+                    }}
+                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 mr-2"
+                    disabled={isButtonDisabled}
+                  >
+                    Confirmar compra
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsConfirming(false);
+                    }}
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
+              <div>
+                <h3 className="">Descripcion:</h3>
+                <div className="space-y-6">
+                  <p className="text-base text-gray-900">{post.description}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    ) : (
+      ) : (
         <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
           <h1 className="text-2xl text-red-500 font-bold">
             Este post no está disponible actualmente.
@@ -295,9 +309,8 @@ function PostComponent({ post, user}) {
           ))}
         </div>
       )}
-  </div>
+    </div>
   );
-
 }
 
 export default PostComponent;

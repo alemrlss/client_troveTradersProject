@@ -7,6 +7,7 @@ import Loader from "../components/Loader/Loader";
 import TradeComponent from "../components/Trade/TradeComponent";
 import { useParams } from "react-router-dom";
 import { getDataUser } from "../services/Auth";
+import Footer from "../components/Footer/Footer";
 function trade() {
   const { id } = useParams();
   const [tradeInfo, setTradeInfo] = useState(null);
@@ -68,9 +69,7 @@ function trade() {
     <>
       {loading && <Loader options={options} />}
       {error && (
-        <h1>
-          {error} PROGRAMAR ESTA PARTE QUE ES CUANDO EL TRADE NO SE ENCUENTRA
-        </h1>
+        <h1>ES POSIBLE QUE EL TRADE FUE CANCELADO ANTERIORMENTE O NO EXISTE</h1>
       )}
       {tradeInfo && (
         <TradeComponent
@@ -82,6 +81,8 @@ function trade() {
           buyerData={buyerData}
         />
       )}
+
+      <Footer />
     </>
   );
 }
