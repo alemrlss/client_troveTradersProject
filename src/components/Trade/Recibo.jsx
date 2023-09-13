@@ -442,13 +442,13 @@ function Recibo({
           </div>
 
           {sellerConfirmed && (
-            <p className="bg-green-300 text-gray-900 font-bold px-4 py-2 rounded mt-2 animate-fade-right animate-duration-500 animate-delay-0">
-              ¡El vendedor <b>{trade.nameSeller}</b> ha realizado marcado el
-              producto como Entregado!
+            <p className="bg-green-200 text-gray-900 font-bold px-4 py-2 rounded-r-3xl mt-2 animate-fade-right animate-duration-500 animate-delay-0">
+              ¡El vendedor <b>{trade.nameSeller}</b> ha marcado el producto como
+              Entregado!
             </p>
           )}
           {seller && sellerConfirmed && (
-            <div className="bg-green-200 p-4 rounded-lg mt-4">
+            <div className="bg-green-400 p-4 rounded-lg mt-4">
               <p className="text-lg">
                 Le has confirmado al comprador que has enviado el producto.
                 Espera que el comprador confirme que ha recibido el producto.
@@ -463,19 +463,19 @@ function Recibo({
               <p className="text-lg ">
                 El vendedor ha registrado la entrega del producto. Te pedimos
                 que verifiques si has recibido el artículo y, en caso
-                afirmativo, lo marques como "Recibido".
+                afirmativo, lo marques como Recibido.
               </p>
             </div>
           )}
           {buyerConfirmed && (
-            <p className="bg-green-300 text-gray-900 font-bold px-4 py-2 rounded mt-4">
+            <p className="bg-red-200 text-gray-900 font-bold px-4 py-2 rounded mt-4">
               ¡El comprador ha marcado el producto como recibido!
             </p>
           )}
           <div className="flex justify-center mt-4">
             {seller && !sellerConfirmed && (
               <button
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-4 rounded mr-2 font-bold "
+                className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-2xl  font-bold "
                 onClick={() => {
                   handleSellerConfirmed();
                 }}
@@ -485,12 +485,12 @@ function Recibo({
             )}
 
             {buyer && sellerConfirmed && (
-              <div>
+              <div className="space-x-2">
                 <button
                   onClick={() => {
                     handleBuyerConfirmed();
                   }}
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-4 rounded mr-2 font-bold"
+                  className="bg-green-500 hover:bg-green-600 py-2 px-2 text-white rounded-2xl font-bold"
                 >
                   He recibido el producto
                 </button>
@@ -499,7 +499,7 @@ function Recibo({
                   onClick={() => {
                     handleDispute();
                   }}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-4 rounded mr-2 font-bold"
+                  className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded-2xl  font-bold"
                 >
                   No he recibido el producto del vendedor
                 </button>

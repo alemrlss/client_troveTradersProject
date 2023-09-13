@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import VerifyIntro from "./VerifyIntro";
 import VerifyStep1 from "./VerifyStep1";
@@ -10,8 +10,12 @@ import axios from "axios";
 import Loader from "../Loader/Loader";
 import VerifyEmailError from "./VerifyEmailError";
 import VerifyError from "./VerifyError";
+import { Link } from "react-router-dom";
+import { SocketContext } from "../../contexts/socketContext";
 
 function VerifyComponent() {
+  const socket = useContext(SocketContext);
+
   const [currentStep, setCurrentStep] = useState("intro"); // Inicialmente, muestra el componente VerifyIntro
   const [emailVerification, setEmailVerification] = useState(null);
   const [verification, setVerification] = useState(null);
@@ -24,6 +28,63 @@ function VerifyComponent() {
   //!CAMBIAR A TRUE SI QUIERES QUE EL SIMULADOR APRUEBE LA VERIFICACION
   //~CAMBIAR A FALSE SI QUIERES QUE NO LA APRUEBE
 
+  const [showNotification, setShowNotification] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+
+  //!UseEffect para la escucha de las notificaciones
+  useEffect(() => {
+    if (socket) {
+      socket.on("newNotification", (payload) => {
+        // Manejar la notificación recibida desde el servidor
+        const msgHTML = (
+          <Link to={payload.target}>
+            <b>{payload.msgNotification}</b>
+          </Link>
+        );
+        showAndHideNotification(
+          payload.msgNotification,
+          msgHTML,
+          payload.bgColor
+        );
+      });
+    }
+    return () => {
+      if (socket) {
+        socket.off("newNotification");
+      }
+    };
+  }, []);
+
+  //!UseEffect para cuando una notificacion cambie se renderize
+  useEffect(() => {
+    // Timer para eliminar las notificaciones después de 2 segundos
+    let timer;
+
+    if (notifications.length > 0) {
+      timer = setTimeout(() => {
+        setNotifications([]);
+        setShowNotification(true);
+      }, 2500);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [notifications]);
+
+  //!Funcion para mostrar las notificaciones
+  const showAndHideNotification = (msg, messageHTML, bgColor) => {
+    // ~Verificar si la notificación ya existe en el estado de notificaciones
+    const notificationExists = notifications.some(
+      (notification) => notification.msg === msg
+    );
+    if (!notificationExists) {
+      setShowNotification(true);
+      setNotifications((prevNotifications) => [
+        ...prevNotifications,
+        { msg, messageHTML, bgColor },
+      ]);
+    }
+  };
   useEffect(() => {
     const fetchVerificationStatus = async () => {
       setLoading(true);
@@ -82,6 +143,18 @@ function VerifyComponent() {
       ) : null}
       {data && emailVerification === false && <VerifyEmailError />}
       {data && verification === true && <VerifyError />}
+      {showNotification && (
+        <div className="fixed top-4 right-4 space-y-4">
+          {notifications.map((notification, index) => (
+            <div
+              key={index}
+              className={`${notification.bgColor} text-gray-800 p-4 rounded-md shadow-md`}
+            >
+              {notification.messageHTML}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

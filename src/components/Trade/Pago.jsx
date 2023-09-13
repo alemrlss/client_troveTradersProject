@@ -488,7 +488,7 @@ function Pago({
           </div>
           {/* Mensajes de confirmación */}
           {buyerConfirmed && (
-            <p className="bg-green-500 text-white font-bold px-4 py-2 rounded mt-4 mb-2 animate-fade-right animate-duration-500 animate-delay-0">
+            <p className="bg-red-200 text-gray-900 font-bold px-4 py-2 rounded-r-3xl mt-4 mb-2 animate-fade-right animate-duration-500 animate-delay-0">
               ¡El comprador ha marcado el pago como realizado!
             </p>
           )}
@@ -532,7 +532,7 @@ function Pago({
             {buyer && !buyerConfirmed && (
               <button
                 onClick={handleBuyerConfirmed}
-                className="bg-green-300 hover:bg-green-500 text-white px-4 py-2 rounded mr-2 font-bold mb-4"
+                className="bg-green-500 hover:bg-green-600 rounded-2xl text-white px-4 py-2 font-bold mb-2"
               >
                 He realizado el Pago
               </button>
@@ -555,7 +555,7 @@ function Pago({
             )}
           </div>{" "}
           {sellerConfirmed && (
-            <p className="bg-green-800 text-white font-bold px-4 py-2 rounded mt-4 mb-2 animate-fade-right animate-duration-500 animate-delay-0">
+            <p className="bg-green-300 font-bold px-4 py-2 rounded-r-3xl mt-4 mb-2 animate-fade-right animate-duration-500 animate-delay-0">
               ¡El vendedor ha confirmado el recibo del pago!
             </p>
           )}

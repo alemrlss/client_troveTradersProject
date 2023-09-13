@@ -48,7 +48,6 @@ function ProfileBody({ data, user }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-
   const formattedDate = format(new Date(userData.createdAt), "MMMM d, yyyy", {
     locale: es,
   });
@@ -86,25 +85,30 @@ function ProfileBody({ data, user }) {
     }
   };
 
+  function formatTimestamp(timestamp) {
+    const options = { year: "numeric", month: "long" };
+    return new Date(timestamp).toLocaleDateString("es-ES", options);
+  }
+
   return (
     <div>
       <div>
         {/* Mensaje de verificación de correo electrónico */}
         {!verificationEmailUser && (
-          <div className="ml-8 text-sm flex items-center">
+          <div className=" text-sm flex items-center justify-center">
             <p className="text-sm">
               Por favor, verifica tu correo electrónico para acceder a todas las
               funciones de la aplicación.
             </p>
 
             {emailSend && (
-              <p className="text-green-600 font-bold text-lg">
+              <p className="text-green-600 font-bold text-lg py-2 ml-2 animate-fade animate-once animate-duration-500 animate-delay-0 animate-ease-linear">
                 ¡Correo enviado con éxito a: {user.email}!
               </p>
             )}
             {!emailSend && (
               <button
-                className="bg-primary-100 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-2"
+                className="bg-secondary-100 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-2"
                 onClick={handleSendEmailVerification}
               >
                 Enviar correo de verificación
@@ -113,7 +117,7 @@ function ProfileBody({ data, user }) {
           </div>
         )}
       </div>
-      <div className="container mx-auto my-5 p-5 animate-fade animate-once animate-duration-500 animate-delay-0 animate-ease-linear">
+      <div className="container mx-auto pb-5 mb-14 mt-8 animate-fade animate-once animate-duration-500 animate-delay-0 animate-ease-linear">
         <ModalEditUser
           isOpen={isOpenModalEdit}
           closeModal={closeModalEdit}
@@ -123,10 +127,10 @@ function ProfileBody({ data, user }) {
         <div className="md:flex no-wrap md:-mx-2 ">
           <div className="w-full md:w-3/12 md:mx-2">
             {/*TARJETA IZUIQERDA. */}
-            <div className="bg-white p-3 border-t-4 border-primary-100">
-              <div className="image overflow-hidden">
+            <div className="bg-white p-3 border-t border-r border-b border-l ">
+              <div className="image overflow-hidden flex justify-center">
                 <img
-                  className="height: 200px margin: 0 border-solid rounded-full"
+                  className="border-solid rounded-full h-64 w-64"
                   src={
                     data.imageProfile
                       ? `http://localhost:3001/image/profile/${data.imageProfile}`
@@ -169,7 +173,7 @@ function ProfileBody({ data, user }) {
                 </li>
                 <li className="flex items-center py-3">
                   <span>Miembro desde</span>
-                  <span className="ml-auto">{finalFormattedDate}</span>
+                  <span className="ml-auto text-sm">{finalFormattedDate}</span>
                 </li>
               </ul>
             </div>
@@ -177,13 +181,13 @@ function ProfileBody({ data, user }) {
             <div className="my-4"></div>
           </div>
 
-          <div className="w-full md:w-9/12 mx-2 h-64">
+          <div className="w-full md:w-9/12 mx-2 h-64 border-t border-r border-l">
             {/*INFORMACION USUARIO. */}
             <div className="bg-white p-3 shadow-sm rounded-sm">
               <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
                 <span className="text-primary-200">
                   <svg
-                    className="h-5"
+                    className="h-8"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -245,14 +249,13 @@ function ProfileBody({ data, user }) {
             </div>
 
             <div className="my-4"></div>
-
-            <div className="bg-white p-3 shadow-sm rounded-sm">
+            <div className="bg-white p-3 shadow-sm rounded-sm border-l border-r border-b">
               <div className="grid grid-cols-2">
                 <div>
                   <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                     <span className="text-primary-200">
                       <svg
-                        className="h-5"
+                        className="h-8"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -291,7 +294,7 @@ function ProfileBody({ data, user }) {
                   <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                     <span className="text-primary-200">
                       <svg
-                        className="h-5"
+                        className="h-8"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -313,14 +316,22 @@ function ProfileBody({ data, user }) {
                     <span className="tracking-wide">Ratings</span>
                   </div>
                   <ul className="list-inside space-y-2">
-                    <li>
-                      <div>Ejemplo</div>
-                      <div className="text-gray-500 text-xs">Marzo 2020 </div>
-                    </li>
-                    <li>
-                      <div>4/5</div>
-                      <div className="text-gray-500 text-xs">Marzo 2020 </div>
-                    </li>
+                    {userData.ratings.length > 0 ? (
+                      userData.ratings.slice(-5).map((rating) => (
+                        <li key={rating._id} className="text-sm">
+                          <div className="text-xs">
+                            {rating.rating}/5 - {rating.comment}
+                          </div>
+                          <div className="text-gray-500 text-xs">
+                            {formatTimestamp(rating.timestamp)}
+                          </div>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="text-xs text-gray-500">
+                        Nadie ha calificado al usuario..
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>

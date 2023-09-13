@@ -5,7 +5,7 @@ import { SocketContext } from "../../contexts/socketContext";
 import { getIdUser } from "../../services/Auth";
 import { Link } from "react-router-dom";
 
-function PostComponent({ post, user}) {
+function PostComponent({ post}) {
   const socket = useContext(SocketContext);
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);

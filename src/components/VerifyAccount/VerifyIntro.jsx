@@ -53,33 +53,10 @@ function VerifyIntro({
 
   return (
     <div>
-      <div className="flex items-center justify-start mb-4">
-        <label className="flex items-center cursor-pointer">
-          <div className="relative">
-            <input
-              type="checkbox"
-              className="sr-only"
-              checked={verificationSimulator}
-              onChange={toggleVerificationSimulator}
-            />
-            <div
-              className={`w-10 h-6 bg-gray-300 rounded-full shadow-inner ${
-                verificationSimulator ? "bg-blue-500" : ""
-              } transition-colors duration-300 ease-in-out ${
-                verificationSimulator ? "bg-blue-600" : ""
-              }`}
-            ></div>
-            <div
-              className={`absolute inset-y-0 left-0 w-6 h-6 transition-transform duration-300 ease-in-out transform ${
-                verificationSimulator
-                  ? "translate-x-full bg-blue-500 border-blue-500"
-                  : ""
-              } bg-white border rounded-full shadow-md`}
-            ></div>
-          </div>
-        </label>
-      </div>
-      <div className="flex items-center justify-center mb-4">
+      <div
+        className="flex items-center justify-center mb-4"
+        onDoubleClick={toggleVerificationSimulator}
+      >
         <FaFileAlt className="text-blue-500 w-8 h-8 mr-2" />
         <h2 className="text-lg sm:text-xl font-semibold">
           ¡Verificación de tu Cuenta!

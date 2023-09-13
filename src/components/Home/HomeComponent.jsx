@@ -15,8 +15,8 @@ function HomeComponent({posts}) {
   //^  Contexto.
   const socket = useContext(SocketContext);
 
-  //~ Estados (showNotification y notifications) es para las notificaciones.. dataPosts son todos los posts
   const [dataPosts] = useState(posts);
+  //~ Estados (showNotification y notifications) es para las notificaciones.. dataPosts son todos los posts
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
 

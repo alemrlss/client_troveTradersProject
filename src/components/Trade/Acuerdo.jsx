@@ -251,13 +251,13 @@ function Acuerdo({
             <h2 className="text-gray-400 mb-2 text-lg">Eres el {role}</h2>
 
             {(trade.agreementConfirmationSeller || sellerConfirmed) && (
-              <p className=" bg-teal-200 text-black font-semibold px-4 py-2 rounded mt-4 m-2 mx-auto animate-fade-right animate-duration-[500ms] animate-delay-0">
+              <p className=" bg-green-200 text-black font-semibold px-4 py-2 rounded-r-3xl mt-4 m-2 mx-auto animate-fade-right animate-duration-[500ms] animate-delay-0">
                 ¡El Vendedor <b>{trade.nameSeller}</b> está de acuerdo para
-                iniciar el Trade!
+                iniciar el trade!
               </p>
             )}
             {(trade.agreementConfirmationBuyer || buyerConfirmed) && (
-              <p className=" bg-green-300 text-gray-900 font-semibold px-4 py-2 rounded mt-4 m-2 mx-auto animate-fade-right animate-duration-[500ms] animate-delay-0">
+              <p className=" bg-red-200 text-gray-900 font-semibold px-4 py-2 rounded-r-3xl mt-4 m-2 mx-auto animate-fade-right animate-duration-[500ms] animate-delay-0">
                 ¡El Comprador <b>{trade.nameBuyer}</b> está de acuerdo para
                 iniciar el Trade!
               </p>
@@ -333,20 +333,20 @@ function Acuerdo({
                 ) : (
                   <div>
                     {!cancelTrade ? (
-                      <div className="flex">
+                      <div className="flex justify-end space-x-2">
                         <button
                           disabled={buttonsDisabled}
                           onClick={() => {
                             handleConfirmAgreementSeller();
                           }}
-                          className="bg-green-500 hover:bg-green-600 text-white px-2 md:px-4 py-1 md:py-2 rounded mr-2 font-semibold"
+                          className="bg-green-500 hover:bg-green-600 text-white px-2 md:px-4 py-1 md:py-2 rounded-3xl font-semibold"
                         >
                           Estoy de Acuerdo
                         </button>
                         <button
                           disabled={buttonsDisabled}
                           onClick={handleCancelTradeSeller}
-                          className="bg-red-500 hover:bg-red-600 text-white px-2 md:px-4 py-1 md:py-2 rounded font-semibold"
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 md:px-4 py-1 md:py-2 rounded-3xl font-semibold"
                         >
                           Cancelar Trade
                         </button>
@@ -397,12 +397,12 @@ function Acuerdo({
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-secondary-100"
               placeholder="Escribe un mensaje..."
             />
             <button
               onClick={handleSendMessage}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+              className="bg-secondary-100 500 hover:bg-secondary-100 text-white font-bold px-4 py-2 rounded"
             >
               Enviar
             </button>
@@ -430,8 +430,9 @@ function Acuerdo({
               <h2 className="text-2xl font-bold mb-2">
                 {sellerData.name} {sellerData.lastName}
               </h2>
-              <p className="text-gray-600 text-sm mb-4">Vendedor</p>
-              <button className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold">
+              <p className="text-gray-600 font-bold  text-sm mb-4">Vendedor</p>
+
+              <button className="mt-4 bg-secondary-200 hover:bg-secondary-200 text-white px-4 py-2 rounded font-semibold">
                 Ver perfil
               </button>
             </div>
@@ -457,8 +458,8 @@ function Acuerdo({
               <h2 className="text-2xl font-bold mb-2">
                 {buyerData.name} {buyerData.lastName}
               </h2>
-              <p className="text-gray-600 text-sm mb-4">Comprador</p>
-              <button className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold">
+              <p className="text-gray-500 font-bold text-sm mb-4">Comprador</p>
+              <button className="mt-4 bg-secondary-200 hover:bg-secondary-200 text-white px-4 py-2 rounded font-semibold">
                 Ver perfil
               </button>
             </div>
