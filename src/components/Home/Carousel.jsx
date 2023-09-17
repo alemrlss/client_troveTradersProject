@@ -17,6 +17,8 @@ const Carousel = () => {
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
+      autoplay: true, 
+      autoplaySpeed: 3000, 
       responsive: [
         {
           breakpoint: 640,
@@ -40,7 +42,7 @@ const Carousel = () => {
     };
   
     return (
-      <div className="carousel-container bg-primary-100 p-12 max-w-screen-2xl mx-auto">
+      <div className="carousel-container max-w-screen-md mx-auto">
         <Slider {...settings}>
           {slides.map((slide, index) => (
             <div

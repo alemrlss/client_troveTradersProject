@@ -22,12 +22,12 @@ import {
   DEPORTE,
   LIBROS,
   OTROS,
-  FORGOT,
+  FORGOTPASSWORD,
+  EDITPASSWORD,
   RESULTADO,
 } from "./routes/paths";
 import Landing from "./pages/landing";
 import Login from "./pages/login";
-import Forgot from "./pages/forgot";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
 import Post from "./pages/post";
@@ -37,6 +37,8 @@ import { AuthContextProvider } from "./contexts/authContext";
 import PublicRoute from "./components/router/PublicRoute";
 import PrivateRoute from "./components/router/PrivateRoute";
 import Register from "./pages/register";
+import EditPassword from "./pages/editPassword";
+import Forgot from "./pages/forgot";
 import VerifyAccount from "./pages/verifyAccount";
 import CrearProducto from "./pages/crearproducto";
 import CategoriaAntiguedades from "./pages/categoriaAntiguedades";
@@ -64,7 +66,7 @@ function App() {
               <Route path={LANDING} element={<Landing />} />
               <Route path={LOGIN} element={<Login />} />
               <Route path={REGISTER} element={<Register />} />
-              <Route path={FORGOT} element={<Forgot />} />
+              <Route path={FORGOTPASSWORD} element={<Forgot />} />
             </Route>
 
             <Route path="/" element={<PrivateRoute />}>
@@ -79,6 +81,7 @@ function App() {
               <Route path={RESULTADO} element={<Resultados />} />
               <Route path={CREARPRODUCTO} element={<CrearProducto />} />
               <Route path={VERIFYACCOUNT} element={<VerifyAccount />} />
+              <Route path={`${EDITPASSWORD}/:id`} element={<EditPassword/>} />
               <Route path={ANTIGUEDADES} element={<CategoriaAntiguedades />} />
               <Route path={MUSICA} element={<CategoriaMusica />} />
               <Route path={CARTAS} element={<CategoriaCartas />} />

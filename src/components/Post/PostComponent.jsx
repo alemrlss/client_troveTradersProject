@@ -191,17 +191,32 @@ function PostComponent({ post}) {
     return formattedDate;
   }
 
+  function cantidadImagenes (photoCount) {
+    switch (photoCount) {
+      case 1:
+        return 'w-full'; 
+      case 2:
+        return 'w-1/2'; 
+      case 3:
+        return 'w-1/3'; 
+      case 4:
+        return 'w-1/4'; 
+      default:
+        return 'w-full'; 
+    }
+  }
+
   return (
     <div className="bg-white">
       {isPostAvailable ? (
         <div className="pt-6">
-          <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+          <div className="mx-auto mt-6 sm:px-6 flex flex-wrap gap-x-8 lg:px-8 w-screen justify-center items-center">
             {post.photos.map((photo, index) => (
               <img
                 key={index}
                 src={`http://localhost:3001/images/posts/${photo}`}
                 alt={`Photo ${index}`}
-                className="rounded shadow w-full h-72 object-cover"
+                className={`rounded shadow ${cantidadImagenes(post.photos.length)} h-1/2 w-1/6`}
               />
             ))}
           </div>
@@ -217,14 +232,14 @@ function PostComponent({ post}) {
             </div>
 
             <div className="mt-4 lg:row-span-3 lg:mt-0">
-              <h2 className="sr-only">Informacion del producto.</h2>
+              <h2 className="text-2xl">Informacion del producto.</h2>
               <p className="text-3xl tracking-tight text-green-600">
                 ${post.price}
               </p>
               <p className="text-2xl tracking-tight text-gray-900">
                 {formatDate(post.createdAt)}
               </p>
-              <p className="text-2xl tracking-tight text-gray-900">
+              <p className="text-2xl tracking-tight text-gray-900 capitalize">
                 Categoria: {post.category}
               </p>
               {!isConfirming ? (
@@ -281,7 +296,7 @@ function PostComponent({ post}) {
 
             <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
               <div>
-                <h3 className="">Descripcion:</h3>
+                <h2 className="text-2xl tracking-tight">Descripcion:</h2>
                 <div className="space-y-6">
                   <p className="text-base text-gray-900">{post.description}</p>
                 </div>

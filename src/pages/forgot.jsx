@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
 import axios from 'axios';
 import ForgotPassword from '../components/ForgotPassword/forgotPassword'
 import Footer from '../components/Footer/Footer'
@@ -22,7 +21,7 @@ function forgot() {
           `http://localhost:3001/users/`, 
           config
         );
-        setUser(response.data);
+        setUser(response);
       } catch (error) {
         console.log(error);
       }
