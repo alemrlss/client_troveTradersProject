@@ -100,6 +100,23 @@ function HomeComponent({posts}) {
             )}
           </div>
         )}*/}
+        <nav className="bg-secondary-200 dark:bg-gray-700">
+          <div className="px-4 py-3">
+            <div className="flex justify-center items-center">
+              <div className="flex flex-wrap justify-center md:justify-start space-x-8 md:space-x-4 text-sm">
+                <Link to='/categoria/antiguedades' className="text-white hover:underline" aria-current="page">Antiguedades</Link>
+                <Link to='/categoria/musica' className="text-white hover:underline" aria-current="page">Musica</Link>
+                <Link to='/categoria/cartas' className="text-white hover:underline" aria-current="page">Cartas</Link>
+                <Link to='/categoria/tecnologia' className="text-white hover:underline" aria-current="page">Tecnologia</Link>
+                <Link to='/categoria/comics' className="text-white hover:underline" aria-current="page">Comics</Link>
+                <Link to='/categoria/juguetes' className="text-white hover:underline" aria-current="page">Juguetes</Link>
+                <Link to='/categoria/deporte' className="text-white hover:underline" aria-current="page">Deporte</Link>
+                <Link to='/categoria/libros' className="text-white hover:underline" aria-current="page">Libros</Link>
+                <Link to='/categoria/otros' className="text-white hover:underline" aria-current="page">Otros</Link>
+              </div>
+            </div>
+          </div>
+        </nav>
       <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
       {/* Panel de la homePage */}
       <Panel />

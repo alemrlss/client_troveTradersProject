@@ -10,6 +10,7 @@ import { es } from "date-fns/locale";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+
 function ProfileBody({ data, user }) {
   const profileOptions = {
     about: "about",
@@ -17,6 +18,7 @@ function ProfileBody({ data, user }) {
   };
 
   const [userData, setUserData] = useState(data); //data del usuario.
+  const idUser = getDataUser().id
 
   const handleSaveChanges = (updatedData) => {
     setUserData(updatedData);
@@ -237,7 +239,7 @@ function ProfileBody({ data, user }) {
                   Editar Perfil.
                 </button>
               )}
-              <Link to={"/forgot-password"}>
+              <Link to={`/edit-password/${idUser}`}>
                 <button className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                   Cambiar contraseña.
                 </button>

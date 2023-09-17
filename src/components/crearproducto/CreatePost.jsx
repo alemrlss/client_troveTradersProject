@@ -5,6 +5,7 @@ function CreatePost() {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [ubication, setUbication] = useState("");
   const [price, setPrice] = useState("");
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
@@ -33,6 +34,7 @@ function CreatePost() {
     formData.append("category", category);
     formData.append("title", title);
     formData.append("description", description);
+    formData.append("ubication", ubication);
     formData.append("price", price);
     formData.append("author_id", getIdUser());
 
@@ -93,8 +95,8 @@ function CreatePost() {
             <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
               <input
                 type="text"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
+                value={ubication}
+                onChange={(event) => setUbication(event.target.value)}
                 className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
               />
             </div>  

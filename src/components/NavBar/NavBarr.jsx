@@ -151,23 +151,12 @@ function NavBarr() {
   return (
   <div>
     <nav className="bg-primary-100 p-4 shadow-lg mx-auto">
-      <div className="sm:mx-auto	container flex justify-between items-center lg:text-sm">
+      <div className="sm:mx-auto flex justify-between items-center lg:text-sm">
         {/* Logotipo */}
         <div className="text-white text-sm font-bold flex items-center">
-          <img src={img} className="h-24" alt="TroveTraders Logo" />
+        <Link to={`/home`}><img src={img} className="h-24 w-24 max-w-full" alt="TroveTraders Logo" /></Link>
           <p className="text-secondary-100 hidden xl:block">TroveTraders</p>
         </div> 
-        {/* menu hamb */}
-        <button
-          className="text-white mr-4 sm:hidden"
-          onClick={handleMenuToggle}
-        >
-          {isMenuOpen ? (
-            <FaTimes className="w-6 h-6" /> // Icono "x" para cerrar el menú
-          ) : (
-            <FaBars className="w-6 h-6" /> // Icono de menú hamburguesa
-          )}
-        </button>
         <div className="hidden sm:flex items-center">
           {/* Iconos para las solicitudes de compra, trades en ejecución, notificaciones */}
           <div className="flex items-center text-white">
@@ -188,7 +177,7 @@ function NavBarr() {
         </div>
 
         {/*-------------------------------------------------------------- BUSQUEDA ------------------------------------------------------------------*/}
-        <form className="flex-grow w-full sm:w-2/6 sm:mr-4" onSubmit={(e) => {
+        <form className="flex-grow w-40 sm:w-2/6 sm:mr-4 mx-4" onSubmit={(e) => {
                 e.preventDefault();
                 navigate(`/resultados?query=${query}`)
               }}>
@@ -196,7 +185,7 @@ function NavBarr() {
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
           >
-            Search
+            Buscar
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -229,6 +218,17 @@ function NavBarr() {
             </button>
           </div>
         </form>
+        {/* menu hamb */}
+        <button
+          className="text-white mr-4 sm:hidden"
+          onClick={handleMenuToggle}
+        >
+          {isMenuOpen ? (
+            <FaTimes className="w-6 h-6" /> // Icono "x" para cerrar el menú
+          ) : (
+            <FaBars className="w-6 h-6" /> // Icono de menú hamburguesa
+          )}
+        </button>
 
         <div className="hidden sm:flex items-center space-x-0">
           <TradesComponent
@@ -360,41 +360,6 @@ function NavBarr() {
           ))}
         </div>
       )}
-    </nav>
-    <nav className="bg-secondary-200 dark:bg-gray-700">
-        <div className="px-4 py-3">
-            <div className="flex items-center">
-                <ul className="mx-auto flex flex-row font-medium mt-0 space-x-8 text-sm">
-                    <li>
-                        <Link to='/categoria/antiguedades' className="text-white  hover:underline" aria-current="page">Antiguedades</Link>
-                    </li>      
-                    <li>
-                        <Link to='/categoria/musica' className="text-white  hover:underline" aria-current="page">Musica</Link>
-                    </li>
-                    <li>
-                        <Link to='/categoria/cartas' className="text-white  hover:underline" aria-current="page">Cartas</Link>
-                    </li>
-                    <li>
-                        <Link to='/categoria/tecnologia' className="text-white  hover:underline" aria-current="page">Tecnologia</Link>
-                    </li>
-                    <li>
-                        <Link to='/categoria/comics' className="text-white  hover:underline" aria-current="page">Comics</Link>
-                    </li>
-                    <li>
-                        <Link to='/categoria/juguetes' className="text-white  hover:underline" aria-current="page">Juguetes</Link>
-                    </li>
-                    <li>
-                       <Link to='/categoria/deporte' className="text-white  hover:underline" aria-current="page">Deporte</Link>
-                    </li>
-                    <li>
-                        <Link to='/categoria/libros' className="text-white  hover:underline" aria-current="page">Libros</Link>
-                    </li>
-                    <li>
-                        <Link to='/categoria/otros' className="text-white  hover:underline" aria-current="page">Otros</Link>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </nav>
 </div>
   );
