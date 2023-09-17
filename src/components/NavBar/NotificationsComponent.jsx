@@ -34,7 +34,7 @@ function NotificationsComponent({
   };
 
   return (
-    <button className="text-white p-3 hover:text-gray-300">
+    <button className="text-secondary-100 p-3 hover:text-gray-300">
       <FaBell className="w-6 h-6" onClick={handleNotificationsClick} />
     </button>
   );

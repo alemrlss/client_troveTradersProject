@@ -20,7 +20,7 @@ function TradesComponent({ openModal, setTrades, id }) {
   return (
     <button
       onClick={getRequestsUser}
-      className="text-white p-3 hover:text-gray-300"
+      className="text-secondary-100 p-3 hover:text-gray-300"
     >
       <FaExchangeAlt className="h-6 w-6" />
     </button>

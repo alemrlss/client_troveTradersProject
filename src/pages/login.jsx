@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
-import LoginComponent from '../components/login/LoginComponent'
+import LoginComponent from "../components/login/LoginComponent";
 function Login() {
   return (
     <div>
-      <LoginComponent/>
+      <LoginComponent />
     </div>
-
-  )
+  );
 }
 
-export default Login
+export default Login;

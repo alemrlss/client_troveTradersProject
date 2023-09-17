@@ -1,19 +1,20 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function RegisterComponent() {
   const navigate = useNavigate();
-  const [formData, setformData] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     lastName: "",
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
 
   const [error, setError] = useState("");
-  const [sucess, setSucess] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,12 +46,13 @@ function RegisterComponent() {
         email: formData.email,
         name: formData.name,
         lastName: formData.lastName,
+        username: formData.username,
         password: formData.password,
       })
       .then((response) => {
         console.log(response);
-        setSucess(
-          `${formData.name} ${formData.lastName} registrado con éxito. Redireccionando al Login..`
+        setSuccess(
+          `${formData.name} ${formData.lastName} registrado con éxito. Redireccionando al inicio de sesión..`
         );
         setTimeout(() => {
           navigate("/login");
@@ -66,8 +68,9 @@ function RegisterComponent() {
   const handleInputChange = (e) => {
     setError("");
     const { name, value } = e.target;
-    setformData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
+
   const validateEmail = (email) => {
     // Validación de correo electrónico utilizando una expresión regular
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -79,171 +82,169 @@ function RegisterComponent() {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordRegex.test(password);
   };
+
   return (
-    <section className="bg-white">
-      {" "}
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
-        <a
-          href="#"
-          className="flex items-center mb-6 mt-6 text-2xl font-semibold text-gray-900"
-        >
+    <section className="bg-primary-100 min-h-screen flex items-center justify-center">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+        <div className="text-center">
           <img
-            className="w-20 h-20 mr-2"
-            src="src\assets\img\logo.png"
-            alt="logo"
+            className="mx-auto w-20 h-20"
+            src="src/assets/img/logoAlejandro.png"
+            alt="Logo"
           />
-          TroveTraders
-        </a>{" "}
-        {/*Panel principal*/}
-        <div className="w-full bg-primary-200 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 mb-6">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              {" "}
-              Crear Cuenta
-            </h1>
-            <form
-              className="space-y-4 md:space-y-6"
-              action="#"
-              onSubmit={handleSubmit}
-            >
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Nombre:
-                </label>
-                <input
-                  type="name"
-                  name="name"
-                  id="name"
-                  onChange={handleInputChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="Tu nombre"
-                  required=""
-                  autoComplete="off"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="lastname"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Apellido:
-                </label>
-                <input
-                  type="lastname"
-                  name="lastName"
-                  id="lastName"
-                  onChange={handleInputChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="Tu apellido"
-                  required=""
-                  autoComplete="off"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Tu Correo
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  onChange={handleInputChange}
-                  autoComplete="off"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="correo@correo.com"
-                  required=""
-                />
-              </div>
-              <div>
-                {" "}
-                {/*Arreglar esto el match de ambas contrase;as*/}
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Contraseña
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  onChange={handleInputChange}
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  required=""
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="confirm-password"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Confirmar Contraseña
-                </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  id="confirmPassword"
-                  placeholder="••••••••"
-                  onChange={handleInputChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  required=""
-                />
-              </div>
-              <div className="flex items-start">
-                {" "}
-                {/*Una funcion que revise si este checkbox esta presionado, o eliminarlo si no lo necesitamos*/}
-                <div className="flex items-center h-5">
-                  <input
-                    id="terms"
-                    aria-describedby="terms"
-                    type="checkbox"
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                    required=""
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label htmlFor="terms" className="font-light text-gray-500">
-                    Acepto los
-                    <a
-                      className="font-medium text-primary-600 hover:underline "
-                      href="#"
-                    >
-                      {" "}
-                      Terminos y Condiciones
-                    </a>
-                  </label>{" "}
-                  {/*Hacer esto*/}
-                </div>
-              </div>{" "}
-              {/*Boton*/}
-              <p className="text-red-500">{error}</p>
-              <p className="text-green-500">{sucess}</p>
-              <button
-                type="submit"
-                className="w-full text-white bg-primary-100 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Crear una cuenta
-              </button>
-              <p className="text-sm font-light text-gray-500">
-                Ya tienes una cuenta?
-                <a
-                  href="/login"
-                  className="font-medium text-primary-600 hover:underline"
-                >
-                  {" "}
-                  Conectate aqui
-                </a>
-              </p>
-            </form>
-          </div>
+          <h2 className="mt-4 text-3xl font-semibold text-gray-900">
+            Crear Cuenta
+          </h2>
         </div>
+        <form className="mt-6" onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-gray-700 text-sm font-medium"
+              >
+                Nombre:
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                onChange={handleInputChange}
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                placeholder="Tu nombre"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="lastName"
+                className="block text-gray-700 text-sm font-medium"
+              >
+                Apellido:
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                id="lastName"
+                onChange={handleInputChange}
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                placeholder="Tu apellido"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-gray-700 text-sm font-medium"
+              >
+                Tu Correo
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                onChange={handleInputChange}
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                placeholder="correo@correo.com"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-gray-700 text-sm font-medium"
+              >
+                Nombre de Usuario:
+              </label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                onChange={handleInputChange}
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                placeholder="Tu nombre de usuario"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-gray-700 text-sm font-medium"
+              >
+                Contraseña
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                onChange={handleInputChange}
+                placeholder="••••••••"
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-gray-700 text-sm font-medium"
+              >
+                Confirmar Contraseña
+              </label>
+              <input
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                onChange={handleInputChange}
+                placeholder="••••••••"
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                required
+              />
+            </div>
+          </div>
+          <div className="mb-6 flex items-start">
+            <div className="flex items-center h-5">
+              <input
+                id="terms"
+                aria-describedby="terms"
+                type="checkbox"
+                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
+                required
+              />
+            </div>
+            <div className="ml-3 text-sm">
+              <label htmlFor="terms" className="font-light text-gray-500">
+                Acepto los{" "}
+                <a
+                  className="font-medium text-secondary-200 hover:underline"
+                  href="#"
+                >
+                  Términos y Condiciones
+                </a>
+              </label>
+            </div>
+          </div>
+          <p className="text-red-500">{error}</p>
+          <p className="text-green-500">{success}</p>
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            >
+              Crear una cuenta
+            </button>
+          </div>
+        </form>
+        <p className="mt-4 text-sm font-light text-gray-500">
+          Ya tienes una cuenta?{" "}
+          <a
+            href="/login"
+            className="font-medium text-secondary-200 hover:underline"
+          >
+            Conéctate aquí
+          </a>
+        </p>
       </div>
     </section>
   );

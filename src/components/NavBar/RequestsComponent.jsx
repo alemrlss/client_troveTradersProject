@@ -23,7 +23,7 @@ function RequestsComponent({ openModal, setRequests, id }) {
 
       <button
         onClick={getRequestsUser}
-        className="text-white p-3 hover:text-gray-300"
+        className="text-secondary-100 p-3 hover:text-gray-300"
       >
         <FaEnvelope className="h-6 w-6"/>
 

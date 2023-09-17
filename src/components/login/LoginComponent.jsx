@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { loginBackend } from "../../services/Auth";
 import { useAuthContext } from "../../contexts/authContext";
 import { Link } from "react-router-dom";
-// eslint-disable-next-line react/prop-types
+
 function LoginComponent() {
   const { login } = useAuthContext();
-  const [formData, setformData] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
@@ -14,7 +14,7 @@ function LoginComponent() {
   const handleInputChange = (e) => {
     setError("");
     const { name, value } = e.target;
-    setformData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
@@ -55,81 +55,78 @@ function LoginComponent() {
   };
 
   return (
-    <section className="bg-logo-100 ">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 ">
-        <a
-          href="#"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900"
-        >
+    <section className="bg-primary-100 opacity- min-h-screen flex items-center justify-center">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+        <div className="text-center">
           <img
-            className="w-20 h-20 mr-2"
-            src="src\assets\img\logo2.jpg"
-            alt="logo"
+            className="mx-auto w-20 h-20"
+            src="src/assets/img/logoAlejandro.png"
+            alt="Logo"
           />
-          TroveTraders
-        </a>
-        <div className="w-full bg-primary-100 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 ">
-          {" "}
-          {/*Background*/}
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            {" "}
-            {/*Panel principal*/}
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Acceder
-            </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-              {" "}
-              {/*Email y Contraseña*/}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Correo
-                </label>
-                <input
-                  name="email"
-                  onChange={handleInputChange}
-                  type="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="Tu correo"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Contraseña
-                </label>
-                <input
-                  name="password"
-                  onChange={handleInputChange}
-                  type="password"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="Tu Contraseña"
-                />
-              </div>
-              <div className="space-y-4 md:space-y-6">
-              <p className="text-red-600">{error}</p>
-                <Link to='/forgot-password' className="text-sm font-light text-secondary-200 hover:underline">Has olvidado la contraseña?</Link>
-                <button className="w-full text-white bg-secondary-100 hover:bg-secondary-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                  Acceder
-                </button>
-              </div>
-            </form>
-            <p className="text-sm font-light text-gray-500">
-              {" "}
-              No tienes cuenta?{" "}
-              <a
-                href="/register"
-                className="font-medium text-secondary-200 hover:underline"
-              >
-                Registrate
-              </a>
-            </p>
-          </div>
+          <h2 className="mt-4 text-3xl font-semibold text-gray-900">
+            Iniciar Sesión
+          </h2>
         </div>
+        <form className="mt-6" onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 text-sm font-medium"
+            >
+              Correo Electrónico
+            </label>
+            <input
+              name="email"
+              onChange={handleInputChange}
+              type="email"
+              className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
+              placeholder="Tu correo"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 text-sm font-medium"
+            >
+              Contraseña
+            </label>
+            <input
+              name="password"
+              onChange={handleInputChange}
+              type="password"
+              className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
+              placeholder="Tu Contraseña"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <p className="text-red-600">{error}</p>
+            <Link
+              to="/forgot-password"
+              className="text-sm font-light text-secondary-200 hover:underline"
+            >
+              Has olvidado la contraseña?
+            </Link>
+          </div>
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            >
+              Acceder
+            </button>
+          </div>
+        </form>
+        <p className="mt-4 text-sm font-light text-gray-500">
+          No tienes cuenta?{" "}
+          <Link
+            to="/register"
+            className="font-medium text-secondary-200 hover:underline"
+          >
+            Regístrate
+          </Link>
+        </p>
       </div>
     </section>
   );
