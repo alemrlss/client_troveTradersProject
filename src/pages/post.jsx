@@ -42,7 +42,6 @@ function post() {
   return <div>
     {loading && <Loader options={options}/>}
     {post && <PostComponent post={post} user={user}/>}
-    <Footer />
   </div>;
 }
 

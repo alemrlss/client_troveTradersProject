@@ -65,7 +65,7 @@ function VerifyStep2({
   return (
     <div>
       <div className="flex items-center justify-center mb-4">
-        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white mr-2">
+        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-secondary-100 text-white mr-2">
           2
         </div>
         <h2 className="text-lg sm:text-xl font-semibold">
@@ -76,7 +76,7 @@ function VerifyStep2({
         Sube una foto clara y legible de tu documento en formato JPEG o PNG.
       </p>
       <div className="flex justify-center">
-        <FaFileImage className="text-blue-500 w-32 h-32" />
+        <FaFileImage className="text-gray-400 w-32 h-32" />
       </div>
       <input
         type="file"
@@ -87,13 +87,13 @@ function VerifyStep2({
       {fileUploaded ? (
         <button
           onClick={performDocumentVerification}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full mt-4 transition-colors duration-300"
+          className="bg-secondary-100 text-white px-4 py-2 rounded hover:bg-blue-60d0 w-full mt-4 transition-colors duration-300"
         >
           Siguiente
         </button>
       ) : (
         <button
-          className="bg-blue-300 text-white px-4 py-2 rounded cursor-not-allowed w-full mt-4 transition-colors duration-300"
+          className="bg-secondary-100 opacity-50 text-white px-4 py-2 rounded cursor-not-allowed w-full mt-4 transition-colors duration-300"
           disabled
         >
           Siguiente
@@ -102,7 +102,7 @@ function VerifyStep2({
       <div className="relative mt-4">
         <div className="flex h-2 bg-gray-200 rounded">
           <div
-            className="h-full bg-blue-500 rounded"
+            className="h-full bg-secondary-200 rounded"
             style={{ width: `${progress}%` }} // Barra de progreso con animación
           ></div>
         </div>

@@ -25,6 +25,7 @@ import {
   FORGOTPASSWORD,
   EDITPASSWORD,
   RESULTADO,
+  MISPUBLICACIONES,
 } from "./routes/paths";
 import Landing from "./pages/landing";
 import Login from "./pages/login";
@@ -53,6 +54,8 @@ import CategoriaOtros from "./pages/categoriaOtros";
 import Resultados from "./pages/resultados";
 
 import { SocketProvider } from "./contexts/socketContext";
+import Mispublicaciones from "./pages/mispublicaciones";
+import NotFound from "./components/NotFound/NotFound";
 
 function App() {
   //ESTA PENDIENTE POR ANEXAR LA VALIDEZ DEL TOKEN!!!.
@@ -81,7 +84,7 @@ function App() {
               <Route path={RESULTADO} element={<Resultados />} />
               <Route path={CREARPRODUCTO} element={<CrearProducto />} />
               <Route path={VERIFYACCOUNT} element={<VerifyAccount />} />
-              <Route path={`${EDITPASSWORD}/:id`} element={<EditPassword/>} />
+              <Route path={`${EDITPASSWORD}/:id`} element={<EditPassword />} />
               <Route path={ANTIGUEDADES} element={<CategoriaAntiguedades />} />
               <Route path={MUSICA} element={<CategoriaMusica />} />
               <Route path={CARTAS} element={<CategoriaCartas />} />
@@ -91,7 +94,8 @@ function App() {
               <Route path={DEPORTE} element={<CategoriaDeporte />} />
               <Route path={LIBROS} element={<CategoriaLibros />} />
               <Route path={OTROS} element={<CategoriaOtros />} />
-              <Route path="*" element={<h1>404</h1>} />
+              <Route path={MISPUBLICACIONES} element={<Mispublicaciones />} />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>

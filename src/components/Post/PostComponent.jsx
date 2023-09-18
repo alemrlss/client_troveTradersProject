@@ -207,7 +207,7 @@ function PostComponent({ post}) {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-white mt-2">
       {isPostAvailable ? (
         <div className="pt-6">
           <div className="mx-auto mt-6 sm:px-6 flex flex-wrap gap-x-8 lg:px-8 w-screen justify-center items-center">

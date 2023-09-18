@@ -33,7 +33,7 @@ function VerifyStep4({ onIntroStep, verificationSuccess }) {
   return (
     <div>
       <div className="flex items-center justify-center mb-4">
-        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white mr-2">
+        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-secondary-100 text-white mr-2">
           4
         </div>
         <h2 className="text-lg sm:text-xl font-semibold">
@@ -78,7 +78,7 @@ function VerifyStep4({ onIntroStep, verificationSuccess }) {
             </>
           )}
           {verificationSuccess ? (
-            <button className="bg-blue-500 mb-2 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4 transition-colors duration-300">
+            <button className="bg-secondary-100 mb-2 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4 transition-colors duration-300">
               <Link to="/home"> Finalizar</Link>
             </button>
           ) : (
@@ -86,7 +86,7 @@ function VerifyStep4({ onIntroStep, verificationSuccess }) {
               onClick={() => {
                 onIntroStep();
               }}
-              className="bg-blue-500 mb-2 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4 transition-colors duration-300"
+              className="bg-secondary-100 mb-2 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4 transition-colors duration-300"
             >
               Volver a la introduccion
             </button>

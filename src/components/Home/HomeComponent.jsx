@@ -9,9 +9,9 @@ import Categories from "./Categories";
 import Panel from "./Panel";
 import Carousel from "./Carousel";
 import Guiahome from "./Guiahome";
+import Barra from "./Barra";
 
-
-function HomeComponent({posts}) {
+function HomeComponent({ posts }) {
   //^  Contexto.
   const socket = useContext(SocketContext);
 
@@ -100,26 +100,12 @@ function HomeComponent({posts}) {
             )}
           </div>
         )}*/}
-        <nav className="bg-secondary-200 dark:bg-gray-700">
-          <div className="px-4 py-3">
-            <div className="flex justify-center items-center">
-              <div className="flex flex-wrap justify-center md:justify-start space-x-8 md:space-x-4 text-sm">
-                <Link to='/categoria/antiguedades' className="text-white hover:underline" aria-current="page">Antiguedades</Link>
-                <Link to='/categoria/musica' className="text-white hover:underline" aria-current="page">Musica</Link>
-                <Link to='/categoria/cartas' className="text-white hover:underline" aria-current="page">Cartas</Link>
-                <Link to='/categoria/tecnologia' className="text-white hover:underline" aria-current="page">Tecnologia</Link>
-                <Link to='/categoria/comics' className="text-white hover:underline" aria-current="page">Comics</Link>
-                <Link to='/categoria/juguetes' className="text-white hover:underline" aria-current="page">Juguetes</Link>
-                <Link to='/categoria/deporte' className="text-white hover:underline" aria-current="page">Deporte</Link>
-                <Link to='/categoria/libros' className="text-white hover:underline" aria-current="page">Libros</Link>
-                <Link to='/categoria/otros' className="text-white hover:underline" aria-current="page">Otros</Link>
-              </div>
-            </div>
-          </div>
-        </nav>
+
+      <Barra />
       <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
       {/* Panel de la homePage */}
       <Panel />
+
       <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
       {/* Carousel de la homePage */}
       <Carousel />
@@ -136,44 +122,54 @@ function HomeComponent({posts}) {
           Productos disponibles
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 bg-white">
+        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
           {dataPosts.map((post) => (
             <div
               key={post._id}
-              className={`bg-white shadow rounded p-6 m-2 animate-fade animate-once animate-duration-[2000ms] animate-delay-100`}
+              className="bg-white rounded-lg shadow-lg overflow-hidden"
             >
-              <div className="">
-                {/* Imágenes del post */}
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                  {post.photos.slice(0, 1).map((photo, index) => (
+              {/* Imágenes del post */}
+              <div className="relative aspect-w-2 aspect-h-1">
+                <div className="absolute inset-0">
+                  {post.photos.map((photo, index) => (
                     <img
                       key={index}
                       src={`http://localhost:3001/images/posts/${photo}`}
                       alt={`Foto ${index + 1}`}
-                      className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                      className={`object-cover w-full h-full transition-opacity duration-300 ease-in-out transform hover:scale-105 ${
+                        index === 0 ? "opacity-100" : "opacity-0"
+                      }`}
                     />
                   ))}
                 </div>
-                {/* Datos de cada publicación */}
-                <h3 className="text-sm text-gray-700">{post.title}</h3>
-                <p className="text-gray-600">{post.description}</p>
+              </div>
 
-                {/* Información del precio */}
-                <p className="text-green-600 font-bold mt-2">
-                  Precio: {post.price} $
-                </p>
-
+              {/* Contenido de la tarjeta */}
+              <div className="p-4">
                 {/* Fecha de creación */}
-                <p className="text-gray-400 mt-2">
+                <p className="text-gray-400 text-right text-xs p-1 mt-2">
                   Creado: {new Date(post.createdAt).toLocaleDateString()}
                 </p>
+                <h3 className="text-base font-semibold text-gray-900">
+                  {post.title}
+                </h3>
+                <p className="text-gray-600 mt-1 leading-5 text-sm">
+                  {post.description.slice(0, 30)}
+                  {post.description.length > 30 && "..."}
+                </p>
+
+                {/* Información del precio */}
+                <p className="text-gray-900 font-bold mt-1">
+                  Precio: {post.price}$
+                </p>
+
+                {/* Botón de "Más información" */}
+                <Link to={`/post/${post._id}`} className="block mt-4">
+                  <button className="bg-secondary-100 hover:opacity-95 rounded-r-xl text-white font-semibold py-2 px-3 rounded-xs full w-full">
+                    Ver mas
+                  </button>
+                </Link>
               </div>
-              {/* Botón de "Más información" */}
-              <Link to={`/post/${post._id}`} className="block mt-4 text-center">
-                <button className="bg-primary-200 hover:bg-primary-300 text-white font-bold py-2 px-4 rounded">
-                  Más información
-                </button>
-              </Link>
             </div>
           ))}
         </div>

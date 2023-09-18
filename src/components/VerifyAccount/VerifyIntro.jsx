@@ -57,7 +57,7 @@ function VerifyIntro({
         className="flex items-center justify-center mb-4"
         onDoubleClick={toggleVerificationSimulator}
       >
-        <FaFileAlt className="text-blue-500 w-8 h-8 mr-2" />
+        <FaFileAlt className="text-gray-400 w-8 h-8 mr-2" />
         <h2 className="text-lg sm:text-xl font-semibold">
           ¡Verificación de tu Cuenta!
         </h2>
@@ -77,7 +77,7 @@ function VerifyIntro({
             }`}
           >
             <div className="flex items-center">
-              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white mr-2">
+              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-secondary-100 text-white mr-2">
                 {index + 1}
               </div>
               <div>{step.title}</div>
@@ -92,7 +92,7 @@ function VerifyIntro({
       </div>
       <button
         onClick={toggleVerificationForm}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full mt-4 transition-colors duration-300"
+        className="bg-secondary-100 text-white px-4 py-2 rounded hover:bg-bldue-600 w-full mt-4 transition-colors duration-300"
       >
         Comenzar con la Verificación
       </button>

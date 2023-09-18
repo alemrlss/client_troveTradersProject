@@ -4,12 +4,11 @@ import { useState, useEffect } from "react";
 import { getDataUser } from "../../services/Auth";
 import ModalEditUser from "../Modals/ModalEditUser/ModalEditUser";
 import { useModal } from "../../hooks/useModal";
-import img from "../../assets/defaultProfile.png";
+import img from "../../assets/img/logoAlejandro.png";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
 
 function ProfileBody({ data, user }) {
   const profileOptions = {
@@ -18,7 +17,7 @@ function ProfileBody({ data, user }) {
   };
 
   const [userData, setUserData] = useState(data); //data del usuario.
-  const idUser = getDataUser().id
+  const idUser = getDataUser().id;
 
   const handleSaveChanges = (updatedData) => {
     setUserData(updatedData);
@@ -142,14 +141,27 @@ function ProfileBody({ data, user }) {
                 />
               </div>
               <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">
-                {userData.username}
+                @{userData.username}
               </h1>
-              <h3 className="text-gray-600 font-lg text-semibold leading-6">
-                Usuario no verificado
-              </h3>
-              <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">
-                Descripcion sobre verificar usuario, etc....
-              </p>
+              {user.isVerify ? null : (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex flex-col justify-center">
+                  <strong className="font-bold text-center">
+                    Usuario no verificado
+                  </strong>
+                  <span className="text-xs text-center">
+                    Debes verificar tu cuenta para acceder a todas las acciones
+                    de la aplicacion, previamente debes estar verificado por
+                    correo
+                  </span>
+                  <Link
+                    to={`/verify-account`}
+                    className="bg-secondary-300 text-white mt-2 text-base rounded-md text-center"
+                  >
+                    Verificar Cuenta
+                  </Link>
+                </div>
+              )}
+
               <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                 <li className="flex items-center py-3">
                   <span>Estado</span>

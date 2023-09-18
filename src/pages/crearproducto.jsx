@@ -4,7 +4,7 @@ function CrearProducto() {
   return (
   <div>
         <CrearProductoComponent/>
-        <Footer />
+    
   </div>
   )
 }

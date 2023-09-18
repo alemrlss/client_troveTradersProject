@@ -51,7 +51,6 @@ function profile() {
     <div>
       {loading && <Loader options={options} />}
       {data && <ProfileMain data={data} user={user} />}
-      <Footer />
     </div>
   );
 }

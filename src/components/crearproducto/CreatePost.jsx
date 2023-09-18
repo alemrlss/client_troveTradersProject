@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { getIdUser } from "../../services/Auth";
-
+import { AiOutlineQuestionCircle } from "react-icons/ai"; // Agrega el icono de pregunta
+import { FaAngleDown } from "react-icons/fa";
 function CreatePost() {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [ubication, setUbication] = useState("");
   const [price, setPrice] = useState("");
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
-  const [envio, setEnvio] = useState(false);
-
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleFileChange = (event) => {
     const selectedFiles = event.target.files;
@@ -19,6 +18,12 @@ function CreatePost() {
     } else {
       setFiles(selectedFiles);
       setError("");
+
+      // Mostrar los nombres de los archivos seleccionados
+      const fileNames = Array.from(selectedFiles).map((file) => file.name);
+      const fileNamesString = fileNames.join(", ");
+      const fileNamesElement = document.querySelector(".file-names");
+      fileNamesElement.textContent = `Archivos seleccionados: ${fileNamesString}`;
     }
   };
 
@@ -34,7 +39,6 @@ function CreatePost() {
     formData.append("category", category);
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("ubication", ubication);
     formData.append("price", price);
     formData.append("author_id", getIdUser());
 
@@ -58,6 +62,7 @@ function CreatePost() {
         setDescription("");
         setPrice("");
         setFiles([]);
+        setSuccessMessage("Publicación creada correctamente");
       } else {
         // Hubo un error al crear el post
         console.error("Error al crear el post");
@@ -65,135 +70,214 @@ function CreatePost() {
     } catch (error) {
       console.error("Error de red:", error);
     }
+    // Resto del código de manejo del formulario
+  };
+  const [expandedStep, setExpandedStep] = useState(null);
+
+  const toggleStep = (stepIndex) => {
+    setExpandedStep(expandedStep === stepIndex ? null : stepIndex);
   };
 
+  const steps = [
+    {
+      title: "¿Cómo publico un producto?",
+      details:
+        "Para publicar un producto, sigue estos pasos: Completa el formulario con los detalles del producto. Carga hasta 4 imágenes de alta calidad del producto. Haz clic en 'Publicar Producto' para completar la publicación.",
+    },
+    {
+      title: "¿Puedo editar mi publicación después de crearla?",
+      details:
+        "Sí, puedes editar tu publicación después de crearla. Inicia sesión en tu cuenta, ve a 'Mis Publicaciones' y selecciona la publicación que deseas editar. Luego, haz clic en 'Editar' para realizar los cambios necesarios.",
+    },
+    {
+      title: "¿Cuánto tiempo estará mi publicación en línea?",
+      details:
+        "Tu publicación estará en línea durante 30 días a partir de la fecha de creación. Después de ese período, podrás optar por volver a publicarla si aún está disponible.",
+    },
+    {
+      title: "¿Cómo puedo eliminar mi publicación?",
+      details:
+        "Puedes eliminar tu publicación en cualquier momento. Inicia sesión en tu cuenta, ve a 'Mis Publicaciones', selecciona la publicación que deseas eliminar y haz clic en 'Eliminar'. Ten en cuenta que esta acción es irreversible.",
+    },
+  ];
+
   return (
-  <div className="space-y-12 mx-20 my-20">
-    <form onSubmit={handleSubmit} className="border-b border-gray-900/10 pb-12">
-        <h2 className="text-base font-semibold leading-7 text-gray-900">Vende tu producto.</h2>
-        <p className="mt-1 text-sm leading-6 text-gray-600">Toda esta informacion sera publica en el sitio, asegurate de compartir la informacion correcta.</p>
-      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        
-        <div className="sm:col-span-6">
-          <label className="text-base font-semibold block leading-6 text-gray-900">Título:</label>
-          <div className="mt-2">
-            <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-              <input
-                type="text"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-                className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
-              />
-            </div>  
-            <p className="mt-3 text-sm leading-6 text-gray-600">El titulo de tu producto debe de contener la informacion mas importante.</p>
-          </div>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label className="text-base font-semibold block leading-6 text-gray-900">Ubicacion:</label>
-          <div className="mt-2">
-            <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-              <input
-                type="text"
-                value={ubication}
-                onChange={(event) => setUbication(event.target.value)}
-                className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
-              />
-            </div>  
-            <p className="mt-3 text-sm leading-6 text-gray-600">La ubicacion en donde se encuentra el producto.</p>
-          </div>
-        </div>
-
-        <div className="sm:col-span-4">
-          <label htmlFor="category" className="block text-base font-semibold leading-6 text-gray-900">Categoria:</label>
-          <div className="mt-2">
-            <select id="category" name="category" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+    <div className="mx-10 mt-8 flex">
+      <div className="flex-1 bg-white p-6 rounded-lg  mr-4">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label
+              htmlFor="title"
+              className="block text-gray-800 font-semibold"
+            >
+              Título:
+            </label>
+            <input
               type="text"
+              id="title"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Escribe el título de tu producto"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="description"
+              className="block text-gray-800 font-semibold"
+            >
+              Descripción:
+            </label>
+            <textarea
+              id="description"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="Escribe una descripción detallada de tu producto"
+              rows="3"
+              required
+              style={{ resize: "none" }} // Agregar esta línea
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="category"
+              className="block text-gray-800 font-semibold"
+            >
+              Categoría:
+            </label>
+            <select
+              id="category"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
               value={category}
               onChange={(event) => setCategory(event.target.value)}
-              > 
-              <option value="">Seleccione una categoría</option>
+              required
+            >
+              <option value="">Selecciona una categoría</option>
               <option value="antiguedades">Antiguedades</option>
-              <option value="musica">Musica</option>
+              <option value="musica">Música</option>
               <option value="cartas">Cartas</option>
-              <option value="tecnologia">Tecnologia</option>
+              <option value="tecnología">Tecnología</option>
               <option value="comics">Comics</option>
               <option value="juguetes">Juguetes</option>
               <option value="deporte">Deporte</option>
               <option value="libros">Libros</option>
               <option value="otros">Otros</option>
             </select>
-            <p className="mt-3 text-sm leading-6 text-gray-600">Selecciona la categoria adecuada, la categoria correcta determinara que tan facil puede ser encontrado tu producto.</p>
           </div>
-        </div>
 
-        <div className="sm:col-span-6">
-          <label className="block text-base font-semibold leading-6 text-gray-900">Descripción:</label>
-          <div className="mt-2">
-            <textarea
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-          <p className="mt-3 text-sm leading-6 text-gray-600">Introduce una descripcion apropiada del producto. Una descripcion concreta y detallada permitira que tu producto tenga mayor probabilidad de ser comprado.</p>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label className="block text-base font-semibold leading-6 text-gray-900">Precio:</label>
-          <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+          <div className="mb-4">
+            <label
+              htmlFor="price"
+              className="block text-gray-800 font-semibold"
+            >
+              Precio:
+            </label>
             <input
               type="number"
+              id="price"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
               value={price}
               onChange={(event) => setPrice(event.target.value)}
-              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
+              placeholder="Escribe el precio en números"
+              required
             />
           </div>
-        </div>
 
-        <div className="flex items-center mb-4">
-            <input id="default-checkbox" type="checkbox" value={envio} onChange={(event) => setEnvio(event,target.value)} className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-            <label htmlFor="default-checkbox" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Envio incluido?</label>
-        </div>
-
-        <div className="col-span-full">
-          <label className="block text-base font-semibold leading-6 text-gray-900">Imagenes:</label>
-          <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-            <div className="text-center">
-              <svg className="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path fillRule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clipRule="evenodd" />
-              </svg>
-              <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                <label htmlFor="file-upload" className="relative cursor-pointer rounded-md bg-white font-semibold text-primary-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-100 focus-within:ring-offset-2 hover:text-primary-200">
-                  <span>Seleccionar un Archivo</span>
-                  <input
-                    id="file-upload"
-                    name="file-upload"
-                    type="file"
-                    multiple
-                    onChange={handleFileChange}
-                    className="sr-only"
-                  />
-                </label>
-                <p className="pl-1">o desliza y suelta.</p>
-              </div>
-              <p className="text-xs leading-5 text-gray-600">Se permiten un máximo de 4 imágenes</p>
-              {error && <p className="text-red-500 mt-2">{error}</p>}
-            </div>
+          <div className="mb-4 border border-gray-300 p-2 rounded-lg">
+            <label
+              htmlFor="images"
+              className="block text-gray-800 font-semibold mb-2"
+            >
+              Imágenes:
+              <p className="text-xs text-gray-400 font-normal">
+                Solo se permite un maximo de 4 imagenes
+              </p>
+            </label>
+            <label className="custom-file-upload bg-gray-900 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded cursor-pointer">
+              Elegir imagenes
+              <input
+                type="file"
+                id="images"
+                multiple
+                onChange={handleFileChange}
+                required
+                className="hidden" // Oculta el input nativo
+              />
+            </label>
+            <div className="file-names text-xs mt-2"></div>
+            {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
-        </div>
 
-        <button
-          type="submit"
-          className="bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded"
-        >
-          Vender producto
-        </button>
+          <div className="text-right">
+            <button
+              type="submit"
+              className="bg-secondary-100 hover:bg-blue-600 text-white font-bold px-6 py-3 rounded-lg"
+            >
+              Publicar Producto
+            </button>
+          </div>
 
+          {successMessage && (
+            <div className="mt-4 text-green-600 font-semibold">
+              {successMessage}
+            </div>
+          )}
+        </form>{" "}
       </div>
-    </form>
-  </div>
-    
+
+      <div className="flex-1 bg-white p-6 rounded-lg border-l">
+        <h2 className="text-2xl font-semibold mb-4 text-center">
+          Consejos para crear una buena publicación
+        </h2>
+        <ul className="pl-6 border-secondary-100 border-b pb-5">
+          <li className="mb-2 italic">
+            <AiOutlineQuestionCircle className="inline-block text-secondary-200 mr-2" />
+            Agrega imágenes de alta calidad de tu objeto.
+          </li>
+          <li className="mb-2 italic">
+            <AiOutlineQuestionCircle className="inline-block text-secondary-200 mr-2" />
+            Proporciona una descripción detallada y precisa.
+          </li>
+          <li className="mb-2 italic">
+            <AiOutlineQuestionCircle className="inline-block text-secondary-200 mr-2" />
+            Especifica el precio de manera clara.
+          </li>
+          <li className="mb-2 italic">
+            <AiOutlineQuestionCircle className="inline-block text-secondary-200 mr-2" />
+            Selecciona la categoría adecuada para tu objeto.
+          </li>
+        </ul>
+
+        <h2 className="text-2xl my-3">Preguntas frecuentes</h2>
+        <div className="flex flex-col space-y-2">
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              onClick={() => toggleStep(index)}
+              className={`p-2 rounded cursor-pointer ${
+                expandedStep === index ? "bg-gray-100" : "bg-white"
+              }`}
+            >
+              <div className="flex items-center">
+                <div className="w-6 h-6 flex items-center justify-center rounded-full  text-secondary-100 font-bold text-2xl mr-2">
+                  <FaAngleDown />
+                </div>
+                <div>{step.title}</div>
+              </div>
+              {expandedStep === index && (
+                <div className="text-gray-500 mt-2 animate-flip-down animate-duration-300 animate-delay-0">
+                  {step.details}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 

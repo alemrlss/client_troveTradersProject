@@ -32,7 +32,7 @@ function VerifyStep3({ onNextStep }) {
   return (
     <div>
       <div className="flex items-center justify-center mb-4">
-        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white mr-2">
+        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-secondary-100 text-white mr-2">
           3
         </div>
         <h2 className="text-lg sm:text-xl font-semibold">
@@ -46,14 +46,14 @@ function VerifyStep3({ onNextStep }) {
       {verificationInProgress ? (
         <div className="flex items-center flex-col">
           
-          <FaSpinner className="animate-spin text-blue-500 w-32 h-32 mt-8" />
+          <FaSpinner className="animate-spin text-gray-200 w-32 h-32 mt-8" />
           <p className="text-xs text-gray-500 mt-4">Esto puede tardar unos minutos...</p>
         </div>
       ) : null}
       <div className="relative mt-6">
         <div className="flex h-2 bg-gray-200 rounded">
           <div
-            className="h-full bg-blue-500 rounded"
+            className="h-full bg-secondary-200 rounded"
             style={{ width: `${progress}%` }} // Barra de progreso con animación
           ></div>
         </div>
