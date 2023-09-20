@@ -90,9 +90,10 @@ function CreatePost() {
         "Sí, puedes editar tu publicación después de crearla. Inicia sesión en tu cuenta, ve a 'Mis Publicaciones' y selecciona la publicación que deseas editar. Luego, haz clic en 'Editar' para realizar los cambios necesarios.",
     },
     {
-      title: "¿Cuánto tiempo estará mi publicación en línea?",
+      title:
+        "¿Cómo puedo obtener más información sobre las políticas de seguridad y privacidad del sitio?      ",
       details:
-        "Tu publicación estará en línea durante 30 días a partir de la fecha de creación. Después de ese período, podrás optar por volver a publicarla si aún está disponible.",
+        "Puedes encontrar información detallada sobre nuestras políticas de seguridad y privacidad en la sección 'Políticas' o 'Términos y Condiciones'` de nuestro sitio web",
     },
     {
       title: "¿Cómo puedo eliminar mi publicación?",
@@ -138,7 +139,7 @@ function CreatePost() {
               placeholder="Escribe una descripción detallada de tu producto"
               rows="3"
               required
-              style={{ resize: "none" }} // Agregar esta línea
+              style={{ resize: "none" }}
             />
           </div>
 
@@ -187,18 +188,18 @@ function CreatePost() {
             />
           </div>
 
+          <p className="block text-gray-800 font-semibold"> Imágenes:</p>
           <div className="mb-4 border border-gray-300 p-2 rounded-lg">
             <label
               htmlFor="images"
               className="block text-gray-800 font-semibold mb-2"
             >
-              Imágenes:
               <p className="text-xs text-gray-400 font-normal">
                 Solo se permite un maximo de 4 imagenes
               </p>
             </label>
-            <label className="custom-file-upload bg-gray-900 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded cursor-pointer">
-              Elegir imagenes
+            <label className="custom-file-upload flex justify-center bg-gray-200  text-gray-500 font-semibold px-4 py-2 rounded-md cursor-pointer">
+              <p className="text-center">Elegir imagenes</p>
               <input
                 type="file"
                 id="images"
@@ -215,7 +216,7 @@ function CreatePost() {
           <div className="text-right">
             <button
               type="submit"
-              className="bg-secondary-100 hover:bg-blue-600 text-white font-bold px-6 py-3 rounded-lg"
+              className="bg-secondary-100 hover:opacity-90 text-white font-bold px-6 py-3 rounded-lg"
             >
               Publicar Producto
             </button>
@@ -233,10 +234,10 @@ function CreatePost() {
         <h2 className="text-2xl font-semibold mb-4 text-center">
           Consejos para crear una buena publicación
         </h2>
-        <ul className="pl-6 border-secondary-100 border-b pb-5">
+        <ul className="pl-6 border-secondary-100 border-b pb-4">
           <li className="mb-2 italic">
             <AiOutlineQuestionCircle className="inline-block text-secondary-200 mr-2" />
-            Agrega imágenes de alta calidad de tu objeto.
+            Agrega imágenes de alta calidad.
           </li>
           <li className="mb-2 italic">
             <AiOutlineQuestionCircle className="inline-block text-secondary-200 mr-2" />
@@ -250,9 +251,13 @@ function CreatePost() {
             <AiOutlineQuestionCircle className="inline-block text-secondary-200 mr-2" />
             Selecciona la categoría adecuada para tu objeto.
           </li>
+          <li className="mb-2 italic">
+            <AiOutlineQuestionCircle className="inline-block text-secondary-200 mr-2" />
+            La primera imagen sera promocianada en toda la aplicacion
+          </li>
         </ul>
 
-        <h2 className="text-2xl my-3">Preguntas frecuentes</h2>
+        <h2 className="text-2xl my-3 mt-4">Preguntas frecuentes</h2>
         <div className="flex flex-col space-y-2">
           {steps.map((step, index) => (
             <div

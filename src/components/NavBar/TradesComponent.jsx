@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import axios from "axios";
-import { FaExchangeAlt } from "react-icons/fa";
+import { AiOutlineTeam } from "react-icons/ai";
 function TradesComponent({ openModal, setTrades, id }) {
   const getRequestsUser = async () => {
     try {
@@ -19,10 +19,11 @@ function TradesComponent({ openModal, setTrades, id }) {
 
   return (
     <button
+      data-tooltip-id="my-tooltip-trades"
       onClick={getRequestsUser}
-      className="text-secondary-100 p-3 hover:text-gray-300"
+      className="text-secondary-100 p-3 "
     >
-      <FaExchangeAlt className="h-6 w-6" />
+      <AiOutlineTeam className="h-6 w-6" />
     </button>
   );
 }

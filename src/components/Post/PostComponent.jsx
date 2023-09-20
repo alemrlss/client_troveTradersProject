@@ -5,7 +5,7 @@ import { SocketContext } from "../../contexts/socketContext";
 import { getIdUser } from "../../services/Auth";
 import { Link } from "react-router-dom";
 
-function PostComponent({ post}) {
+function PostComponent({ post }) {
   const socket = useContext(SocketContext);
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -191,18 +191,18 @@ function PostComponent({ post}) {
     return formattedDate;
   }
 
-  function cantidadImagenes (photoCount) {
+  function cantidadImagenes(photoCount) {
     switch (photoCount) {
       case 1:
-        return 'w-full'; 
+        return "w-full";
       case 2:
-        return 'w-1/2'; 
+        return "w-1/2";
       case 3:
-        return 'w-1/3'; 
+        return "w-1/3";
       case 4:
-        return 'w-1/4'; 
+        return "w-1/4";
       default:
-        return 'w-full'; 
+        return "w-full";
     }
   }
 
@@ -216,7 +216,9 @@ function PostComponent({ post}) {
                 key={index}
                 src={`http://localhost:3001/images/posts/${photo}`}
                 alt={`Photo ${index}`}
-                className={`rounded shadow ${cantidadImagenes(post.photos.length)} h-1/2 w-1/6`}
+                className={`rounded shadow ${cantidadImagenes(
+                  post.photos.length
+                )} h-1/2 w-1/6`}
               />
             ))}
           </div>

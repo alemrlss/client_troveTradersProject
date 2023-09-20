@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Barra() {
   return (
-    <nav className="bg-secondary-200 text-white py-2">
+    <nav className="bg-secondary-300 text-white font-semibold py-1">
       <div className="container mx-auto">
         <ul className="flex justify-center space-x-8 md:space-x-4 text-sm">
           <li>

@@ -77,44 +77,14 @@ function HomeComponent({ posts }) {
 
   return (
     <div className="">
-      {/* Mensaje de verificación de correo electrónico 
-        {!verificationEmailUser && (
-          <div className="text-sm flex items-center">
-            <p className="text-sm">
-              Por favor, verifica tu correo electrónico para acceder a todas las
-              funciones de la aplicación.
-            </p>
-
-            {emailSend && (
-              <p className="text-green-600 font-bold text-lg">
-                ¡Correo enviado con éxito a: {user.email}!
-              </p>
-            )}
-            {!emailSend && (
-              <button
-                className="bg-primary-100 hover:bg-primary-200 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline m-2"
-                onClick={handleSendEmailVerification}
-              >
-                Enviar correo de verificación
-              </button>
-            )}
-          </div>
-        )}*/}
-
       <Barra />
-      <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
-      {/* Panel de la homePage */}
-      <Panel />
 
-      <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
       {/* Carousel de la homePage */}
       <Carousel />
       <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
       <Guiahome />
       <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
       {/* Contenedor de la homePage */}
-      <Categories />
-      <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
 
       {/* Contenedor de Productos */}
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">

@@ -1,7 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useContext, useEffect } from "react";
-import { FaHome, FaUser, FaAngleRight, FaBars, FaTimes } from "react-icons/fa";
-import logo from "../../assets/img/navbarLogo.png";
+import {
+  FaHome,
+  FaUser,
+  FaAngleRight,
+  FaBars,
+  FaTimes,
+  FaPlus,
+  FaList,
+} from "react-icons/fa";
+import logo from "../../assets/img/imagen3.png";
 import { SocketContext } from "../../contexts/socketContext";
 import { useAuthContext } from "../../contexts/authContext";
 import { useModal } from "../../hooks/useModal";
@@ -14,6 +22,7 @@ import TradesComponent from "./TradesComponent";
 import RequestsComponent from "./RequestsComponent";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom"; // Importa useLocation
+import { Tooltip } from "react-tooltip";
 
 function NavBarr() {
   //^  Contexto.
@@ -150,30 +159,74 @@ function NavBarr() {
 
   return (
     <div>
-      <nav className="bg-white shadow-lg mx-auto flex items-center justify-between px-4 py-2">
+      <nav className="bg-white shadow-lg mx-auto flex items-center justify-between px-4 py-1">
         {/* Logo */}
-        <div className="flex items-center w-2/6 ">
-          <div className="hidden sm:flex items-center space-x-3 ">
+        <div className="flex items-center w-2/6">
+          <div className="hidden sm:flex items-center space-x-2 ">
             <Link
+              data-tooltip-id="my-tooltip-home"
+              data-tooltip-content="Inicio"
               to={`/home`}
-              className={`text-secondary-300 p-2 ${
+              className={`text-secondary-100 p-1 ${
                 location.pathname === "/home"
                   ? "border-b-2 border-b-secondary-200"
                   : ""
               }`}
             >
-              <FaHome className="w-8 h-8 " />
+              <FaHome className="w-6 h-6 " />
             </Link>
             <Link
+              data-tooltip-id="my-tooltip-perfil"
+              data-tooltip-content="Perfil"
               to={`/profile/${idUser}`}
-              className={`text-secondary-100 flex flex-col p-2 ${
+              className={`text-secondary-100 flex flex-col p-1 ${
                 location.pathname === `/profile/${idUser}`
                   ? "border-b-2 border-b-secondary-200"
                   : ""
               }`}
             >
-              <FaUser className="w-8 h-8" />
+              <FaUser className="w-6 h-6" />
             </Link>
+            <Link
+              data-tooltip-id="my-tooltip-crear-publicacion"
+              data-tooltip-content="Crear publicacion"
+              to={`/crear-publicacion`}
+              className={`text-secondary-300 p-1 ${
+                location.pathname === "/crear-publicacion"
+                  ? "border-b-2 border-b-secondary-200"
+                  : ""
+              }`}
+            >
+              <FaPlus className="w-6 h-6 rounded-full border-2 p-1 border-secondary-100 " />
+            </Link>
+            <Link
+              data-tooltip-id="my-tooltip-mis-publicaciones"
+              data-tooltip-content="Mis publicaciones"
+              to={`/mis-publicaciones`}
+              className={`text-secondary-100 flex flex-col p-1 ${
+                location.pathname === `/mis-publicaciones`
+                  ? "border-b-2 border-b-secondary-200"
+                  : ""
+              }`}
+            >
+              <FaList className="w-6 h-6" />
+            </Link>
+            <Tooltip
+              id="my-tooltip-home"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", color: "#fff" }}
+            />
+            <Tooltip
+              id="my-tooltip-perfil"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", color: "#fff" }}
+            />
+            <Tooltip
+              id="my-tooltip-crear-publicacion"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", color: "#fff" }}
+            />
+            <Tooltip
+              id="my-tooltip-mis-publicaciones"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", color: "#fff" }}
+            />
           </div>
           <Link
             to={`/home`}
@@ -181,7 +234,7 @@ function NavBarr() {
           ></Link>
 
           <form
-            className="flex items-center border border-jisselColor1-300 rounded-lg ml-4"
+            className="hidden w-96 sm:flex items-center border border-jisselColor1-300 rounded-lg ml-4"
             onSubmit={(e) => {
               e.preventDefault();
               navigate(`/resultados?query=${query}`);
@@ -205,9 +258,8 @@ function NavBarr() {
 
         {/* Search bar */}
         {/* Links */}
-        <div className="flex w-2/6  justify-center" >
-        <img src={logo} className="h-12" alt="" />
-
+        <div className="flex w-2/6  justify-center">
+          <img src={logo} className="h-10" alt="" />
         </div>
 
         {/* Menu icon and links */}
@@ -221,28 +273,64 @@ function NavBarr() {
 
           {/* Notification, trades, requests, and logout */}
           <div className="hidden sm:flex items-center ">
-            <TradesComponent
-              id={idUser}
-              openModal={openModalTrades}
-              setTrades={setTrades}
-            />
-            <RequestsComponent
-              id={idUser}
-              openModal={openModalRequests}
-              setRequests={setRequests}
-            />
-            <NotificationsComponent
-              idUser={idUser}
-              setNotifications={setNotifications}
-              setIsOpen={setIsOpen}
-              isOpen={isOpen}
-            />
             <div
+              data-tooltip-id="my-tooltip-trades"
+              data-tooltip-content="Trades en ejecucion"
+            >
+              <TradesComponent
+                id={idUser}
+                openModal={openModalTrades}
+                setTrades={setTrades}
+              />
+            </div>
+            <div
+              data-tooltip-id="my-tooltip-trades"
+              data-tooltip-content="Solicitudes"
+            >
+              <RequestsComponent
+                id={idUser}
+                openModal={openModalRequests}
+                setRequests={setRequests}
+              />
+            </div>
+
+            <div
+              data-tooltip-id="my-tooltip-notificaciones"
+              data-tooltip-content="Notificaciones"
+            >
+              <NotificationsComponent
+                idUser={idUser}
+                setNotifications={setNotifications}
+                setIsOpen={setIsOpen}
+                isOpen={isOpen}
+              />
+            </div>
+            <div
+              data-tooltip-id="my-tooltip-logout"
+              data-tooltip-content="Cerrar sesion"
               onClick={handleLogout}
               className=" shadow-md flex rounded-lg p-2 ml-6 items-center cursor-pointer hover:text-red-700"
             >
               <FaAngleRight className="w-6 h-6 text-black hover:text-red-500" />
+
+              <Tooltip
+                id="my-tooltip-logout"
+                style={{ backgroundColor: "rgba(255,0,0,0.5)	", color: "#fff" }}
+              />
             </div>
+            <Tooltip
+              id="my-tooltip-trades"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", color: "#fff" }}
+            />
+
+            <Tooltip
+              id="my-tooltip-solicitudes"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", color: "#fff" }}
+            />
+            <Tooltip
+              id="my-tooltip-notificaciones"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", color: "#fff" }}
+            />
           </div>
         </div>
 

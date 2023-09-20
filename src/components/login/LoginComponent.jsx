@@ -55,8 +55,8 @@ function LoginComponent() {
   };
 
   return (
-    <section className="bg-primary-100 opacity- min-h-screen flex items-center justify-center">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+    <section className="bg-logo-100 min-h-screen flex items-center justify-center">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg ">
         <div className="text-center">
           <img
             className="mx-auto w-20 h-20"
@@ -112,7 +112,7 @@ function LoginComponent() {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               Acceder
             </button>

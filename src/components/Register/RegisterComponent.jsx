@@ -84,7 +84,7 @@ function RegisterComponent() {
   };
 
   return (
-    <section className="bg-primary-100 min-h-screen flex items-center justify-center">
+    <section className="bg-logo-100  min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
         <div className="text-center">
           <img
@@ -110,7 +110,7 @@ function RegisterComponent() {
                 name="name"
                 id="name"
                 onChange={handleInputChange}
-                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 placeholder="Tu nombre"
                 required
               />
@@ -127,7 +127,7 @@ function RegisterComponent() {
                 name="lastName"
                 id="lastName"
                 onChange={handleInputChange}
-                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 placeholder="Tu apellido"
                 required
               />
@@ -144,7 +144,7 @@ function RegisterComponent() {
                 name="email"
                 id="email"
                 onChange={handleInputChange}
-                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 placeholder="correo@correo.com"
                 required
               />
@@ -161,7 +161,7 @@ function RegisterComponent() {
                 name="username"
                 id="username"
                 onChange={handleInputChange}
-                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 placeholder="Tu nombre de usuario"
                 required
               />
@@ -181,7 +181,7 @@ function RegisterComponent() {
                 id="password"
                 onChange={handleInputChange}
                 placeholder="••••••••"
-                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 required
               />
             </div>
@@ -198,7 +198,7 @@ function RegisterComponent() {
                 id="confirmPassword"
                 onChange={handleInputChange}
                 placeholder="••••••••"
-                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-primary-600"
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 required
               />
             </div>
@@ -230,7 +230,7 @@ function RegisterComponent() {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               Crear una cuenta
             </button>

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
-import { FaEnvelope } from "react-icons/fa";
+import { AiFillTags } from "react-icons/ai";
 function RequestsComponent({ openModal, setRequests, id }) {
 
  
@@ -23,9 +23,9 @@ function RequestsComponent({ openModal, setRequests, id }) {
 
       <button
         onClick={getRequestsUser}
-        className="text-secondary-100 p-3 hover:text-gray-300"
+        className="text-secondary-100 p-3"
       >
-        <FaEnvelope className="h-6 w-6"/>
+        <AiFillTags className="h-6 w-6"/>
 
       </button>
   );

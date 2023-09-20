@@ -10,92 +10,93 @@ import imgCategory8 from "../../assets/img/categories/8.jpg";
 const callouts = [
   {
     id: 1,
-    description: 'Antiguedades',
+    description: "Antiguedades",
     imageSrc: imgCategory,
-    imageAlt: '',
-    href: 'categoria/antiguedades',
+    imageAlt: "",
+    href: "categoria/antiguedades",
   },
   {
     id: 2,
-    description: 'Musica',
+    description: "Musica",
     imageSrc: imgCategory2,
-    imageAlt: '',
-    href: 'categoria/musica',
+    imageAlt: "",
+    href: "categoria/musica",
   },
   {
     id: 3,
-    description: 'Cartas',
+    description: "Cartas",
     imageSrc: imgCategory3,
-    imageAlt: '',
-    href: 'categoria/cartas',
+    imageAlt: "",
+    href: "categoria/cartas",
   },
   {
     id: 4,
-    description: 'Tecnologia',
+    description: "Tecnologia",
     imageSrc: imgCategory4,
-    imageAlt: '',
-    href: 'categoria/tecnologia',
+    imageAlt: "",
+    href: "categoria/tecnologia",
   },
   {
     id: 5,
-    description: 'Comics',
+    description: "Comics",
     imageSrc: imgCategory5,
-    imageAlt: '',
-    href: 'categoria/comics',
+    imageAlt: "",
+    href: "categoria/comics",
   },
   {
     id: 6,
-    description: 'Juguetes',
+    description: "Juguetes",
     imageSrc: imgCategory6,
-    imageAlt: '',
-    href: 'categoria/juguetes',
+    imageAlt: "",
+    href: "categoria/juguetes",
   },
   {
     id: 7,
-    description: 'Deporte',
+    description: "Deporte",
     imageSrc: imgCategory7,
-    imageAlt: '',
-    href: 'categoria/deporte',
+    imageAlt: "",
+    href: "categoria/deporte",
   },
   {
     id: 8,
-    description:'Libros',
+    description: "Libros",
     imageSrc: imgCategory8,
-    imageAlt: '',
-    href: 'categoria/libros',
+    imageAlt: "",
+    href: "categoria/libros",
   },
-]
+];
 
 export default function Categories() {
   return (
-    <div className="">
-  <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-    <div className="mx-auto max-w-3xl py-4 sm:py-4 lg:max-w-none lg:py-4">
-      <h2 className="text-2xl font-bold text-gray-900">Categorias</h2>
-      
-      <div className="mt-6 space-y-12 lg:grid lg:grid-cols-8 lg:gap-x-6 lg:space-y-0 sm:grid-cols-2">
-        {callouts.map((callout) => (
-          <div key={callout.id} className="group relative">
-            <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
-              <img
-                src={callout.imageSrc}
-                alt={callout.imageAlt}
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
-            <h3 className="mt-6 text-sm text-gray-500">
-              <a href={callout.href}>
-                <span className="absolute inset-0" />
-                {callout.name}
-              </a>
-            </h3>
-            <p className="text-base font-semibold text-gray-900">{callout.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</div>
-  )
-}
+    <marquee className="">
+      <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl py-4 sm:py-4 lg:max-w-none lg:py-4">
+          <h2 className="text-2xl font-bold text-gray-900">Categorias</h2>
 
+          <div className="mt-6 space-y-12 lg:grid lg:grid-cols-8 lg:gap-x-6 lg:space-y-0 sm:grid-cols-2">
+            {callouts.map((callout) => (
+              <div key={callout.id} className="group relative">
+                <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
+                  <img
+                    src={callout.imageSrc}
+                    alt={callout.imageAlt}
+                    className="h-full w-full object-cover object-center"
+                  />
+                </div>
+                <h3 className="mt-6 text-sm text-gray-500">
+                  <a href={callout.href}>
+                    <span className="absolute inset-0" />
+                    {callout.name}
+                  </a>
+                </h3>
+                <p className="text-base font-semibold text-gray-900">
+                  {callout.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </marquee>
+  );
+}
