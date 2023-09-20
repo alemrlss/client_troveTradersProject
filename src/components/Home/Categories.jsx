@@ -1,11 +1,13 @@
+import { Link } from "react-router-dom";
 import imgCategory from "../../assets/img/categories/1.jpg";
 import imgCategory2 from "../../assets/img/categories/2.jpg";
 import imgCategory3 from "../../assets/img/categories/3.jpg";
-import imgCategory4 from "../../assets/img/categories/4.jpg";
+import imgCategory4 from "../../assets/img/categories/4.jpeg";
 import imgCategory5 from "../../assets/img/categories/5.jpg";
-import imgCategory6 from "../../assets/img/categories/6.jpg";
+import imgCategory6 from "../../assets/img/categories/6.jpeg";
 import imgCategory7 from "../../assets/img/categories/7.jpeg";
-import imgCategory8 from "../../assets/img/categories/8.jpg";
+import imgCategory8 from "../../assets/img/categories/8.jpeg";
+import imgCategory9 from "../../assets/img/categories/9.png";
 
 const callouts = [
   {
@@ -64,39 +66,43 @@ const callouts = [
     imageAlt: "",
     href: "categoria/libros",
   },
+  /*{
+    id: 9,
+    description:'Zapatos',
+    imageSrc: imgCategory9,
+    imageAlt: '',
+    href: 'categoria/zapatos', 
+  }*/
 ];
 
 export default function Categories() {
   return (
-    <marquee className="">
-      <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl py-4 sm:py-4 lg:max-w-none lg:py-4">
+    <div className="">
+      fff
+      <div className="mx-auto max-w-5xl px-4 lg:px-8">
+        <div className="mx-auto py-4 lg:py-4">
           <h2 className="text-2xl font-bold text-gray-900">Categorias</h2>
 
-          <div className="mt-6 space-y-12 lg:grid lg:grid-cols-8 lg:gap-x-6 lg:space-y-0 sm:grid-cols-2">
+          <div className="grid-cols-4 mt-6 grid lg:grid-cols-4 gap-x-6">
             {callouts.map((callout) => (
-              <div key={callout.id} className="group relative">
-                <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
-                  <img
-                    src={callout.imageSrc}
-                    alt={callout.imageAlt}
-                    className="h-full w-full object-cover object-center"
-                  />
+              <a href={callout.href} key={callout.id}>
+                <div className="mx-0 my-0">
+                  <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 shadow-2xl">
+                    <img
+                      src={callout.imageSrc}
+                      alt={callout.imageAlt}
+                      className="h-full w-full object-cover object-center"
+                    />
+                  </div>
+                  <p className="text-sm font-semibold justify-center mb-4">
+                    {callout.description}
+                  </p>
                 </div>
-                <h3 className="mt-6 text-sm text-gray-500">
-                  <a href={callout.href}>
-                    <span className="absolute inset-0" />
-                    {callout.name}
-                  </a>
-                </h3>
-                <p className="text-base font-semibold text-gray-900">
-                  {callout.description}
-                </p>
-              </div>
+              </a>
             ))}
           </div>
         </div>
       </div>
-    </marquee>
+    </div>
   );
 }

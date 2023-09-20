@@ -85,14 +85,14 @@ function HomeComponent({ posts }) {
       <Guiahome />
       <hr className="h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
       {/* Contenedor de la homePage */}
-
+      <Categories />
       {/* Contenedor de Productos */}
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">
           Productos disponibles
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 bg-white">
           {dataPosts.map((post) => (
             <div
               key={post._id}
