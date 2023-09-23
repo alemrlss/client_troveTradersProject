@@ -7,7 +7,7 @@ import EditPassword from "../components/EditPassword/EditPassword";
 
 
 function editPassword() {
-  const [data, setData] = useState(null);
+  const [user, setUser] = useState(null);
   const { id } = useParams();
   const token = getToken();
   const config = {
@@ -19,18 +19,15 @@ function editPassword() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/users/${id}`,
-          config
-        );
-        setData(response.data);
+          `http://localhost:3001/users/${id}`, config);
+        setUser(response.data);
       } catch (error) {
-        console.log(error); //PROGRAMAR ERROR.
+        console.log(error);
       }
     };
 
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   const options = {
     width: 100,
@@ -39,7 +36,7 @@ function editPassword() {
 
   return (
     <div>
-      {data && <EditPassword data={data}/>}
+      <EditPassword user={user}/>
       <Footer/>
     </div>
   )

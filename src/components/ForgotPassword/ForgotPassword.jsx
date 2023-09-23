@@ -6,28 +6,44 @@ import { Link } from 'react-router-dom';
 function ForgotPassword(user, data) {
   const [verificationEmailUser] = useState(user.verificationEmail);
   const [emailSend, setEmailSend] = useState(false);
+  const [error, setError] = useState("");
+
+  const [formData, setformData] = useState({
+    email: ""
+  });
+
+  const handleInputChange = (e) => {
+    setError("");
+    const { name, value } = e.target;
+    setformData({ ...formData, [name]: value });
+  };
 
   const handleSendEmailRecovery = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/auth/recovery-email",
+        "http://localhost:3001/auth/recovery-email/",
         {
-          email: user.email,
+          email: formData.email,
         }
       );
       console.log(response.data);
       setEmailSend(true);
     } catch (error) {
       console.error(
-        "Error al enviar el correo de verificación:",
+        "Error al enviar el correo de recuperacion:",
         error.message
       );
+    }
+
+    if (formData.email === "") {
+      setError("Por favor introduce tu correo.");
+      return;
     }
   };
 
   return (
-    <section className="bg-logo-100 ">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 ">
+    <section className="bg-logo-100 min-h-screen flex items-center justify-center">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
         <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900">
           <img className="w-20 h-20 mr-2" src="src\assets\img\logo2.jpg" alt="logo"/>
           TroveTraders
@@ -53,11 +69,13 @@ function ForgotPassword(user, data) {
                 </label>
                 <input
                   name="email"
+                  onChange={handleInputChange}
                   type="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   placeholder="Tu correo"
                 />
                 <p className="mt-5 text-sm font-light text-gray-500">Ingresa tu correo electrónico para encontrar tu cuenta.</p>
+                <p className="mt-5 text-sm font-light text-red-500">{error}</p>
               </div>
               <div>
                 <button type="button" onClick={handleSendEmailRecovery} className="mb-5 w-full text-white bg-secondary-100 hover:bg-secondary-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">

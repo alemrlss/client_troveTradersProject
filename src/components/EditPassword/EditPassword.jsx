@@ -1,11 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { getDataUser } from '../../services/Auth';
 
-function EditPassword(data) {
-  const [userData, setUserData] = useState(data);
+function EditPassword({user}) {
   const idUser = getDataUser().id
 
   const [formData, setformData] = useState({
@@ -15,138 +13,144 @@ function EditPassword(data) {
   });
 
   const [error, setError] = useState("");
-  const [response, setResponse] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleInputChange = (e) => {
-    setError("");
-    const { name, value } = e.target;
-    setformData({ ...formData, [name]: value });
+  const validatePassword = (password,newPassword,confirmPassword) => {
+    // Validación de contraseña utilizando una expresión regular
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    const isPasswordValid = passwordRegex.test(password);
+    const isNewPasswordValid = passwordRegex.test(newPassword);
+    const isConfirmPasswordValid = passwordRegex.test(confirmPassword);
+    return {
+      isPasswordValid,
+      isNewPasswordValid,
+      isConfirmPasswordValid,
+    };
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
+    if (formData.newPassword !== formData.confirmPassword) {
+      setError("La nueva contraseña no es identica.");
+      return;
+    }
+
+    const passwordValidation = validatePassword(formData.password, formData.newPassword, formData.confirmPassword);
+
+    if (!passwordValidation.isPasswordValid || !passwordValidation.isNewPasswordValid || !passwordValidation.isConfirmPasswordValid) {
+      setError(
+        "Las contraseñas deben contener al menos 8 caracteres y contener letras y números."
+      );
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/auth/edit-password/${user._id}`, 
+        {
+          id: user._id,
+          password: formData.password,
+          newPassword: formData.newPassword,
+          confirmPassword: formData.confirmPassword,
+        }
+      );
+      if (response.data === true) {
+        setSuccess('La contraseña ha sido cambiada con exito');
+      } else {
+        setError("Ha sucedido un error. Intenta de nuevo.");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error('Respuesta del Server:', error.response.data);
+      }
+    }
+
     if (formData.password === "" || formData.newPassword === "" || formData.confirmPassword === "") {
       setError("Por favor completa todos los campos.");
       return;
     }
-  
-    if (formData.newPassword !== formData.confirmPassword) {
-      setError("Las claves no son iguales.");
-      return;
-    }
-  
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/users/edit-password",
-        {
-          password: formData.password,
-          email: userData.data.email
-        }
-      );
-          /*Si la clave es correcta*/
-      if (response.data === true) {
-        const updateResponse = await axios.put(
-          'http://localhost:3001/users/',
-          {
-            password: formData.NewPassword,
-          }
-        );
-        console.log('La clave ha sido cambiada:', updateResponse.data);
-      } else {
-        setError("Ha sucedido un error. Intenta de nuevo.");
-        console.log('Respuesta API:', response.data);
-      }
-    } catch (error) {
-        setError("Error, intenta de nuevo.");
-        console.log('Respuesta API:', response.data);
-    }
-
-    const validatePassword = (password) => {
-      // Validación de contraseña utilizando una expresión regular
-      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-      return passwordRegex.test(password);
-    };
   };
 
-
   return (
-      <section className="bg-logo-100 py-10">
-      <div className="flex flex-col items-center justify-center px-6 mx-auto g:py-0 ">
-        <div className="w-full bg-primary-100 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 ">
-          {" "}
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            {" "}
-            {/*Panel principal*/}
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Cambiar la contraseña.
-            </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-              {" "}
-              {/*Contraseña ACTUAL*/}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Tu contraseña actual:
-                </label>
-                <input
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  type="password"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="..."
-                />
-              </div>
-              {/*Contraseña NUEVA*/}
-              <div>
-                <label
-                  htmlFor="newPassword"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Tu nueva contraseña.
-                </label>
-                <input
-                  name="newPassword"
-                  value={formData.newPassword}
-                  onChange={handleInputChange}
-                  type="password"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="..."
-                />
-              </div>
-               {/*Contraseña CONFIRMADA*/}
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Repite tu nueva contraseña.
-                </label>
-                <input
-                  name="confirmPassword"
-                  onChange={handleInputChange}
-                  value={formData.confirmPassword}
-                  type="password"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  placeholder="..."
-                />
-              </div>
-              <div className="space-y-4 md:space-y-6">
-              <p className="text-red-600">{error}</p>
-                <button className="w-full text-white bg-secondary-100 hover:bg-secondary-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                  Acceder
-                </button>
-                <Link to={`/profile/${idUser}`} className='text-sm font-light text-secondary-200 hover:underline'>Regresar al perfil.</Link>
-              </div>
-            </form>
-          </div>
-        </div>
+    <section className="bg-logo-100 min-h-screen flex items-center justify-center">
+    <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg ">
+      <div className="text-center">
+        <h2 className="mt-4 text-3xl font-semibold text-gray-900">
+          Cambiar la Contraseña.
+        </h2>
       </div>
-    </section>
+      <form className="mt-6" onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label
+            htmlFor="password"
+            className="block text-gray-700 text-sm font-medium"
+          >
+            Ingresa la ultima contraseña:
+          </label>
+          <input
+            name="password"
+            type="password"
+            className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
+            placeholder="Ultima contraseña"
+            required
+            value={formData.password}
+            onChange={(e) => setformData({ ...formData, password: e.target.value })}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="newPassword"
+            className="block text-gray-700 text-sm font-medium"
+          >
+            Ingresa la nueva contraseña: 
+          </label>
+          <input
+            name="newPassword"
+            type="password"
+            className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
+            placeholder="Nueva Contraseña"
+            required
+            value={formData.newPassword}
+            onChange={(e) => setformData({ ...formData, newPassword: e.target.value })}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="confirmPassword"
+            className="block text-gray-700 text-sm font-medium"
+          >
+            Ingresa la nueva contraseña de nuevo:
+          </label>
+          <input
+            name="confirmPassword"
+            type="password"
+            className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
+            placeholder="Nueva Contraseña"
+            value={formData.confirmPassword}
+            onChange={(e) => setformData({ ...formData, confirmPassword: e.target.value })}
+            required
+          />
+        </div>
+        <div className='mb-6'>
+          <p className="text-red-600">{error}</p>
+          <p className='text-green-600'>{success}</p>
+        </div>
+        <div>
+          <button
+            type="submit"
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          >
+            Aceptar
+          </button>
+        </div>
+        <div className='mb-6'>
+        </div>
+      </form>
+    </div>
+  </section>
   ) 
 }
 
