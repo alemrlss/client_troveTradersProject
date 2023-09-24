@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 
 function ForgotPassword(user, data) {
-  const [verificationEmailUser] = useState(user.verificationEmail);
   const [emailSend, setEmailSend] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState('');
 
   const [formData, setformData] = useState({
     email: ""
@@ -28,11 +28,9 @@ function ForgotPassword(user, data) {
       );
       console.log(response.data);
       setEmailSend(true);
+      setSuccess('El correo de recuperacion se ha enviado con exito.');
     } catch (error) {
-      console.error(
-        "Error al enviar el correo de recuperacion:",
-        error.message
-      );
+      console.error("Error al enviar el correo de recuperacion:", error.message);
     }
 
     if (formData.email === "") {
@@ -44,45 +42,41 @@ function ForgotPassword(user, data) {
   return (
     <section className="bg-logo-100 min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900">
-          <img className="w-20 h-20 mr-2" src="src\assets\img\logo2.jpg" alt="logo"/>
-          TroveTraders
-        </a>
-        <div className="w-full bg-primary-100 rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 ">
-          {" "}
-          {/*Background*/}
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            {" "}
-            {/*Panel principal*/}
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Recupera tu cuenta.
-            </h1>
-            <form className="space-y-4 md:space-y-6">
-              {" "}
-              {/*Email y Contraseña*/}
-              <div>
-                <label
+        <div className="text-center">
+          <img
+            className="mx-auto w-20 h-20"
+            src="src/assets/img/logoAlejandro.png"
+            alt="Logo"
+          />
+          <h2 className="mt-4 text-3xl font-semibold text-gray-900">
+            Recuperar contraseña.
+          </h2>
+        </div>
+            <form className="mt-6">
+              <div className="mb-4">
+                  <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block text-gray-700 text-sm font-medium"
                 >
-                  Correo
+                  Correo Electrónico
                 </label>
                 <input
                   name="email"
                   onChange={handleInputChange}
                   type="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
                   placeholder="Tu correo"
                 />
                 <p className="mt-5 text-sm font-light text-gray-500">Ingresa tu correo electrónico para encontrar tu cuenta.</p>
                 <p className="mt-5 text-sm font-light text-red-500">{error}</p>
+                <p className="mt-5 text-sm font-light text-green-500">{success}</p>
               </div>
               <div>
-                <button type="button" onClick={handleSendEmailRecovery} className="mb-5 w-full text-white bg-secondary-100 hover:bg-secondary-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                <button type="button" onClick={handleSendEmailRecovery} className="mb-4 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                   Enviar Correo
                 </button>
                 <Link to ='/login'>
-                  <button className="w-full text-white bg-secondary-100 hover:bg-secondary-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                  <button className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                     Cancelar
                   </button>
                 </Link>
@@ -90,8 +84,6 @@ function ForgotPassword(user, data) {
                 
             </form>
           </div>
-        </div>
-      </div>
     </section>
   )
 }

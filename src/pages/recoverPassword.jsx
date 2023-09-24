@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import ForgotPassword from '../components/ForgotPassword/forgotPassword'
+import RecoverPasswordComponent from "../components/RecoverPassword/RecoverPasswordComponent";
 import Footer from '../components/Footer/Footer'
 import { getToken } from "../services/Auth";
 
-function forgot() {
+function recoverPassword() {
   const [user, setUser] = useState(null);
   const token = getToken();
   const config = {
@@ -30,13 +31,11 @@ function forgot() {
     fetchData();
   }, []);
 
-
   return (
     <div>
-        <ForgotPassword user={user}/>
-        <Footer/>
+      <RecoverPasswordComponent user={user}/>
     </div>
-  )
+  );
 }
 
-export default forgot
+export default recoverPassword;
