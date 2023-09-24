@@ -9,6 +9,8 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { BsCamera } from "react-icons/bs";
+import { Tooltip } from "react-tooltip";
 
 function ProfileBody({ data, user }) {
   const profileOptions = {
@@ -90,6 +92,46 @@ function ProfileBody({ data, user }) {
     const options = { year: "numeric", month: "long" };
     return new Date(timestamp).toLocaleDateString("es-ES", options);
   }
+  const [isEditingImage, setIsEditingImage] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageUpload = async () => {
+    if (selectedImage) {
+      if (selectedImage) {
+        // Crear un objeto FormData
+        const formData = new FormData();
+        formData.append("imageProfile", selectedImage);
+
+        try {
+          // Realizar la solicitud POST para cargar la imagen
+          const response = await fetch(
+            `http://localhost:3001/users/${getDataUser().id}/imageProfile`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          if (response.ok) {
+            // La imagen se ha cargado correctamente
+            // Actualizar la imagen de perfil en tu estado
+            // Cambiar setIsEditingImage(false) para ocultar el formulario de carga
+            setIsEditingImage(false);
+            window.location.reload();
+          } else {
+            // Manejar el caso en que la carga de imagen falla
+            console.error("Error al cargar la imagen");
+          }
+        } catch (error) {
+          // Manejar errores de red u otros errores
+          console.error("Error de red:", error);
+        }
+      }
+    }
+  };
+  const handleEditImageClick = () => {
+    setIsEditingImage(true);
+  };
 
   return (
     <div>
@@ -118,7 +160,7 @@ function ProfileBody({ data, user }) {
           </div>
         )}
       </div>
-      <div className="container mx-auto pb-5 mb-14 mt-8 animate-fade animate-once animate-duration-500 animate-delay-0 animate-ease-linear">
+      <div className="container mx-auto pb-5 mb-14 mt-2 animate-fade animate-once animate-duration-500 animate-delay-0 animate-ease-linear">
         <ModalEditUser
           isOpen={isOpenModalEdit}
           closeModal={closeModalEdit}
@@ -129,7 +171,7 @@ function ProfileBody({ data, user }) {
           <div className="w-full md:w-3/12 md:mx-2">
             {/*TARJETA IZUIQERDA. */}
             <div className="bg-white p-3 border-t border-r border-b border-l ">
-              <div className="image overflow-hidden flex justify-center">
+              <div className=" flex justify-center items-center">
                 <img
                   className="border-solid rounded-full h-64 w-64"
                   src={
@@ -140,9 +182,47 @@ function ProfileBody({ data, user }) {
                   alt="Imagen de Perfil"
                 />
               </div>
-              <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">
-                @{userData.username}
-              </h1>
+
+              <div className="flex justify-between">
+                <h1 className="text-gray-900 font-bold text-xl leading-8 my-1">
+                  @{userData.username}
+                </h1>
+                {canEdit && (
+                  <button
+                    data-tooltip-id="my-tooltip-agregar-imagen"
+                    data-tooltip-content="Agregar imagen de perfil"
+                    onClick={handleEditImageClick}
+                    className="bg-transparent p-2 flex justify-end items-center text-black rounded-full hover:bg-gray-300"
+                  >
+                    <BsCamera size={18} />
+                  </button>
+                )}
+
+                <Tooltip
+                  id="my-tooltip-agregar-imagen"
+                  style={{
+                    backgroundColor: "rgba(141, 61, 58, 0.8)",
+                    color: "#fff",
+                  }}
+                />
+              </div>
+              {isEditingImage ? (
+                <div className="flex flex-col items-center space-y-1 m-1 p-1 bg-gray-100 rounded-lg animate-fade-down animate-duration-200">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setSelectedImage(e.target.files[0])}
+                    className="border border-gray-300 w-5/6"
+                  />
+                  <button
+                    onClick={handleImageUpload}
+                    className="bg-secondary-100 w-3/6 hover:opacity-90 text-white font-bold py-1 rounded"
+                  >
+                    Cargar imagen
+                  </button>
+                </div>
+              ) : null}
+
               {user.isVerify ? null : (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex flex-col justify-center">
                   <strong className="font-bold text-center">
@@ -286,22 +366,20 @@ function ProfileBody({ data, user }) {
                     <span className="tracking-wide">Ultimos Trades</span>
                   </div>
                   <ul className="list-inside space-y-2">
-                    <li>
-                      <div>Trade 1</div>
-                      <div className="text-gray-500 text-xs">Julio 2023</div>
-                    </li>
-                    <li>
-                      <div>Trade 2</div>
-                      <div className="text-gray-500 text-xs">Julio 2023</div>
-                    </li>
-                    <li>
-                      <div>Trade 3</div>
-                      <div className="text-gray-500 text-xs">Julio 2023</div>
-                    </li>
-                    <li>
-                      <div>Trade 4</div>
-                      <div className="text-gray-500 text-xs">Julio 2023</div>
-                    </li>
+                    {userData.tradesFinished.length > 0 ? (
+                      userData.tradesFinished.slice(-5).map((trade) => (
+                        <li key={trade._id} className="text-sm">
+                          <p>{trade.titlePost}</p>
+                          <p className="text-xs text-gray-500">
+                            {formatTimestamp(trade.createdAt)}
+                          </p>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="text-xs text-gray-500">
+                        El usuario no ha realizado ningun trade...{" "}
+                      </li>
+                    )}
                   </ul>
                 </div>
                 <div>

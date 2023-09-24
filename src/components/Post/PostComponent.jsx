@@ -4,6 +4,8 @@ import axios from "axios";
 import { SocketContext } from "../../contexts/socketContext";
 import { getIdUser } from "../../services/Auth";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 function PostComponent({ post }) {
   const socket = useContext(SocketContext);
@@ -15,6 +17,7 @@ function PostComponent({ post }) {
   const [isPostAvailable, setIsPostAvailable] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+  console.log();
   useEffect(() => {
     setIsPostAvailable(post.currentState === "disponible");
     if (socket) {
@@ -144,7 +147,7 @@ function PostComponent({ post }) {
       );
 
       const msgConfirmation =
-        "✅ La solicitud de compra ha sido enviada con exito";
+        "✅ - La solicitud de compra ha sido enviada con exito";
       const msgConfirmationHTML = (
         <p>
           <b>{msgConfirmation}</b>
@@ -183,12 +186,21 @@ function PostComponent({ post }) {
         console.error("Error al obtener las solicitudes del comprador:", error);
       });
   };
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
   function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = date.toLocaleDateString(undefined, options);
-    return formattedDate;
+    const formattedDate = format(new Date(dateString), "MMMM d, yyyy", {
+      locale: es,
+    });
+    const formattedMonth = capitalizeFirstLetter(formattedDate.split(" ")[0]);
+    const finalFormattedDate = `${formattedMonth} ${formattedDate
+      .split(" ")
+      .slice(1)
+      .join(" ")}`;
+
+    return finalFormattedDate;
   }
 
   function cantidadImagenes(photoCount) {
@@ -207,10 +219,10 @@ function PostComponent({ post }) {
   }
 
   return (
-    <div className="bg-white mt-2">
+    <div className="bg-white overflow-hidden my-36">
       {isPostAvailable ? (
-        <div className="pt-6">
-          <div className="mx-auto mt-6 sm:px-6 flex flex-wrap gap-x-8 lg:px-8 w-screen justify-center items-center">
+        <div className="">
+          <div className="mx-auto pb-4 sm:px-6 flex flex-wrap gap-x-8 lg:px-8 w-screen justify-center items-center border-b border-gray-200">
             {post.photos.map((photo, index) => (
               <img
                 key={index}
@@ -223,18 +235,18 @@ function PostComponent({ post }) {
             ))}
           </div>
 
-          <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+          <div className="mx-auto font-custom max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
             <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                Nombre del producto:
-              </h1>
               <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
                 {post.title}
               </h1>
             </div>
 
             <div className="mt-4 lg:row-span-3 lg:mt-0">
-              <h2 className="text-2xl">Informacion del producto.</h2>
+              <h2 className="text-2xl text-center">
+                Informacion del producto.
+              </h2>
+
               <p className="text-3xl tracking-tight text-green-600">
                 ${post.price}
               </p>
@@ -267,7 +279,9 @@ function PostComponent({ post }) {
                     setIsConfirming(true);
                   }}
                   type="submit"
-                  className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary-100 px-8 py-3 text-base font-medium text-white hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="mt-4 flex w-full items-center justify-center rounded-md border border-transparent
+                   bg-secondary-100 px-8 py-3 text-xl font-bold text-white hover:opacity-90 focus:outline-none 
+                   focus:ring-2 focus:ring-secondary-600 focus:ring-offset-2"
                   disabled={isButtonDisabled}
                 >
                   Comprar
@@ -279,7 +293,7 @@ function PostComponent({ post }) {
                       handleConfirmClick();
                       setIsConfirming(false);
                     }}
-                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 mr-2"
+                    className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded mt-4 mr-2"
                     disabled={isButtonDisabled}
                   >
                     Confirmar compra
@@ -298,10 +312,10 @@ function PostComponent({ post }) {
 
             <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
               <div>
-                <h2 className="text-2xl tracking-tight">Descripcion:</h2>
-                <div className="space-y-6">
-                  <p className="text-base text-gray-900">{post.description}</p>
-                </div>
+                <h2 className="text-xl tracking-tight">Descripcion:</h2>
+                <p className="text-base mt-1 text-gray-900">
+                  {post.description}
+                </p>
               </div>
             </div>
           </div>

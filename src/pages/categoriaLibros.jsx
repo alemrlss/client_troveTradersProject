@@ -40,7 +40,6 @@ function categoriaLibros() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <LibrosComponent posts={posts} user={user} />}
-      <Footer />
     </div>
   );
 }

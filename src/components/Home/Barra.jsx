@@ -65,7 +65,7 @@ function Barra() {
               className="hover:underline"
               aria-current="page"
             >
-              Deporte
+              Deportes
             </Link>
           </li>
           <li>

@@ -40,7 +40,6 @@ function categoriaAntiguedades() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <AntiguedadesComponent posts={posts} user={user} />}
-      <Footer />
     </div>
   );
 }

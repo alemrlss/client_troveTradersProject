@@ -40,7 +40,7 @@ function categoriaDeporte() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <DeporteComponent posts={posts} user={user} />}
-      <Footer />
+    
     </div>
   );
 }

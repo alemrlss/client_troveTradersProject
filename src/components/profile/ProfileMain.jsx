@@ -5,6 +5,7 @@ import ProfileBody from "./ProfileBody";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import { Link } from "react-router-dom";
+
 function ProfileMain({ data, user }) {
   //^  Contexto.
   const socket = useContext(SocketContext);

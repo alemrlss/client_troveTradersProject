@@ -23,6 +23,7 @@ import RequestsComponent from "./RequestsComponent";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom"; // Importa useLocation
 import { Tooltip } from "react-tooltip";
+import { Navigate } from "react-router-dom"; // Asegúrate de importar el Navigate correcto según tu biblioteca de enrutamiento
 
 function NavBarr() {
   //^  Contexto.
@@ -122,7 +123,8 @@ function NavBarr() {
   //?Estados de las notificaciones
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isOpenRequest, setIsOpenRequest] = useState(false);
+  const [isOpenTrade, setIsOpenTrade] = useState(false);
   //?Estados de las requests
   const [requests, setRequests] = useState([]);
 
@@ -156,6 +158,69 @@ function NavBarr() {
   const handleMenuItemClick = () => {
     setMenuOpen(false); // Cerrar el menú móvil cuando se hace clic en un elemento
   };
+
+  const handleAccept = async (request) => {
+    try {
+      await axios.post(
+        `http://localhost:3001/users/${idUser}/requests/${request._id}/accept`
+      );
+      await axios.post("http://localhost:3001/notifications", {
+        sellerId: request.buyerID,
+        message: `🤩 El vendedor ${request.nameSeller} ha aceptado tu solicitud de compra por el articulo: ${request.titlePost}. Click para ir al trade`,
+        target: `/trade/${request._id}`,
+      });
+
+      await axios.put(`http://localhost:3001/posts/${request.postID}`, {
+        newState: "acuerdo",
+      });
+
+      sendNotification(
+        request.buyerID,
+        `🤩 El vendedor ${request.nameSeller} ha aceptado tu solicitud de compra por el articulo: ${request.titlePost}. Click para ir al trade`,
+        "bg-green-200",
+        `/trade/${request._id}`
+      );
+      setIsOpenRequest(!isOpenRequest);
+    } catch (error) {
+      // Manejo de errores si la solicitud falla
+      console.error("Error al aceptar la solicitud:", error);
+    }
+  };
+
+  const handleReject = async (request) => {
+    console.log(request);
+    try {
+      await axios.delete(
+        `http://localhost:3001/users/${idUser}/requests/${request._id}`
+      );
+      const updatedRequests = requests.filter((r) => r._id !== request._id);
+      setRequests(updatedRequests);
+
+      await axios.post("http://localhost:3001/notifications", {
+        sellerId: request.buyerID,
+        message: `😭 El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost} 😭`,
+        target: `/home`,
+      });
+      sendNotification(
+        request.buyerID,
+        `😭 El vendedor ${request.nameSeller} ha rechazado tu solicitud por la compra del articulo: ${request.titlePost} 😭`,
+        "bg-pink-400",
+        "/home"
+      );
+    } catch (error) {
+      console.error("Error al eliminar la solicitud:", error);
+    }
+  };
+
+  //Funcion para dar formato a la hora
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString(undefined, options);
+
+    return formattedDate;
+  }
 
   return (
     <div>
@@ -281,6 +346,12 @@ function NavBarr() {
                 id={idUser}
                 openModal={openModalTrades}
                 setTrades={setTrades}
+                isOpenTrade={isOpenTrade}
+                setIsOpenTrade={setIsOpenTrade}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                isOpenRequest={isOpenRequest}
+                setIsOpenRequest={setIsOpenRequest}
               />
             </div>
             <div
@@ -289,11 +360,15 @@ function NavBarr() {
             >
               <RequestsComponent
                 id={idUser}
-                openModal={openModalRequests}
                 setRequests={setRequests}
+                setIsOpenRequest={setIsOpenRequest}
+                isOpenRequest={isOpenRequest}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                isOpenTrade={isOpenTrade}
+                setIsOpenTrade={setIsOpenTrade}
               />
             </div>
-
             <div
               data-tooltip-id="my-tooltip-notificaciones"
               data-tooltip-content="Notificaciones"
@@ -303,6 +378,10 @@ function NavBarr() {
                 setNotifications={setNotifications}
                 setIsOpen={setIsOpen}
                 isOpen={isOpen}
+                isOpenRequest={isOpenRequest}
+                setIsOpenRequest={setIsOpenRequest}
+                isOpenTrade={isOpenTrade}
+                setIsOpenTrade={setIsOpenTrade}
               />
             </div>
             <div
@@ -343,12 +422,6 @@ function NavBarr() {
                 openModal={openModalTrades}
                 setTrades={setTrades}
               />
-              <RequestsComponent
-                className="text-black"
-                id={idUser}
-                openModal={openModalRequests}
-                setRequests={setRequests}
-              />
 
               <NotificationsComponent
                 className="text-black"
@@ -386,28 +459,119 @@ function NavBarr() {
           </div>
         )}
       </nav>
-
       {/* Notifications */}
       {isOpen && (
-        <div className="notification-menu absolute top-20 right-0 text-black bg-white border border-gray-300 rounded-lg shadow-md p-4 w-80 max-h-60 overflow-y-auto">
+        <div className="notification-menu absolute top-15 right-0 text-black bg-white border border-gray-300 rounded-lg shadow-md p-4 w-80 max-h-60 overflow-y-auto z-50">
           <h2 className="text-xl font-semibold mb-4">Notificaciones</h2>
           <ul className="divide-y divide-gray-300">
-            {notifications.map((notification) => (
-              <li
-                className={`p-4 m-1 ${
-                  notification.read
-                    ? "bg-gray-100 text-gray-700"
-                    : "bg-orange-100 text-orange-700"
-                } rounded-md transition duration-300 ease-in-out transform hover:scale-105`}
-                key={notification._id}
-                onClick={() => {
-                  readNotification(notification._id, idUser);
-                  setIsOpen(false);
-                }}
-              >
-                <Link to={notification.target}>{notification.message}</Link>
+            {notifications.length === 0 ? ( // Verifica si no hay notificaciones
+              <li className="p-4 m-1 bg-gray-100 text-gray-700 rounded-md">
+                No hay notificaciones
               </li>
-            ))}
+            ) : (
+              // Mapea las notificaciones si hay alguna
+              notifications.map((notification) => (
+                <li
+                  className={`p-4 m-2 text-xs ${
+                    notification.read
+                      ? "bg-gray-100 text-gray-700"
+                      : "bg-orange-100 text-orange-700"
+                  } rounded-md transition duration-300 ease-in-out transform hover:scale-105`}
+                  key={notification._id}
+                  onClick={() => {
+                    readNotification(notification._id, idUser);
+                    setIsOpen(false);
+                  }}
+                >
+                  <Link to={notification.target}>{notification.message}</Link>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      )}
+
+      {isOpenRequest && (
+        <div className="notification-menu absolute top-15 right-0 text-black bg-white border border-gray-300 rounded-lg shadow-md p-4 w-full md:w-80 max-h-60 overflow-y-auto z-50">
+          <h2 className="text-xl font-semibold mb-4">Solicitudes</h2>
+          <ul className="divide-y divide-gray-300">
+            {requests.length === 0 ? (
+              <li className="p-4 m-1 bg-gray-100 text-gray-700 rounded-md">
+                No hay solicitudes
+              </li>
+            ) : (
+              requests.map((request) => (
+                <div
+                  key={request._id}
+                  className="p-2 mb-4 border rounded flex flex-col md:flex-col md:items-center"
+                >
+                  <div className="mb-4 md:mb-0 md:mr-4 text-xs">
+                    <p className="mb-2"> {request.message}</p>
+                  </div>
+                  <div className="flex">
+                    <button
+                      className="px-2 py-1 md:mb-0 md:mr-2 text-xs text-white bg-green-500 rounded hover:bg-green-600"
+                      onClick={() => {
+                        handleAccept(request);
+                      }}
+                    >
+                      Aceptar
+                    </button>
+                    <button
+                      className="px-2 py-1 text-xs rounded-md text-white bg-red-500  hover:bg-red-600"
+                      onClick={() => {
+                        handleReject(request);
+                      }}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </ul>
+        </div>
+      )}
+      {isOpenTrade && (
+        <div className="notification-menu absolute top-15 right-0 text-black bg-white border border-gray-300 rounded-lg shadow-md p-4 w-full md:w-80 max-h-60 overflow-y-auto z-50">
+          <h2 className="text-xl font-semibold mb-4">Trades en ejecucion</h2>
+          <ul className="divide-y divide-gray-300">
+            {trades.length === 0 ? (
+              <li className="p-4 m-1 bg-gray-100 text-gray-700 rounded-md">
+                No hay trades en ejecucion
+              </li>
+            ) : (
+              trades.map((trade) => (
+                <div
+                  key={trade._id}
+                  className="p-2 mb-4 border rounded flex flex-col md:flex-col md:items-center"
+                >
+                  <div>
+                    <p className="font-bold text-sm">{trade.titlePost}</p>
+                    <div className="flex justify-between space-x-4">
+                      <p className="text-gray-500 text-xs">
+                        Vendedor: {trade.nameSeller}
+                      </p>
+                      <p className="text-gray-500 text-xs">
+                        Comprador: {trade.nameBuyer}
+                      </p>
+                    </div>
+                    <div className=" flex justify-end mx-2">
+                      <button
+                        onClick={() => {
+                          setIsOpenTrade(!isOpenTrade);
+                          navigate(`/trade/${trade._id}`);
+                          window.location.reload();
+                        }}
+                        className=" bg-orange-400 hover:bg-green-600 text-white font-bold py-1 px-2 rounded my-1"
+                      >
+                        Ver Trade
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </ul>
         </div>
       )}

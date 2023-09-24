@@ -8,16 +8,19 @@ function CreatePost() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [files, setFiles] = useState([]);
+  const [errorFile, setErrorFile] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleFileChange = (event) => {
     const selectedFiles = event.target.files;
     if (selectedFiles.length > 4) {
-      setError("Se permiten un máximo de 4 imágenes");
+      setErrorFile("Se permiten un máximo de 4 imágenes");
+    } else if (selectedFiles.length < 2) {
+      setErrorFile("Se requiere al menos dos imagenes");
     } else {
       setFiles(selectedFiles);
-      setError("");
+      setErrorFile("");
 
       // Mostrar los nombres de los archivos seleccionados
       const fileNames = Array.from(selectedFiles).map((file) => file.name);
@@ -28,9 +31,52 @@ function CreatePost() {
   };
 
   const handleSubmit = async (event) => {
+    setError("");
+    setErrorFile("");
+    setSuccessMessage("");
     event.preventDefault();
+
+    if (files.length === 0) {
+      setErrorFile("Debes seleccionar al menos una imagen");
+      return;
+    }
+
+    if (files.length > 4) {
+      setErrorFile("Se permiten un máximo de 4 imágenes");
+      return;
+    }
+
+    if (files.length < 2) {
+      setErrorFile("Se requieren al menos dos imágenes");
+      return;
+    }
+    if (!category || category === "index") {
+      setError("Selecciona una categoría válida");
+      return;
+    }
+
+    if (!title || title.length < 15 || title.length > 40) {
+      setError("El título debe tener entre 15 y 40 caracteres");
+      return;
+    }
+
+    if (!description || description.length < 15 || description.length > 100) {
+      setError("La descripción debe tener entre 15 y 100 caracteres");
+      return;
+    }
+
+    if (isNaN(price) || parseFloat(price) < 0) {
+      setError("El precio debe ser un número no negativo");
+      return;
+    }
+
     if (files.length > 4) {
       setError("Se permiten un máximo de 4 imágenes");
+      return;
+    }
+
+    if (files.length < 2) {
+      setError("Se permiten un mínimo de 2 imágenes");
       return;
     }
 
@@ -57,12 +103,14 @@ function CreatePost() {
       if (response.ok) {
         // La creación del post fue exitosa
         console.log("Post creado exitosamente");
-        // Restablecer los campos del formulario
         setTitle("");
         setDescription("");
         setPrice("");
+        setCategory(""); // Reiniciar el campo de selección de categoría
         setFiles([]);
         setSuccessMessage("Publicación creada correctamente");
+        const fileNamesElement = document.querySelector(".file-names");
+        fileNamesElement.textContent = ``;
       } else {
         // Hubo un error al crear el post
         console.error("Error al crear el post");
@@ -72,6 +120,7 @@ function CreatePost() {
     }
     // Resto del código de manejo del formulario
   };
+
   const [expandedStep, setExpandedStep] = useState(null);
 
   const toggleStep = (stepIndex) => {
@@ -103,7 +152,7 @@ function CreatePost() {
   ];
 
   return (
-    <div className="mx-10 mt-8 flex">
+    <div className="mx-10 py-16  flex">
       <div className="flex-1 bg-white p-6 rounded-lg  mr-4">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -157,14 +206,14 @@ function CreatePost() {
               onChange={(event) => setCategory(event.target.value)}
               required
             >
-              <option value="">Selecciona una categoría</option>
+              <option value="index">Selecciona una categoría</option>
               <option value="antiguedades">Antiguedades</option>
               <option value="musica">Música</option>
               <option value="cartas">Cartas</option>
-              <option value="tecnología">Tecnología</option>
+              <option value="tecnologia">Tecnología</option>
               <option value="comics">Comics</option>
               <option value="juguetes">Juguetes</option>
-              <option value="deporte">Deporte</option>
+              <option value="deportes">Deportes</option>
               <option value="libros">Libros</option>
               <option value="otros">Otros</option>
             </select>
@@ -203,16 +252,18 @@ function CreatePost() {
               <input
                 type="file"
                 id="images"
+                name="images"
                 multiple
                 onChange={handleFileChange}
                 required
-                className="hidden" // Oculta el input nativo
+                className="hidden"
               />
             </label>
             <div className="file-names text-xs mt-2"></div>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
+            {errorFile && <p className="text-red-500 mt-2">{errorFile}</p>}
           </div>
 
+          {error && <p className="text-red-500 mt-2">{error}</p>}
           <div className="text-right">
             <button
               type="submit"

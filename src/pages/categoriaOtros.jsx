@@ -40,7 +40,7 @@ function categoriaOtros() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <OtrosComponent posts={posts} user={user} />}
-      <Footer />
+
     </div>
   );
 }

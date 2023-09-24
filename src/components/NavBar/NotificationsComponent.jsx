@@ -7,6 +7,10 @@ function NotificationsComponent({
   setNotifications,
   isOpen,
   setIsOpen,
+  isOpenRequest,
+  setIsOpenRequest,
+  isOpenTrade,
+  setIsOpenTrade,
 }) {
   const loadNotifications = () => {
     // Realiza la solicitud al servidor para obtener las notificaciones
@@ -18,6 +22,9 @@ function NotificationsComponent({
         //Reversed: para que las notificaciones más recientes aparezcan primero
         const reversed = response.data.reverse();
         setNotifications(reversed);
+        console.log(isOpenRequest, isOpenTrade);
+        if (isOpenRequest) setIsOpenRequest(false);
+        if (isOpenTrade) setIsOpenTrade(false);
       })
       .catch((error) => {
         // Manejo de errores si la solicitud falla

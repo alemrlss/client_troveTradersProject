@@ -8,12 +8,10 @@ function Footer() {
           {/* Logo y Nombre de la Empresa */}
           <a
             href="/"
-            className="flex items-center mb-4 md:mb-0 text-secondary-200"
+            className="flex items-center mb-4 md:mb-0 text-secondary-100"
           >
-            <img src={logo} className="h-12 mr-3" alt="TroveTraders Logo" />
-            <span className="text-2xl font-semibold whitespace-nowrap dark:text-white">
-              TroveTraders
-            </span>
+            <img src={logo} className="h-20 mr-3" alt="TroveTraders Logo" />
+          
           </a>
 
           {/* Enlaces de Navegación */}

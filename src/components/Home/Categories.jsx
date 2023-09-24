@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import imgCategory from "../../assets/img/categories/1.jpg";
 import imgCategory2 from "../../assets/img/categories/2.jpg";
 import imgCategory3 from "../../assets/img/categories/3.jpg";
@@ -7,7 +6,9 @@ import imgCategory5 from "../../assets/img/categories/5.jpg";
 import imgCategory6 from "../../assets/img/categories/6.jpeg";
 import imgCategory7 from "../../assets/img/categories/7.jpeg";
 import imgCategory8 from "../../assets/img/categories/8.jpeg";
-import imgCategory9 from "../../assets/img/categories/9.png";
+import Slider from "react-slick";
+import { Tooltip } from "react-tooltip";
+import { useRef, useEffect } from "react";
 
 const callouts = [
   {
@@ -74,35 +75,78 @@ const callouts = [
     href: 'categoria/zapatos', 
   }*/
 ];
+const Categories = () => {
+  const sliderRef = useRef(null);
 
-export default function Categories() {
+  useEffect(() => {
+    console.log(sliderRef);
+    if (sliderRef.current) {
+      // Comienza el carrusel tan pronto como cargue la página
+    }
+  }, []);
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 8000,
+    autoplaySpeed: 8000,
+    cssEase: "linear",
+    pauseOnHover: false,
+    responsive: [
+      {
+        breakpoint: 640,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+    ],
+  };
+
   return (
-    <div className="">
-      fff
-      <div className="mx-auto max-w-5xl px-4 lg:px-8">
-        <div className="mx-auto py-4 lg:py-4">
-          <h2 className="text-2xl font-bold text-gray-900">Categorias</h2>
-
-          <div className="grid-cols-4 mt-6 grid lg:grid-cols-4 gap-x-6">
-            {callouts.map((callout) => (
-              <a href={callout.href} key={callout.id}>
-                <div className="mx-0 my-0">
-                  <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 shadow-2xl">
-                    <img
-                      src={callout.imageSrc}
-                      alt={callout.imageAlt}
-                      className="h-full w-full object-cover object-center"
-                    />
-                  </div>
-                  <p className="text-sm font-semibold justify-center mb-4">
-                    {callout.description}
-                  </p>
+    <div className="mb-2">
+      <div className="py-4 space-y-10 mx-10 bg-orange-40">
+        <h2 className="text-3xl font-bold text-gray-800">Categorias</h2>
+        <Slider {...settings} ref={sliderRef}>
+          {callouts.map((callout) => (
+            <div
+              data-tooltip-id="my-tooltip-category"
+              data-tooltip-content={callout.description}
+              key={callout.id}
+              className="hover:opacity-80 px-4"
+            >
+              <a href={callout.href}>
+                <div className="overflow-hidden flex justify-center">
+                  <img
+                    src={callout.imageSrc}
+                    alt={callout.imageAlt}
+                    className="w-52 h-60 rounded-lg"
+                  />
                 </div>
               </a>
-            ))}
-          </div>
-        </div>
+            </div>
+          ))}
+        </Slider>
       </div>
+      <Tooltip
+        id="my-tooltip-category"
+        style={{
+          backgroundColor: "rgba(209, 207, 207, 0.7)",
+          color: "#000000",
+          fontSize: "18px",
+          fontWeight: "bold",
+        }}
+      />
     </div>
   );
-}
+};
+
+export default Categories;

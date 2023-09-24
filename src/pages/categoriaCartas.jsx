@@ -40,7 +40,6 @@ function categoriaCartas() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <CartasComponent posts={posts} user={user} />}
-      <Footer />
     </div>
   );
 }

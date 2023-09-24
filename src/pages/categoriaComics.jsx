@@ -40,7 +40,6 @@ function categoriaComics() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <ComicsComponent posts={posts} user={user} />}
-      <Footer />
     </div>
   );
 }

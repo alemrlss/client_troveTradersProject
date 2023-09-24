@@ -40,7 +40,6 @@ function categoriaTecnologia() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <TecnologiaComponent posts={posts} user={user} />}
-      <Footer />
     </div>
   );
 }

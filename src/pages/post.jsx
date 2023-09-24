@@ -5,7 +5,6 @@ import { getIdUser } from "../services/Auth";
 import Loader from "../components/Loader/Loader";
 import PostComponent from "../components/Post/PostComponent";
 import axios from "axios";
-import Footer from "../components/Footer/Footer";
 
 function post() {
   // eslint-disable-next-line react-hooks/rules-of-hooks

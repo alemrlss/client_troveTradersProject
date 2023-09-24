@@ -35,6 +35,9 @@ export default {
       gridTemplateRows: {
         "[auto,auto,1fr]": "auto auto 1fr",
       },
+      fontFamily: {
+        custom: ["CustomFont", "mono"], // Cambia 'CustomFont' al nombre de tu fuente y 'sans' a la pila de fuentes de respaldo
+      },
     },
   },
   corePlugins: {

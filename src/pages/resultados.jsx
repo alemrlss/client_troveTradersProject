@@ -1,5 +1,5 @@
-import React from 'react'
-import ResultadosComponent from '../components/resultados/resultadosComponent';
+/* eslint-disable react-hooks/rules-of-hooks */
+import ResultadosComponent from "../components/resultados/resultadosComponent";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader/Loader";
@@ -40,7 +40,6 @@ function resultados() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && <ResultadosComponent posts={posts} user={user} />}
-      <Footer />
     </div>
   );
 }

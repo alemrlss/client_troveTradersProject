@@ -1,12 +1,13 @@
-import CrearProductoComponent from '../components/crearproducto/CrearProductoComponent'
-import Footer from "../components/Footer/Footer";
+import CrearProductoComponent from "../components/crearproducto/CrearProductoComponent";
+
+
+
 function CrearProducto() {
   return (
-  <div>
-        <CrearProductoComponent/>
-    
-  </div>
-  )
+    <div>
+      <CrearProductoComponent />
+    </div>
+  );
 }
 
-export default CrearProducto
+export default CrearProducto;

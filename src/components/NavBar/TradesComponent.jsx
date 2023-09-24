@@ -2,7 +2,17 @@
 
 import axios from "axios";
 import { AiOutlineTeam } from "react-icons/ai";
-function TradesComponent({ openModal, setTrades, id }) {
+function TradesComponent({
+  openModal,
+  setTrades,
+  id,
+  isOpenTrade,
+  setIsOpenTrade,
+  isOpen,
+  setIsOpen,
+  isOpenRequest,
+  setIsOpenRequest,
+}) {
   const getRequestsUser = async () => {
     try {
       const response = await axios.get(
@@ -11,7 +21,10 @@ function TradesComponent({ openModal, setTrades, id }) {
       const data = response.data;
 
       setTrades(data);
-      openModal();
+      setIsOpenTrade(!isOpenTrade);
+
+      if (isOpen) setIsOpen(false);
+      if (isOpenRequest) setIsOpenRequest(false);
     } catch (error) {
       console.error("Error al obtener las solicitudes:", error);
     }
