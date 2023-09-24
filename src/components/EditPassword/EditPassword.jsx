@@ -32,18 +32,22 @@ function EditPassword({user}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    const passwordValidation = validatePassword(formData.password, formData.newPassword, formData.confirmPassword);
 
-    if (formData.newPassword !== formData.confirmPassword) {
-      setError("La nueva contraseña no es identica.");
+    if (formData.password === "" || formData.newPassword === "" || formData.confirmPassword === "") {
+      setError("Por favor completa todos los campos.");
       return;
     }
-
-    const passwordValidation = validatePassword(formData.password, formData.newPassword, formData.confirmPassword);
 
     if (!passwordValidation.isPasswordValid || !passwordValidation.isNewPasswordValid || !passwordValidation.isConfirmPasswordValid) {
       setError(
         "Las contraseñas deben contener al menos 8 caracteres y contener letras y números."
       );
+      return;
+    }
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      setError("La nueva contraseña no es identica.");
       return;
     }
 
@@ -59,18 +63,18 @@ function EditPassword({user}) {
       );
       if (response.data === true) {
         setSuccess('La contraseña ha sido cambiada con exito');
-      } else {
-        setError("Ha sucedido un error. Intenta de nuevo.");
+      } 
+      if (response.data === false) {
+        setError("Contraseña incorrecta. Por favor, intenta de nuevo.");
       }
     } catch (error) {
       if (error.response) {
-        console.error('Respuesta del Server:', error.response.data);
+        if (error.response.status === 401) {
+          console.log(error);
+        } else {
+          console.log(error);
+        }
       }
-    }
-
-    if (formData.password === "" || formData.newPassword === "" || formData.confirmPassword === "") {
-      setError("Por favor completa todos los campos.");
-      return;
     }
   };
 
