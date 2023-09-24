@@ -145,7 +145,7 @@ function ProfileBody({ data, user }) {
             </p>
 
             {emailSend && (
-              <p className="text-green-600 font-bold text-lg py-2 ml-2 animate-fade animate-once animate-duration-500 animate-delay-0 animate-ease-linear">
+              <p className="text-secondary-100 underline font-bold text-lg py-2 ml-2 animate-fade animate-once animate-duration-500 animate-delay-0 animate-ease-linear">
                 ¡Correo enviado con éxito a: {user.email}!
               </p>
             )}
