@@ -1,13 +1,18 @@
-import React from 'react'
-import { useState } from 'react';
-import axios from 'axios';
-import { getDataUser } from '../../services/Auth';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-function EditPassword({user}) {
-  const idUser = getDataUser().id
+function RecoverPasswordComponent(user) {
+    const { token } = useParams();
+    const navigate = useNavigate();
+    ///????
+    const [verificationStatus, setVerificationStatus] = useState("");
+    useEffect(() => {
+    // Llamar a la función para verificar el token de verificación en el backend
+    handleSubmit(token);
+  }, [token]); // Agregar token como dependencia para que se ejecute cuando cambie
 
   const [formData, setformData] = useState({
-    password: "",
     newPassword: "",
     confirmPassword: ""
   });
@@ -15,69 +20,64 @@ function EditPassword({user}) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState('');
 
-  const validatePassword = (password,newPassword,confirmPassword) => {
+  const validatePassword = (newPassword,confirmPassword) => {
     // Validación de contraseña utilizando una expresión regular
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-    const isPasswordValid = passwordRegex.test(password);
     const isNewPasswordValid = passwordRegex.test(newPassword);
     const isConfirmPasswordValid = passwordRegex.test(confirmPassword);
     return {
-      isPasswordValid,
       isNewPasswordValid,
       isConfirmPasswordValid,
     };
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    const passwordValidation = validatePassword(formData.password, formData.newPassword, formData.confirmPassword);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  const passwordValidation = validatePassword(formData.newPassword, formData.confirmPassword);
 
-    if (formData.password === "" || formData.newPassword === "" || formData.confirmPassword === "") {
-      setError("Por favor completa todos los campos.");
-      return;
-    }
+  if (formData.newPassword === "" || formData.confirmPassword === "") {
+    setError("Por favor completa todos los campos.");
+    return;
+  }
 
-    if (!passwordValidation.isPasswordValid || !passwordValidation.isNewPasswordValid || !passwordValidation.isConfirmPasswordValid) {
-      setError(
-        "Las contraseñas deben contener al menos 8 caracteres y contener letras y números."
-      );
-      return;
-    }
+  if (!passwordValidation.isNewPasswordValid || !passwordValidation.isConfirmPasswordValid) {
+    setError(
+      "Las contraseñas deben contener al menos 8 caracteres y contener letras y números."
+    );
+    return;
+  }
 
-    if (formData.newPassword !== formData.confirmPassword) {
-      setError("La nueva contraseña no es identica.");
-      return;
-    }
+  if (formData.newPassword !== formData.confirmPassword) {
+    setError("La nueva contraseña debe ser identica.");
+    return;
+  }
 
-    try {
-      const response = await axios.post(
-        `http://localhost:3001/auth/edit-password/${user._id}`, 
-        {
-          id: user._id,
-          password: formData.password,
-          newPassword: formData.newPassword,
-          confirmPassword: formData.confirmPassword,
-        }
-      );
-      if (response.data === true) {
-        setSuccess('La contraseña ha sido cambiada con exito');
-      } 
-      if (response.data === false) {
-        setError("Contraseña incorrecta. Por favor, intenta de nuevo.");
+  try {
+    const response = await axios.post(
+      `http://localhost:3001/auth/edit-password/${user._id}`, 
+      {
+        id: user._id,
+        newPassword: formData.newPassword,
+        confirmPassword: formData.confirmPassword,
       }
-    } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          console.log(error);
-        } else {
-          console.log(error);
-        }
+    );
+    if (response.data === true) {
+      setSuccess('La contraseña ha sido cambiada con exito');
+    } 
+    if (response.data === false) {
+      setError("Contraseña incorrecta. Por favor, intenta de nuevo.");
+    }
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status === 401) {
+        console.log(error);
+      } else {
+        console.log(error);
       }
     }
-  };
-
+  }
+};
   return (
     <section className="bg-logo-100 min-h-screen flex items-center justify-center">
     <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg ">
@@ -87,23 +87,6 @@ function EditPassword({user}) {
         </h2>
       </div>
       <form className="mt-6" onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 text-sm font-medium"
-          >
-            Ingresa la ultima contraseña:
-          </label>
-          <input
-            name="password"
-            type="password"
-            className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
-            placeholder="Ultima contraseña"
-            required
-            value={formData.password}
-            onChange={(e) => setformData({ ...formData, password: e.target.value })}
-          />
-        </div>
         <div className="mb-4">
           <label
             htmlFor="newPassword"
@@ -157,5 +140,4 @@ function EditPassword({user}) {
   </section>
   ) 
 }
-
-export default EditPassword
+export default RecoverPasswordComponent

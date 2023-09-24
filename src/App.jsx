@@ -11,7 +11,6 @@ import {
   TRADE,
   EMAILVERIFICATION,
   CREARPRODUCTO,
-  LANDING,
   VERIFYACCOUNT,
   ANTIGUEDADES,
   MUSICA,
@@ -22,12 +21,12 @@ import {
   DEPORTE,
   LIBROS,
   OTROS,
+  RECOVERPASSWORD,
   FORGOTPASSWORD,
   EDITPASSWORD,
   RESULTADO,
   MISPUBLICACIONES,
 } from "./routes/paths";
-import Landing from "./pages/landing";
 import Login from "./pages/login";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
@@ -39,7 +38,8 @@ import PublicRoute from "./components/router/PublicRoute";
 import PrivateRoute from "./components/router/PrivateRoute";
 import Register from "./pages/register";
 import EditPassword from "./pages/editPassword";
-import Forgot from "./pages/forgot";
+import ForgotPassword from "./pages/forgotPassword";
+import RecoverPassword from "./pages/recoverPassword";
 import VerifyAccount from "./pages/verifyAccount";
 import CrearProducto from "./pages/crearproducto";
 import CategoriaAntiguedades from "./pages/categoriaAntiguedades";
@@ -66,10 +66,10 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<PublicRoute />}>
-              <Route path={LANDING} element={<Landing />} />
               <Route path={LOGIN} element={<Login />} />
               <Route path={REGISTER} element={<Register />} />
-              <Route path={FORGOTPASSWORD} element={<Forgot />} />
+              <Route path={FORGOTPASSWORD} element={<ForgotPassword />} />
+              <Route path={`${RECOVERPASSWORD}/:token/test`} element={<RecoverPassword />} />
             </Route>
 
             <Route path="/" element={<PrivateRoute />}>
