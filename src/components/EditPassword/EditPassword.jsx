@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
 import { getDataUser } from '../../services/Auth';
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
+
 
 function EditPassword({user}) {
   const idUser = getDataUser().id
@@ -14,6 +16,12 @@ function EditPassword({user}) {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   const validatePassword = (password,newPassword,confirmPassword) => {
     // Validación de contraseña utilizando una expresión regular
@@ -87,7 +95,7 @@ function EditPassword({user}) {
         </h2>
       </div>
       <form className="mt-6" onSubmit={handleSubmit}>
-        <div className="mb-4">
+        <div className="relative mb-4">
           <label
             htmlFor="password"
             className="block text-gray-700 text-sm font-medium"
@@ -96,13 +104,20 @@ function EditPassword({user}) {
           </label>
           <input
             name="password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
             placeholder="Ultima contraseña"
             required
             value={formData.password}
             onChange={(e) => setformData({ ...formData, password: e.target.value })}
           />
+          <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-2 top-9 text-gray-600 hover:text-gray-800"
+            >
+              {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+          </button>
         </div>
         <div className="mb-4">
           <label
@@ -113,7 +128,7 @@ function EditPassword({user}) {
           </label>
           <input
             name="newPassword"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
             placeholder="Nueva Contraseña"
             required
@@ -130,7 +145,7 @@ function EditPassword({user}) {
           </label>
           <input
             name="confirmPassword"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
             placeholder="Nueva Contraseña"
             value={formData.confirmPassword}

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
+
 
 function RecoverPasswordComponent(user) {
     const { token } = useParams();
@@ -19,6 +21,11 @@ function RecoverPasswordComponent(user) {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const validatePassword = (newPassword,confirmPassword) => {
     // Validación de contraseña utilizando una expresión regular
@@ -87,7 +94,7 @@ const handleSubmit = async (e) => {
         </h2>
       </div>
       <form className="mt-6" onSubmit={handleSubmit}>
-        <div className="mb-4">
+        <div className="relative mb-4">
           <label
             htmlFor="newPassword"
             className="block text-gray-700 text-sm font-medium"
@@ -96,13 +103,20 @@ const handleSubmit = async (e) => {
           </label>
           <input
             name="newPassword"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
             placeholder="Nueva Contraseña"
             required
             value={formData.newPassword}
             onChange={(e) => setformData({ ...formData, newPassword: e.target.value })}
           />
+          <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-11 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+              >
+                {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+          </button>
         </div>
         <div className="mb-4">
           <label
