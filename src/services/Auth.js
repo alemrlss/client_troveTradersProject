@@ -14,7 +14,7 @@ export const loginBackend = async (email, password) => {
       localStorage.setItem("accessToken", token);
       return {
         status: response.status,
-        message: "LOGGUED!",
+        message: "Conectado!",
       };
     }
   } catch (error) {
@@ -22,13 +22,13 @@ export const loginBackend = async (email, password) => {
       //PASSWORD INVALID
       return {
         status: error.response.data.statusCode,
-        message: "PASSWORD INVALID",
+        message: "Contraseña Incorrecta",
       };
     } else if (error.response.data.statusCode === 404) {
       //USER NOT FOUND
       return {
         status: error.response.data.statusCode,
-        message: "USER NOT FOUND",
+        message: "El usuario no ah sido encontrado.",
       };
     }
   }
