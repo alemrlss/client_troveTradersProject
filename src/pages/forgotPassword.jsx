@@ -34,7 +34,6 @@ function forgotPassword() {
   return (
     <div>
         <ForgotPassword user={user}/>
-        <Footer/>
     </div>
   )
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
@@ -6,15 +7,16 @@ import { useState, useContext, useEffect } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import { Link } from "react-router-dom";
 import Categories from "./Categories";
-import Panel from "./Panel";
 import Carousel from "./Carousel";
 import Guiahome from "./Guiahome";
 import Barra from "./Barra";
+import { Navigate } from "react-router-dom";
 
-function HomeComponent({ posts }) {
+function HomeComponent({ posts, user }) {
   //^  Contexto.
   const socket = useContext(SocketContext);
 
+  console.log(user);
   const [dataPosts] = useState(posts);
   //~ Estados (showNotification y notifications) es para las notificaciones.. dataPosts son todos los posts
   const [showNotification, setShowNotification] = useState(false);
@@ -36,6 +38,37 @@ function HomeComponent({ posts }) {
     (_, index) => index + 1
   );
 
+  //!Verificacion de terminar el registro:
+  const [redirectToCompletion, setRedirectToCompletion] = useState(
+    user.registrationCompleted
+  );
+
+  useEffect(() => {
+    // Verificar si registrationCompleted es false
+    if (!user.registrationCompleted) {
+      // Redirigir al formulario de completar información
+      setRedirectToCompletion(true);
+    }
+  }, [user.registrationCompleted]);
+
+  if (!redirectToCompletion) {
+    return <Navigate to="/registro" />;
+  }
+
+  
+  //!Verificacion de cuenta bloqueada:
+  const [redirectToCompletionBlocked, setRedirectToCompletionBlocked] =
+    useState(!user.blocked);
+
+  useEffect(() => {
+    if (!user.redirectToCompletionBlocked) {
+      setRedirectToCompletionBlocked(true);
+    }
+  }, [user.redirectToCompletionBlocked]);
+
+  if (!redirectToCompletionBlocked) {
+    return <Navigate to="/bloqueado" />;
+  }
   //!UseEffect para la escucha de las notificaciones
   useEffect(() => {
     if (socket) {
@@ -61,6 +94,7 @@ function HomeComponent({ posts }) {
   }, []);
 
   //!UseEffect para cuando una notificacion cambie se renderize
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     // Timer para eliminar las notificaciones después de 2 segundos
     let timer;

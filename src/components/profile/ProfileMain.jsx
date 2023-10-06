@@ -72,7 +72,7 @@ function ProfileMain({ data, user }) {
     }
   };
   return (
-    <div>
+    <div className="">
       <div>
         <div>
           <ProfileBody data={data} user={user} />

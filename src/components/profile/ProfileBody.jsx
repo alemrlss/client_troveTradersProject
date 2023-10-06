@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
@@ -9,9 +10,10 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { BsCamera } from "react-icons/bs";
+import { BsCamera, BsNutFill } from "react-icons/bs";
 import { Tooltip } from "react-tooltip";
-
+import { FaLock, FaUserEdit, FaUserShield } from "react-icons/fa"; // O cualquier otro icono de react-icons que necesites
+import { Navigate } from "react-router-dom";
 function ProfileBody({ data, user }) {
   const profileOptions = {
     about: "about",
@@ -21,9 +23,31 @@ function ProfileBody({ data, user }) {
   const [userData, setUserData] = useState(data); //data del usuario.
   const idUser = getDataUser().id;
 
+  console.log(userData);
   const handleSaveChanges = (updatedData) => {
     setUserData(updatedData);
   };
+
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
+  const handleMenuClick = (e) => {
+    // Obtener la posición del icono
+    const iconPosition = e.currentTarget.getBoundingClientRect();
+
+    // Calcular la posición del menú a la izquierda del icono
+    const top = iconPosition.bottom + window.scrollY;
+    const left = iconPosition.left + window.scrollX - menuWidth; // Resta el ancho del menú
+
+    // Actualizar el estado del menú y su posición
+    setIsMenuVisible(!isMenuVisible);
+    setMenuPosition({ top, left });
+  };
+
+  const [arePrivateDataHidden, setArePrivateDataHidden] = useState(false);
+
+  // Antes de devolver el JSX, calcula el ancho del menú
+  const menuWidth = 300; // Cambia esto al ancho deseado para tu menú
 
   const decorationButton = "border-b-4 border-green-800";
   const [isClicked, setisClicked] = useState(profileOptions.about);
@@ -133,8 +157,40 @@ function ProfileBody({ data, user }) {
     setIsEditingImage(true);
   };
 
+   //!Verificacion de cuenta bloqueada:
+   const [redirectToCompletionBlocked, setRedirectToCompletionBlocked] =
+   useState(!user.blocked);
+
+ useEffect(() => {
+   if (!user.redirectToCompletionBlocked) {
+     setRedirectToCompletionBlocked(true);
+   }
+ }, [user.redirectToCompletionBlocked]);
+
+ if (!redirectToCompletionBlocked) {
+   return <Navigate to="/bloqueado" />;
+ }
+ 
+  //!Verificacion de terminar el registro:
+  const [redirectToCompletion, setRedirectToCompletion] = useState(
+    user.registrationCompleted
+  );
+  useEffect(() => {
+    // Verificar si registrationCompleted es false
+    if (!user.registrationCompleted) {
+      // Redirigir al formulario de completar información
+      setRedirectToCompletion(true);
+    }
+  }, [user.registrationCompleted]);
+
+  if (!redirectToCompletion) {
+    return <Navigate to="/registro" />;
+
+    
+  }
+  
   return (
-    <div>
+    <div className="">
       <div>
         {/* Mensaje de verificación de correo electrónico */}
         {!verificationEmailUser && (
@@ -223,25 +279,6 @@ function ProfileBody({ data, user }) {
                 </div>
               ) : null}
 
-              {user.isVerify ? null : (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex flex-col justify-center">
-                  <strong className="font-bold text-center">
-                    Usuario no verificado
-                  </strong>
-                  <span className="text-xs text-center">
-                    Debes verificar tu cuenta para acceder a todas las acciones
-                    de la aplicacion, previamente debes estar verificado por
-                    correo
-                  </span>
-                  <Link
-                    to={`/verify-account`}
-                    className="bg-secondary-300 text-white mt-2 text-base rounded-md text-center"
-                  >
-                    Verificar Cuenta
-                  </Link>
-                </div>
-              )}
-
               <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                 <li className="flex items-center py-3">
                   <span>Estado</span>
@@ -278,24 +315,86 @@ function ProfileBody({ data, user }) {
           <div className="w-full md:w-9/12 mx-2 h-64 border-t border-r border-l">
             {/*INFORMACION USUARIO. */}
             <div className="bg-white p-3 shadow-sm rounded-sm">
-              <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                <span className="text-primary-200">
-                  <svg
-                    className="h-8"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+              <div className="flex items-center justify-between space-x-2 font-semibold text-gray-900 leading-8">
+                <div className="flex items-center">
+                  {" "}
+                  <span className="text-primary-200">
+                    <svg
+                      className="h-8"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                  </span>
+                  <span className=" ml-2 tracking-wide">
+                    Informacion del Usuario:
+                  </span>
+                </div>
+                {canEdit && (
+                  <button
+                    onClick={handleMenuClick}
+                    className="bg-transparent p-2 flex justify-end items-center text-black rounded-full hover:bg-gray-300"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                </span>
-                <span className="tracking-wide">Informacion del Usuario:</span>
+                    <BsNutFill size={18} />
+                  </button>
+                )}
+
+                {isMenuVisible && (
+                  <div
+                    className="bg-white z-50 absolute shadow-md rounded-md animate-fade-down animate-duration-500"
+                    style={{
+                      top: `${menuPosition.top}px`,
+                      left: `${menuPosition.left}px`,
+                      width: `${menuWidth}px`, // Establece el ancho del menú
+                    }}
+                  >
+                    <ul>
+                      <li>
+                        <Link to={`/edit-password/${idUser}`}>
+                          <button className="py-2 px-4 text-gray-800 hover:bg-gray-200 w-full text-left flex items-center">
+                            <FaLock className="mr-2" /> Cambiar contraseña.
+                          </button>
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            setIsMenuVisible(false);
+                          }}
+                          className="py-2 px-4 text-gray-800 hover:bg-gray-200 w-full text-left flex items-center"
+                        >
+                          <FaUserEdit className="mr-2" /> Editar perfil
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            setArePrivateDataHidden(!arePrivateDataHidden);
+                            setIsMenuVisible(false);
+                          }}
+                          className={`py-2 px-4 hover:bg-gray-200 w-full text-left flex items-center ${
+                            arePrivateDataHidden
+                              ? "text-green-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          <FaUserShield className="mr-2" />
+                          {arePrivateDataHidden
+                            ? "Mostrar Datos confidenciales"
+                            : "Ocultar Datos confidenciales"}
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
               <div className="text-gray-700">
                 <div className="grid md:grid-cols-2 text-sm">
@@ -309,37 +408,62 @@ function ProfileBody({ data, user }) {
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Genero:</div>
-                    <div className="px-4 py-2">{userData.gender}</div>
+                    <div className={`px-4 py-2`}>{userData.gender}</div>{" "}
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">
                       Numero Telefonico:
                     </div>
-                    <div className="px-4 py-2">????????</div>
+                    <div
+                      className={`px-4 py-2 ${
+                        arePrivateDataHidden ? "text-red-500" : ""
+                      }`}
+                    >
+                      {arePrivateDataHidden ? "********" : userData.phone}
+                    </div>{" "}
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Direccion:</div>
-                    <div className="px-4 py-2">?????????</div>
+                    <div
+                      className={`px-4 py-2 ${
+                        arePrivateDataHidden ? "text-red-500" : ""
+                      }`}
+                    >
+                      {arePrivateDataHidden ? "********" : userData.address}
+                    </div>{" "}
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Email</div>
-                    <div className="px-4 py-2">{userData.email}</div>
+                    <div
+                      className={`px-4 py-2 ${
+                        arePrivateDataHidden ? "text-red-500" : ""
+                      }`}
+                    >
+                      {arePrivateDataHidden ? "********" : userData.email}
+                    </div>
                   </div>
                 </div>
               </div>
-              {canEdit && (
-                <button
-                  className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4"
-                  onClick={openModalEdit}
-                >
-                  Editar Perfil.
-                </button>
+              {user.isVerify ? null : (
+                <div className="bg-red-100 border borde r-red-400 my-2 text-red-700 px-4 py-3 rounded  flex flex-col justify-center">
+                  <strong className="font-bold text-center">
+                    Usuario no verificado
+                  </strong>
+                  <span className="text-xs text-center">
+                    Debes verificar tu cuenta para acceder a todas las acciones
+                    de la aplicacion, previamente debes estar verificado por
+                    correo
+                  </span>
+                  <div className="flex justify-center">
+                    <Link
+                      to={`/verify-account`}
+                      className="bg-secondary-300 text-white mt-2 px-4 py-1 w-auto text-base rounded-md text-center"
+                    >
+                      Verificar Cuenta
+                    </Link>
+                  </div>
+                </div>
               )}
-              <Link to={`/edit-password/${idUser}`}>
-                <button className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
-                  Cambiar contraseña.
-                </button>
-              </Link>
             </div>
 
             <div className="my-4"></div>

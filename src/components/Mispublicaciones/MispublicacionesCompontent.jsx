@@ -5,14 +5,45 @@ import { FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom"; // Importa Link para el botón
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../../contexts/socketContext";
-
-function MisPublicacionesComponent({ posts }) {
+import { Navigate } from "react-router-dom";
+function MisPublicacionesComponent({ posts, user }) {
   //^  Contexto.
   const socket = useContext(SocketContext);
 
   //~ Estados (showNotification y notifications) es para las notificaciones..
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
+
+   //!Verificacion de cuenta bloqueada:
+   const [redirectToCompletionBlocked, setRedirectToCompletionBlocked] =
+   useState(!user.blocked);
+
+ useEffect(() => {
+   if (!user.redirectToCompletionBlocked) {
+     setRedirectToCompletionBlocked(true)
+   }
+ }, [user.redirectToCompletionBlocked]);
+
+ if (!redirectToCompletionBlocked) {
+   return <Navigate to="/bloqueado" />;
+ }
+
+
+  //!Verificacion de terminar el registro:
+  const [redirectToCompletion, setRedirectToCompletion] = useState(
+    user.registrationCompleted
+  );
+  useEffect(() => {
+    // Verificar si registrationCompleted es false
+    if (!user.registrationCompleted) {
+      // Redirigir al formulario de completar información
+      setRedirectToCompletion(true);
+    }
+  }, [user.registrationCompleted]);
+
+  if (!redirectToCompletion) {
+    return <Navigate to="/registro" />;
+  }
 
   //!UseEffect para la escucha de las notificaciones
   useEffect(() => {
@@ -127,7 +158,8 @@ function MisPublicacionesComponent({ posts }) {
                 </p>
                 <p className="text-gray-600">Categoría: {post.category}</p>
                 <p className="text-gray-600">
-                  Fecha de Creación: {post.createdAt}
+                  Fecha de Creación:{" "}
+                  {new Date(post.createdAt).toLocaleDateString()}
                 </p>
                 <div className="mt-4 flex justify-end space-x-2">
                   <button

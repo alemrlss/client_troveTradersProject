@@ -112,9 +112,9 @@ const Categories = () => {
   };
 
   return (
-    <div className="mb-2">
+    <div className="">
+      <h2 className="text-3xl font-bold mx-28 mb-3">Categorias</h2>
       <div className="py-4 space-y-10 mx-10 bg-orange-40">
-        <h2 className="text-3xl font-bold text-gray-800">Categorias</h2>
         <Slider {...settings} ref={sliderRef}>
           {callouts.map((callout) => (
             <div
@@ -124,7 +124,7 @@ const Categories = () => {
               className="hover:opacity-80 px-4"
             >
               <a href={callout.href}>
-                <div className="overflow-hidden flex justify-center">
+                <div className="overflow-hidden flex justify-center shadow-lg">
                   <img
                     src={callout.imageSrc}
                     alt={callout.imageAlt}
