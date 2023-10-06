@@ -17,7 +17,6 @@ function PostComponent({ post }) {
   const [isPostAvailable, setIsPostAvailable] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  console.log();
   useEffect(() => {
     setIsPostAvailable(post.currentState === "disponible");
     if (socket) {
@@ -206,23 +205,23 @@ function PostComponent({ post }) {
   function cantidadImagenes(photoCount) {
     switch (photoCount) {
       case 1:
-        return "w-full";
+        return "w-full h-64";
       case 2:
-        return "w-1/2";
+        return "w-1/2  h-64";
       case 3:
-        return "w-1/3";
+        return "w-1/3  h-64";
       case 4:
-        return "w-1/4";
+        return "w-1/4  h-64";
       default:
-        return "w-full";
+        return "w-full  h-64";
     }
   }
 
   return (
-    <div className="bg-white overflow-hidden my-36">
+    <div className="bg-white overflow-y-hidden my-20">
       {isPostAvailable ? (
-        <div className="">
-          <div className="mx-auto pb-4 sm:px-6 flex flex-wrap gap-x-8 lg:px-8 w-screen justify-center items-center border-b border-gray-200">
+        <div className="overflow-y-hidden">
+          <div className="mx-auto pb-4 sm:px-6 flex flex-wrap gap-x-8 lg:px-8 w-full justify-center items-center border-y py-3 border-gray-100">
             {post.photos.map((photo, index) => (
               <img
                 key={index}
@@ -312,9 +311,14 @@ function PostComponent({ post }) {
 
             <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
               <div>
-                <h2 className="text-xl tracking-tight">Descripcion:</h2>
+                <h2 className="text-xl tracking-tight font-semibold">
+                  Descripcion:
+                </h2>
                 <p className="text-base mt-1 text-gray-900">
                   {post.description}
+                </p>
+                <p className="text-xl font-bold mt-2">
+                  Informacion del Vendedor:
                 </p>
               </div>
             </div>

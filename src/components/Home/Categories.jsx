@@ -114,7 +114,7 @@ const Categories = () => {
   return (
     <div className="">
       <h2 className="text-3xl font-bold mx-28 mb-3">Categorias</h2>
-      <div className="py-4 space-y-10 mx-10 bg-orange-40">
+      <div className="py-4 space-y-10 bg-orange-40">
         <Slider {...settings} ref={sliderRef}>
           {callouts.map((callout) => (
             <div

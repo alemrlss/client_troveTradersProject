@@ -102,7 +102,6 @@ function CreatePost() {
 
       if (response.ok) {
         // La creación del post fue exitosa
-        console.log("Post creado exitosamente");
         setTitle("");
         setDescription("");
         setPrice("");
@@ -203,7 +202,10 @@ function CreatePost() {
               id="category"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
               value={category}
-              onChange={(event) => setCategory(event.target.value)}
+              onChange={(event) => {
+                console.log(event.target.value);
+                setCategory(event.target.value);
+              }}
               required
             >
               <option value="index">Selecciona una categoría</option>
