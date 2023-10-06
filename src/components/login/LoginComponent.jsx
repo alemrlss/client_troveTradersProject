@@ -2,6 +2,7 @@ import { useState } from "react";
 import { loginBackend } from "../../services/Auth";
 import { useAuthContext } from "../../contexts/authContext";
 import { Link } from "react-router-dom";
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 
 function LoginComponent() {
   const { login } = useAuthContext();
@@ -10,6 +11,11 @@ function LoginComponent() {
     password: "",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleInputChange = (e) => {
     setError("");
@@ -84,21 +90,30 @@ function LoginComponent() {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="relative mb-4">
             <label
               htmlFor="password"
               className="block text-gray-700 text-sm font-medium"
             >
               Contraseña
             </label>
-            <input
-              name="password"
-              onChange={handleInputChange}
-              type="password"
-              className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
-              placeholder="Tu Contraseña"
-              required
-            />
+            <div className="relative">
+              <input
+                name="password"
+                onChange={handleInputChange}
+                type={showPassword ? 'text' : 'password'}
+                className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
+                placeholder="Tu Contraseña"
+                required
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+              >
+                {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+              </button>
+            </div>
           </div>
           <div className="mb-6">
             <p className="text-red-600">{error}</p>

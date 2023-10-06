@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 
 function RegisterComponent() {
   const navigate = useNavigate();
@@ -15,6 +16,12 @@ function RegisterComponent() {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -167,7 +174,7 @@ function RegisterComponent() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="relative grid grid-cols-2 gap-4 mb-6">
             <div>
               <label
                 htmlFor="password"
@@ -176,7 +183,7 @@ function RegisterComponent() {
                 Contraseña
               </label>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 id="password"
                 onChange={handleInputChange}
@@ -184,6 +191,13 @@ function RegisterComponent() {
                 className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 required
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-11 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+              >
+                {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+              </button>
             </div>
             <div>
               <label
@@ -193,7 +207,7 @@ function RegisterComponent() {
                 Confirmar Contraseña
               </label>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="confirmPassword"
                 id="confirmPassword"
                 onChange={handleInputChange}
@@ -201,6 +215,7 @@ function RegisterComponent() {
                 className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 required
               />
+              
             </div>
           </div>
           <div className="mb-6 flex items-start">

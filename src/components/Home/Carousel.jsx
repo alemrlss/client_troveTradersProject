@@ -41,7 +41,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="carousel-container p-7 bg-white  border-4 border-secondary-300 mx-10 m-8 rounded-xl animate-fade animate-once animate-duration-[800ms] animate-delay-0">
+    <div className="carousel-containe bg-white  border-4 border-secondary-300 mx-10 m-8 rounded-xl animate-fade animate-once animate-duration-[800ms] animate-delay-0">
       <Slider {...settings} className="">
         {slides.map((slide, index) => (
           <div
@@ -52,7 +52,7 @@ const Carousel = () => {
             <img
               src={slide}
               alt={`Slide ${index + 1}`}
-              className="w-full h-full object-cover"
+              className="w-50% h-50% object-cover mx-auto"
             />
           </div>
         ))}
