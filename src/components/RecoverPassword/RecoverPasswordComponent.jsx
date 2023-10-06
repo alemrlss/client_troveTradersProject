@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
-
+import { Link } from "react-router-dom";
 
 function RecoverPasswordComponent(user) {
     const { token } = useParams();
@@ -137,7 +137,7 @@ const handleSubmit = async (e) => {
           <p className="text-red-600">{error}</p>
           <p className='text-green-600'>{success}</p>
         </div>
-        <div>
+        <div className="mb-3">
           <button
             type="submit"
             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
@@ -145,7 +145,13 @@ const handleSubmit = async (e) => {
             Aceptar
           </button>
         </div>
-        <div className='mb-6'>
+        <div>
+        <Link to="/home"><button
+            type="submit"
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary-100 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          >
+            Cancelar
+          </button></Link>
         </div>
       </form>
     </div>

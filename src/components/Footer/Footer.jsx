@@ -16,20 +16,10 @@ function Footer() {
 
           {/* Enlaces de Navegación */}
           <ul className="flex flex-wrap mb-6 text-sm font-medium text-gray-700 md:mb-0">
-            <li className="mr-4 md:mr-6">
-              <a href="#" className="hover:underline">
-                Quiénes Somos
-              </a>
-            </li>
-            <li className="mr-4 md:mr-6">
-              <a href="#" className="hover:underline">
-                Guía de Uso
-              </a>
-            </li>
             <li>
-              <a href="#" className="hover:underline">
-                Contáctanos
-              </a>
+              <p>
+                Contáctanos: Soportealcliente@trovetraders.com
+              </p>
             </li>
           </ul>
         </div>
