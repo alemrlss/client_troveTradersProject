@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import {
   HOME,
   LOGIN,
