@@ -38,7 +38,11 @@ function MisPublicaciones() {
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
       {posts && user && (
-        <MispublicacionesCompontent posts={posts} user={user} />
+        <MispublicacionesCompontent
+          posts={posts}
+          user={user}
+          setPosts={setPosts}
+        />
       )}
     </div>
   );
