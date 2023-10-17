@@ -1,42 +1,38 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
-import { Link } from "react-router-dom"; // Importa Link para el botón
+import { Link } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../../contexts/socketContext";
 import { Navigate } from "react-router-dom";
-function MisPublicacionesComponent({ posts, user }) {
-  //^  Contexto.
+import axios from "axios"; // Importa Axios
+
+function MisPublicacionesComponent({ posts, user, setPosts }) {
   const socket = useContext(SocketContext);
 
-  //~ Estados (showNotification y notifications) es para las notificaciones..
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [redirectToCompletionBlocked, setRedirectToCompletionBlocked] =
+    useState(!user.blocked);
 
-   //!Verificacion de cuenta bloqueada:
-   const [redirectToCompletionBlocked, setRedirectToCompletionBlocked] =
-   useState(!user.blocked);
+  useEffect(() => {
+    if (!user.redirectToCompletionBlocked) {
+      setRedirectToCompletionBlocked(true);
+    }
+  }, [user.redirectToCompletionBlocked]);
 
- useEffect(() => {
-   if (!user.redirectToCompletionBlocked) {
-     setRedirectToCompletionBlocked(true)
-   }
- }, [user.redirectToCompletionBlocked]);
+  if (!redirectToCompletionBlocked) {
+    return <Navigate to="/bloqueado" />;
+  }
 
- if (!redirectToCompletionBlocked) {
-   return <Navigate to="/bloqueado" />;
- }
-
-
-  //!Verificacion de terminar el registro:
   const [redirectToCompletion, setRedirectToCompletion] = useState(
     user.registrationCompleted
   );
+
   useEffect(() => {
-    // Verificar si registrationCompleted es false
     if (!user.registrationCompleted) {
-      // Redirigir al formulario de completar información
       setRedirectToCompletion(true);
     }
   }, [user.registrationCompleted]);
@@ -45,72 +41,39 @@ function MisPublicacionesComponent({ posts, user }) {
     return <Navigate to="/registro" />;
   }
 
-  //!UseEffect para la escucha de las notificaciones
-  useEffect(() => {
-    if (socket) {
-      socket.on("newNotification", (payload) => {
-        // Manejar la notificación recibida desde el servidor
-
-        const msgHTML = (
-          <Link to={payload.target}>
-            <b>{payload.msgNotification}</b>
-          </Link>
-        );
-        showAndHideNotification(
-          payload.msgNotification,
-          msgHTML,
-          payload.bgColor
-        );
-
-        // Puedes realizar otras acciones con la notificación, como mostrarla en la interfaz de usuario
-      });
-    }
-    return () => {
-      if (socket) {
-        socket.off("newNotification");
-      }
-    };
-  }, [socket]);
-
-  //!UseEffect para cuando una notificacion cambie se renderize
-  useEffect(() => {
-    // Timer para eliminar las notificaciones después de 2 segundos
-    let timer;
-
-    if (notifications.length > 0) {
-      timer = setTimeout(() => {
-        setNotifications([]);
-        setShowNotification(true);
-      }, 2500);
-    }
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [notifications]);
-
-  //!Funcion para mostrar las Notificaciones
-  const showAndHideNotification = (msg, messageHTML, bgColor) => {
-    // ~Verificar si la notificación ya existe en el estado de notificaciones
-    const notificationExists = notifications.some(
-      (notification) => notification.msg === msg
-    );
-    if (!notificationExists) {
-      setShowNotification(true);
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        { msg, messageHTML, bgColor },
-      ]);
-    }
-  };
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-
-  const handleEditClick = (post) => {
-    // Lógica para editar el post
-    // Puedes redirigir a una página de edición aquí usando React Router
-  };
+  const [selectedPostDelete, setSelectedPostDelete] = useState(null);
 
   const handleDeleteClick = (post) => {
-    // Lógica para eliminar el post
+    setSelectedPostDelete(post);
+    setConfirmDelete(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedPostDelete) {
+      // Realiza la solicitud DELETE al backend
+      axios
+        .delete(`http://localhost:3001/posts/delete/${selectedPostDelete._id}`)
+        .then((response) => {
+          // Verifica que la eliminación haya sido exitosa
+          if (response.status === 200) {
+            // Actualiza el estado local eliminando la publicación
+            const updatedPosts = posts.filter(
+              (post) => post._id !== selectedPostDelete._id
+            );
+            setPosts(updatedPosts);
+          } else {
+            // Maneja el caso en el que la eliminación no fue exitosa (por ejemplo, muestra un mensaje de error)
+          }
+        })
+        .catch((error) => {
+          // Maneja errores de la solicitud (por ejemplo, muestra un mensaje de error)
+        });
+
+      setConfirmDelete(false);
+      setSelectedPostDelete(null);
+    }
   };
 
   const handleCloseClick = () => {
@@ -118,7 +81,6 @@ function MisPublicacionesComponent({ posts, user }) {
   };
 
   const handleBackgroundClick = (e) => {
-    // Verificar si el clic se realizó en el fondo oscuro (fuera de la información del post)
     if (e.target.classList.contains("bg-opacity-50")) {
       setSelectedPost(null);
     }
@@ -167,12 +129,6 @@ function MisPublicacionesComponent({ posts, user }) {
                     className="bg-secondary-100 text-white px-3 py-2 rounded-lg hover:opacity-90"
                   >
                     Ver Detalles
-                  </button>
-                  <button
-                    onClick={() => handleEditClick(post)}
-                    className="bg-secondary-300 text-white px-3 py-2 rounded-lg  hover:opacity-90"
-                  >
-                    Editar
                   </button>
                   <button
                     onClick={() => handleDeleteClick(post)}
@@ -228,10 +184,28 @@ function MisPublicacionesComponent({ posts, user }) {
               key={index}
               className={`${notification.bgColor} text-gray-800 p-4 rounded-md shadow-md bg`}
             >
-              {" "}
               {notification.messageHTML}
             </div>
           ))}
+        </div>
+      )}
+      {confirmDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white rounded-lg p-4">
+            <p>¿Seguro que deseas eliminar esta publicación?</p>
+            <button
+              onClick={handleConfirmDelete}
+              className="bg-red-500 text-white px-3 py-2 rounded-lg"
+            >
+              Confirmar Eliminación
+            </button>
+            <button
+              onClick={() => setConfirmDelete(false)}
+              className="text-secondary-100 hover:underline ml-2"
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       )}
     </div>
