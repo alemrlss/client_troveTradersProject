@@ -431,20 +431,17 @@ function NavBarr() {
                 isOpen={isOpen}
               />
               <Link
-                className="text-white p-3 flex items-center"
+                className="text-secondary-100 p-3 flex items-center"
                 onClick={handleMenuItemClick}
                 to={`/home`}
               >
-                <FaHome />
-                <span className="ml-2">Inicio</span>
-              </Link>
+                <FaHome className="w-6 h-6" />              </Link>
               <Link
                 onClick={handleMenuItemClick}
                 to={`/profile/${idUser}`}
-                className="text-white p-3 flex items-center"
+                className=" p-3 flex items-center text-secondary-100"
               >
-                <FaUser />
-                <span className="ml-2">Perfil</span>
+                <FaUser className="w-6 h-6" />
               </Link>
               <button
                 className="text-red-600 p-3 hover:text-red-700 flex items-center"
