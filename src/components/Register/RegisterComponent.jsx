@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
+import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 
 function RegisterComponent() {
   const navigate = useNavigate();
@@ -21,7 +21,6 @@ function RegisterComponent() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -183,7 +182,7 @@ function RegisterComponent() {
                 Contraseña
               </label>
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 name="password"
                 id="password"
                 onChange={handleInputChange}
@@ -207,7 +206,7 @@ function RegisterComponent() {
                 Confirmar Contraseña
               </label>
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 name="confirmPassword"
                 id="confirmPassword"
                 onChange={handleInputChange}
@@ -215,10 +214,9 @@ function RegisterComponent() {
                 className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-200"
                 required
               />
-              
             </div>
           </div>
-          <div className="mb-6 flex items-start">
+          <div className="mb-1 flex items-start">
             <div className="flex items-center h-5">
               <input
                 id="terms"
@@ -240,8 +238,8 @@ function RegisterComponent() {
               </label>
             </div>
           </div>
-          <p className="text-red-500">{error}</p>
-          <p className="text-green-500">{success}</p>
+          <p className="text-red-500 m-2">{error}</p>
+          <p className="text-green-700 m-2">{success}</p>
           <div>
             <button
               type="submit"

@@ -553,14 +553,14 @@ function NavBarr() {
                         Comprador: {trade.nameBuyer}
                       </p>
                     </div>
-                    <div className=" flex justify-end mx-2">
+                    <div className=" flex justify-center mx-2">
                       <button
                         onClick={() => {
                           setIsOpenTrade(!isOpenTrade);
                           navigate(`/trade/${trade._id}`);
                           window.location.reload();
                         }}
-                        className=" bg-orange-400 hover:bg-green-600 text-white font-bold py-1 px-2 rounded my-1"
+                        className=" bg-orange-600 text-center hover:bg-orange-700 text-white text-xs font-bold py-1 px-2 rounded my-1"
                       >
                         Ver Trade
                       </button>
