@@ -3,10 +3,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader/Loader";
 import { getIdUser } from "../services/Auth";
-import MispublicacionesCompontent from "../components/Mispublicaciones/MispublicacionesCompontent";
-function MisPublicaciones() {
+import RegistroComponent from "../components/Registro/RegistroComponent";
+function Registro() {
   const [loading, setLoading] = useState(false);
-  const [posts, setPosts] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -14,13 +13,9 @@ function MisPublicaciones() {
     const fetchData = async () => {
       try {
         const responseUser = await axios.get(
-          `http://localhost:3001/posts/user-posts/${getIdUser()}`
-        );
-        const responseUserData = await axios.get(
           `http://localhost:3001/users/${getIdUser()}`
         );
-        setPosts(responseUser.data);
-        setUser(responseUserData.data);
+        setUser(responseUser.data);
         setLoading(false);
       } catch (error) {
         console.error("Error al obtener el post:", error);
@@ -37,15 +32,9 @@ function MisPublicaciones() {
   return (
     <div className="min-h-screen">
       {loading && <Loader options={options} />}
-      {posts && user && (
-        <MispublicacionesCompontent
-          posts={posts}
-          user={user}
-          setPosts={setPosts}
-        />
-      )}
+      {user && <RegistroComponent user={user} />}
     </div>
   );
 }
 
-export default MisPublicaciones;
+export default Registro;

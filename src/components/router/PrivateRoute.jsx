@@ -11,7 +11,7 @@ export default function PrivateRoute() {
     return <Navigate to={LOGIN} />;
   }
   return (
-    //! SE LE COLOCA EL PROVIDER DE CONEXTO DE SOCKETS(SERVIDOR) SOLO PARA LAS RUTAS PRIVADAS..
+    //! SE LE COLOCA EL PROVIDER DE CONTEXTO DE SOCKETS(SERVIDOR) SOLO PARA LAS RUTAS PRIVADAS..
     <SocketProvider>
       <>
         <NavBarr />

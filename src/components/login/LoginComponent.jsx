@@ -2,7 +2,8 @@ import { useState } from "react";
 import { loginBackend } from "../../services/Auth";
 import { useAuthContext } from "../../contexts/authContext";
 import { Link } from "react-router-dom";
-import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
+import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
+import { RiAdminFill } from "react-icons/ri";
 
 function LoginComponent() {
   const { login } = useAuthContext();
@@ -101,7 +102,7 @@ function LoginComponent() {
               <input
                 name="password"
                 onChange={handleInputChange}
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-secondary-100"
                 placeholder="Tu Contraseña"
                 required
@@ -133,6 +134,7 @@ function LoginComponent() {
             </button>
           </div>
         </form>
+        ;
         <p className="mt-4 text-sm font-light text-gray-500">
           No tienes cuenta?{" "}
           <Link
@@ -142,6 +144,11 @@ function LoginComponent() {
             Regístrate
           </Link>
         </p>
+        <Link to="http://localhost:5174/login" target="_blank">
+          <button className="fixed top-4 right-4 bg-secondary-100 text-white py-4 px-4 rounded-full hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+            <RiAdminFill size={24} />{" "}
+          </button>
+        </Link>
       </div>
     </section>
   );

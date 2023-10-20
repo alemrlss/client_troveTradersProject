@@ -38,7 +38,7 @@ function post() {
     width: 100,
     height: 100,
   };
-  return <div>
+  return <div className="overflow-y-hidden">
     {loading && <Loader options={options}/>}
     {post && <PostComponent post={post} user={user}/>}
   </div>;

@@ -37,7 +37,6 @@ function editPassword() {
   return (
     <div>
       <EditPassword user={user}/>
-      <Footer/>
     </div>
   )
 }

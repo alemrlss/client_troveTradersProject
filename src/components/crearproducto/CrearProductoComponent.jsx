@@ -1,15 +1,46 @@
+/* eslint-disable react/prop-types */
 import CreatePost from "./CreatePost";
 import { SocketContext } from "../../contexts/socketContext";
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
-function CrearProductoComponent() {
+function CrearProductoComponent({ user }) {
   //^  Contexto.
   const socket = useContext(SocketContext);
 
   //~ Estados (showNotification y notifications) es para las notificaciones..
   const [showNotification, setShowNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
+
+  //!Verificacion de cuenta bloqueada:
+  const [redirectToCompletionBlocked, setRedirectToCompletionBlocked] =
+    useState(!user.blocked);
+
+  useEffect(() => {
+    if (!user.redirectToCompletionBlocked) {
+      setRedirectToCompletionBlocked(true);
+    }
+  }, [user.redirectToCompletionBlocked]);
+
+  if (!redirectToCompletionBlocked) {
+    return <Navigate to="/bloqueado" />;
+  }
+
+  //!Verificacion de terminar el registro:
+  const [redirectToCompletion, setRedirectToCompletion] = useState(
+    user.registrationCompleted
+  );
+  useEffect(() => {
+    // Verificar si registrationCompleted es false
+    if (!user.registrationCompleted) {
+      // Redirigir al formulario de completar información
+      setRedirectToCompletion(true);
+    }
+  }, [user.registrationCompleted]);
+
+  if (!redirectToCompletion) {
+    return <Navigate to="/registro" />;
+  }
 
   //!UseEffect para la escucha de las notificaciones
   useEffect(() => {
@@ -36,7 +67,7 @@ function CrearProductoComponent() {
         socket.off("newNotification");
       }
     };
-  }, [ socket]);
+  }, [socket]);
 
   //!UseEffect para cuando una notificacion cambie se renderize
   useEffect(() => {

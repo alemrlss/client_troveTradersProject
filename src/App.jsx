@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import {
   HOME,
   LOGIN,
@@ -26,6 +25,8 @@ import {
   EDITPASSWORD,
   RESULTADO,
   MISPUBLICACIONES,
+  REGISTRO,
+  BLOQUEADO
 } from "./routes/paths";
 import Login from "./pages/login";
 import Home from "./pages/home";
@@ -52,6 +53,8 @@ import CategoriaDeporte from "./pages/categoriaDeporte";
 import CategoriaLibros from "./pages/categoriaLibros";
 import CategoriaOtros from "./pages/categoriaOtros";
 import Resultados from "./pages/resultados";
+import Registro from "./pages/registro";
+import Bloqueado from "./pages/bloqueado";
 
 import { SocketProvider } from "./contexts/socketContext";
 import Mispublicaciones from "./pages/mispublicaciones";
@@ -69,7 +72,10 @@ function App() {
               <Route path={LOGIN} element={<Login />} />
               <Route path={REGISTER} element={<Register />} />
               <Route path={FORGOTPASSWORD} element={<ForgotPassword />} />
-              <Route path={`${RECOVERPASSWORD}/:token/test`} element={<RecoverPassword />} />
+              <Route
+                path={`${RECOVERPASSWORD}/:token/test`}
+                element={<RecoverPassword />}
+              />
             </Route>
 
             <Route path="/" element={<PrivateRoute />}>
@@ -95,6 +101,8 @@ function App() {
               <Route path={LIBROS} element={<CategoriaLibros />} />
               <Route path={OTROS} element={<CategoriaOtros />} />
               <Route path={MISPUBLICACIONES} element={<Mispublicaciones />} />
+              <Route path={REGISTRO} element={<Registro />} />
+              <Route path={BLOQUEADO} element={<Bloqueado />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

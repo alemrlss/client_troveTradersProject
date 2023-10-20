@@ -432,7 +432,7 @@ function Acuerdo({
               </h2>
               <p className="text-gray-600 font-bold  text-sm mb-4">Vendedor</p>
 
-              <button className="mt-4 bg-secondary-200 hover:bg-secondary-200 text-white px-4 py-2 rounded font-semibold">
+              <button className="mt-4 bg-secondary-100 hover:opacity-90 text-white px-4 py-2 rounded font-semibold">
                 Ver perfil
               </button>
             </div>
@@ -459,7 +459,7 @@ function Acuerdo({
                 {buyerData.name} {buyerData.lastName}
               </h2>
               <p className="text-gray-500 font-bold text-sm mb-4">Comprador</p>
-              <button className="mt-4 bg-secondary-200 hover:bg-secondary-200 text-white px-4 py-2 rounded font-semibold">
+              <button className="mt-4 bg-secondary-100 hover:opacity-90 text-white px-4 py-2 rounded font-semibold">
                 Ver perfil
               </button>
             </div>
