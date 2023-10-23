@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useState, useContext, useEffect } from "react";
+import React from 'react';
 import axios from "axios";
 import { SocketContext } from "../../contexts/socketContext";
 import { getIdUser } from "../../services/Auth";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import ImageGallery from "react-image-gallery";
+import 'react-image-gallery/styles/css/image-gallery.css'
 
 function PostComponent({ post }) {
   const socket = useContext(SocketContext);
@@ -217,43 +220,31 @@ function PostComponent({ post }) {
     }
   }
 
+  const imagesFromPost = post.photos.map((photo, index) => ({
+    original: `http://localhost:3001/images/posts/${photo}`,
+    thumbnail: `http://localhost:3001/images/posts/${photo}`, // You can use the same image for the thumbnail if needed
+  }));
+
   return (
-    <div className="bg-white overflow-y-hidden my-20">
+    <div className="bg-white my-10">
       {isPostAvailable ? (
-        <div className="overflow-y-hidden">
-          <div className="mx-auto pb-4 sm:px-6 flex flex-wrap gap-x-8 lg:px-8 w-full justify-center items-center border-y py-3 border-gray-100">
-            {post.photos.map((photo, index) => (
-              <img
-                key={index}
-                src={`http://localhost:3001/images/posts/${photo}`}
-                alt={`Photo ${index}`}
-                className={`rounded shadow ${cantidadImagenes(
-                  post.photos.length
-                )} h-1/2 w-1/6`}
-              />
-            ))}
-          </div>
-
-          <div className="mx-auto font-custom max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
-            <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+        <div className="mx-10"> 
+          <div className="flex flex-wrap gap-x-8 lg:px-8 justify-center items-center">
+            <ImageGallery items={imagesFromPost} additionalClass="lg:max-w-2xl lg:w-2/3"/>
+            <div className="lg:w-1/6 border-grey-500 border-2 p-5 rounded-lg shadow-2xl">
+              <h2 className="text-2xl text-center font-bold">
                 {post.title}
-              </h1>
-            </div>
-
-            <div className="mt-4 lg:row-span-3 lg:mt-0">
-              <h2 className="text-2xl text-center">
-                Informacion del producto.
               </h2>
-
-              <p className="text-3xl tracking-tight text-green-600">
+              <p className="text-3xl text-center tracking-tight text-green-600">
                 ${post.price}
               </p>
-              <p className="text-2xl tracking-tight text-gray-900">
+              <p className="text-xl tracking-tight text-gray-900 font-bold">Fecha de Publicacion:</p>
+              <p className="text-xl tracking-tight text-gray-900 capitalize">
                 {formatDate(post.createdAt)}
               </p>
-              <p className="text-2xl tracking-tight text-gray-900 capitalize">
-                Categoria: {post.category}
+              <p className="text-xl tracking-tight text-gray-900 font-bold">Categoria:</p>
+              <p className="text-xl tracking-tight text-gray-900 capitalize">
+                {post.category}
               </p>
               {!isConfirming ? (
                 <button
@@ -307,18 +298,12 @@ function PostComponent({ post }) {
                   </button>
                 </div>
               )}
-            </div>
-
-            <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
               <div>
-                <h2 className="text-xl tracking-tight font-semibold">
-                  Descripcion:
+                <h2 className="mt-5 text-xl tracking-tight font-semibold text-center">
+                  Descripcion del producto:
                 </h2>
                 <p className="text-base mt-1 text-gray-900">
                   {post.description}
-                </p>
-                <p className="text-xl font-bold mt-2">
-                  Informacion del Vendedor:
                 </p>
               </div>
             </div>
