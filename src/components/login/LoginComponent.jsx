@@ -134,7 +134,6 @@ function LoginComponent() {
             </button>
           </div>
         </form>
-        ;
         <p className="mt-4 text-sm font-light text-gray-500">
           No tienes cuenta?{" "}
           <Link
