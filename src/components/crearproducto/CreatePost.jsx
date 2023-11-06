@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getIdUser } from "../../services/Auth";
 import { AiOutlineQuestionCircle } from "react-icons/ai"; // Agrega el icono de pregunta
 import { FaAngleDown } from "react-icons/fa";
+
 function CreatePost() {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
@@ -11,6 +12,34 @@ function CreatePost() {
   const [errorFile, setErrorFile] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  const [isVerify, setIsVerify] = useState(false)
+
+  const [isLoading, setIsLoading] = useState(true); // Estado para el loader
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/users/${getIdUser()}`
+        );
+        if (response) {
+          const data = await response.json();
+          setIsLoading(false);
+          console.log(data);
+          setIsVerify(data.isVerify)
+        } else {
+          setError("Error al cargar los datos iniciales");
+          setIsLoading(false); // Finaliza la carga con error
+        }
+      } catch (error) {
+        console.error("Error de red:", error);
+        setIsLoading(false); // Finaliza la carga con error
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleFileChange = (event) => {
     const selectedFiles = event.target.files;
@@ -35,6 +64,11 @@ function CreatePost() {
     setErrorFile("");
     setSuccessMessage("");
     event.preventDefault();
+
+    if(!isVerify){ 
+      setError('Es necesario verificar tu cuenta para publicar un producto')
+      return 
+    }
 
     if (files.length === 0) {
       setErrorFile("Debes seleccionar al menos una imagen");
@@ -92,7 +126,6 @@ function CreatePost() {
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
     }
-
     try {
       // Enviar la solicitud al backend
       const response = await fetch("http://localhost:3001/posts", {
@@ -152,140 +185,143 @@ function CreatePost() {
 
   return (
     <div className="mx-2 md:mx-4 lg:mx-10 py-8 md:py-16 flex flex-col md:flex-row">
-      <div className="mb-4 md:w-1/2 lg:w-1/2 xl:w-1/2 md:mr-4">
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label
-                htmlFor="title"
-                className="block text-gray-800 font-semibold"
-              >
-                Título:
-              </label>
-              <input
-                type="text"
-                id="title"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-                placeholder="Escribe el título de tu producto"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="description"
-                className="block text-gray-800 font-semibold"
-              >
-                Descripción:
-              </label>
-              <textarea
-                id="description"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-                placeholder="Escribe una descripción detallada de tu producto"
-                rows="3"
-                required
-                style={{ resize: "none" }}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="category"
-                className="block text-gray-800 font-semibold"
-              >
-                Categoría:
-              </label>
-              <select
-                id="category"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
-                value={category}
-                onChange={(event) => {
-                  console.log(event.target.value);
-                  setCategory(event.target.value);
-                }}
-                required
-              >
-                <option value="index">Selecciona una categoría</option>
-                <option value="antiguedades">Antiguedades</option>
-                <option value="musica">Música</option>
-                <option value="cartas">Cartas</option>
-                <option value="tecnologia">Tecnología</option>
-                <option value="comics">Comics</option>
-                <option value="juguetes">Juguetes</option>
-                <option value="deportes">Deportes</option>
-                <option value="libros">Libros</option>
-                <option value="otros">Otros</option>
-              </select>
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="price"
-                className="block text-gray-800 font-semibold"
-              >
-                Precio:
-              </label>
-              <input
-                type="number"
-                id="price"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
-                value={price}
-                onChange={(event) => setPrice(event.target.value)}
-                placeholder="Escribe el precio en números"
-                required
-              />
-            </div>
-
-            <p className="block text-gray-800 font-semibold"> Imágenes:</p>
-            <div className="mb-4 border border-gray-300 p-2 rounded-lg">
-              <label
-                htmlFor="images"
-                className="block text-gray-800 font-semibold mb-2"
-              >
-                <p className="text-xs text-gray-400 font-normal">
-                  Solo se permite un maximo de 4 imagenes
-                </p>
-              </label>
-              <label className="custom-file-upload flex justify-center bg-gray-200  text-gray-500 font-semibold px-4 py-2 rounded-md cursor-pointer">
-                <p className="text-center">Elegir imagenes</p>
+      {isLoading ? (
+        <div> Cargando... </div>
+      ) : (
+        <div className="mb-4 md:w-1/2 lg:w-1/2 xl:w-1/2 md:mr-4">
+          <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg">
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label
+                  htmlFor="title"
+                  className="block text-gray-800 font-semibold"
+                >
+                  Título:
+                </label>
                 <input
-                  type="file"
-                  id="images"
-                  name="images"
-                  multiple
-                  onChange={handleFileChange}
+                  type="text"
+                  id="title"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                  placeholder="Escribe el título de tu producto"
                   required
-                  className="hidden"
                 />
-              </label>
-              <div className="file-names text-xs mt-2"></div>
-              {errorFile && <p className="text-red-500 mt-2">{errorFile}</p>}
-            </div>
-
-            {error && <p className="text-red-500 mt-2">{error}</p>}
-            <div className="text-right">
-              <button
-                type="submit"
-                className="bg-secondary-100 hover:opacity-90 text-white font-bold px-6 py-3 rounded-lg"
-              >
-                Publicar Producto
-              </button>
-            </div>
-
-            {successMessage && (
-              <div className="mt-4 text-green-600 font-semibold">
-                {successMessage}
               </div>
-            )}
-            {/* Resto del formulario... */}
-          </form>
-        </div>
-      </div>
 
+              <div className="mb-4">
+                <label
+                  htmlFor="description"
+                  className="block text-gray-800 font-semibold"
+                >
+                  Descripción:
+                </label>
+                <textarea
+                  id="description"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                  placeholder="Escribe una descripción detallada de tu producto"
+                  rows="3"
+                  required
+                  style={{ resize: "none" }}
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="category"
+                  className="block text-gray-800 font-semibold"
+                >
+                  Categoría:
+                </label>
+                <select
+                  id="category"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
+                  value={category}
+                  onChange={(event) => {
+                    console.log(event.target.value);
+                    setCategory(event.target.value);
+                  }}
+                  required
+                >
+                  <option value="index">Selecciona una categoría</option>
+                  <option value="antiguedades">Antiguedades</option>
+                  <option value="musica">Música</option>
+                  <option value="cartas">Cartas</option>
+                  <option value="tecnologia">Tecnología</option>
+                  <option value="comics">Comics</option>
+                  <option value="juguetes">Juguetes</option>
+                  <option value="deportes">Deportes</option>
+                  <option value="libros">Libros</option>
+                  <option value="otros">Otros</option>
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="price"
+                  className="block text-gray-800 font-semibold"
+                >
+                  Precio:
+                </label>
+                <input
+                  type="number"
+                  id="price"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary-200"
+                  value={price}
+                  onChange={(event) => setPrice(event.target.value)}
+                  placeholder="Escribe el precio en números"
+                  required
+                />
+              </div>
+
+              <p className="block text-gray-800 font-semibold"> Imágenes:</p>
+              <div className="mb-4 border border-gray-300 p-2 rounded-lg">
+                <label
+                  htmlFor="images"
+                  className="block text-gray-800 font-semibold mb-2"
+                >
+                  <p className="text-xs text-gray-400 font-normal">
+                    Solo se permite un maximo de 4 imagenes
+                  </p>
+                </label>
+                <label className="custom-file-upload flex justify-center bg-gray-200  text-gray-500 font-semibold px-4 py-2 rounded-md cursor-pointer">
+                  <p className="text-center">Elegir imagenes</p>
+                  <input
+                    type="file"
+                    id="images"
+                    name="images"
+                    multiple
+                    onChange={handleFileChange}
+                    required
+                    className="hidden"
+                  />
+                </label>
+                <div className="file-names text-xs mt-2"></div>
+                {errorFile && <p className="text-red-500 mt-2">{errorFile}</p>}
+              </div>
+
+              {error && <p className="text-red-500 mt-2">{error}</p>}
+              <div className="text-right">
+                <button
+                  type="submit"
+                  className="bg-secondary-100 hover:opacity-90 text-white font-bold px-6 py-3 rounded-lg"
+                >
+                  Publicar Producto
+                </button>
+              </div>
+
+              {successMessage && (
+                <div className="mt-4 text-green-600 font-semibold">
+                  {successMessage}
+                </div>
+              )}
+              {/* Resto del formulario... */}
+            </form>
+          </div>
+        </div>
+      )}
       <div className="md:w-1/2 lg:w-2/3 xl:w-3/4 mt-4 md:mt-0">
         <h2 className="text-xl md:text-2xl font-semibold text-center mb-4">
           Consejos para crear una buena publicación

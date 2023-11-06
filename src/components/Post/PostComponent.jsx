@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useContext, useEffect } from "react";
-import React from 'react';
+import React from "react";
 import axios from "axios";
 import { SocketContext } from "../../contexts/socketContext";
 import { getIdUser } from "../../services/Auth";
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import ImageGallery from "react-image-gallery";
-import 'react-image-gallery/styles/css/image-gallery.css'
+import "react-image-gallery/styles/css/image-gallery.css";
 
 function PostComponent({ post }) {
   const socket = useContext(SocketContext);
@@ -19,6 +19,8 @@ function PostComponent({ post }) {
   const [hasRequested, setHasRequested] = useState(false);
   const [isPostAvailable, setIsPostAvailable] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isVerify, setIsVerify] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setIsPostAvailable(post.currentState === "disponible");
@@ -57,6 +59,26 @@ function PostComponent({ post }) {
       }
     };
   }, [post.author_id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/users/${getIdUser()}`
+        );
+        if (response) {
+          const data = await response.json();
+          setIsVerify(data.isVerify);
+        } else {
+          console.log("elses");
+        }
+      } catch (error) {
+        console.error("Error de red:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     let timer;
@@ -228,29 +250,40 @@ function PostComponent({ post }) {
   return (
     <div className="bg-white my-10">
       {isPostAvailable ? (
-        <div className="mx-10"> 
+        <div className="mx-10">
           <div className="flex flex-wrap gap-x-8 lg:px-8 justify-center items-center">
-            <ImageGallery items={imagesFromPost} additionalClass="lg:max-w-2xl lg:w-2/3"/>
+            <ImageGallery
+              items={imagesFromPost}
+              additionalClass="lg:max-w-2xl lg:w-2/3"
+            />
             <div className="lg:w-1/6 border-grey-500 border-2 p-5 rounded-lg shadow-2xl">
-              <h2 className="text-2xl text-center font-bold">
-                {post.title}
-              </h2>
+              <h2 className="text-2xl text-center font-bold">{post.title}</h2>
               <p className="text-3xl text-center tracking-tight text-green-600">
                 ${post.price}
               </p>
-              <p className="text-xl tracking-tight text-gray-900 font-bold">Fecha de Publicacion:</p>
+              <p className="text-xl tracking-tight text-gray-900 font-bold">
+                Fecha de Publicacion:
+              </p>
               <p className="text-xl tracking-tight text-gray-900 capitalize">
                 {formatDate(post.createdAt)}
               </p>
-              <p className="text-xl tracking-tight text-gray-900 font-bold">Categoria:</p>
+              <p className="text-xl tracking-tight text-gray-900 font-bold">
+                Categoria:
+              </p>
               <p className="text-xl tracking-tight text-gray-900 capitalize">
                 {post.category}
               </p>
               {!isConfirming ? (
                 <button
                   onClick={() => {
-                    hasRequestedFunction(post.author_id);
+                    if (!isVerify) {
+                      alert(
+                        "No puedes comprar ningun producto si tu cuenta no esta verificada"
+                      );
+                      return;
+                    }
 
+                    hasRequestedFunction(post.author_id);
                     if (post.author_id === getIdUser()) {
                       const msgError = "No puedes comprar tu propio producto.";
                       const msgErrorHTML = (
